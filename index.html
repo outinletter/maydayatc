@@ -1057,14 +1057,16 @@
       var html = "";
 
       // Upper Navigation Header (Modified to preserve structural scale & replace SETTINGS text with SVG)
-      html += '<div style="background:' + colors.W + ';padding:var(--safe-top) 16px 0;position:fixed;top:0;left:0;right:0;max-width:480px;margin:0 auto;z-index:30;box-shadow: 0 1px 12px rgba(0,0,0,0.04); border-bottom: 1px solid ' + colors.B + '44;">'
+      html += '<div style="background:' + colors.W + 'EE;backdrop-filter:blur(10px);padding:var(--safe-top) 16px 0;position:fixed;top:0;left:0;right:0;max-width:480px;margin:0 auto;z-index:30;box-shadow: 0 4px 20px rgba(0,0,0,0.06); border-bottom: 1px solid ' + colors.B + '88;">'
         + '<div style="display:flex;align-items:center;justify-content:space-between;height:72px">'
         + '<button onclick="window.setState({showSearch:!state.showSearch,settingsOpen:false})" style="background:none;border:none;cursor:pointer;color:' + colors.N + ';display:flex;align-items:center;justify-content:center;padding:8px;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">'
         + '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>'
         + '</button>'
         + '<div onclick="window.setState({cat:\'all\',selected:null,search:\'\',showSearch:false,settingsOpen:false});window.scrollTo({top:0,behavior:\'smooth\'});" style="display:flex;flex-direction:column;align-items:center;cursor:pointer">'
-        + '<span style="font-size:26px;font-weight:800;color:' + colors.T + ';letter-spacing:0.5px">Mayday ATC</span>'
-        + '<span style="font-size:14px;font-weight:600;color:' + colors.M + ';letter-spacing:0.5px;margin-top:2px;">ARCHIVE</span>'
+        + '<div style="font-size:26px;font-weight:900;letter-spacing:-0.5px;line-height:1.1;">'
+        + '<span style="color:#E74C3C;">MAYDAY</span> <span style="color:' + colors.T + ';">ATC</span>'
+        + '</div>'
+        + '<span style="font-size:12px;font-weight:800;color:' + colors.N + ';letter-spacing:3px;margin-top:2px;opacity:0.8;">ARCHIVE</span>'
         + '</div>'
         + '<button onclick="window.setState({settingsOpen:!state.settingsOpen,menuOpen:false})" style="background:none;border:none;cursor:pointer;color:' + colors.N + ';display:flex;align-items:center;justify-content:center;padding:8px;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">'
         + '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>'
@@ -1108,13 +1110,19 @@
       } else if (s.selected) {
         html += '<div style="padding-top: 16px;">' + detailHTML(s.selected, colors) + '</div>';
       } else {
-        // Elegant Category Indicator on Home
-        html += '<div style="display:flex;align-items:center;justify-content:space-between;padding: 24px 4px 16px;">'
+        // Elegant Category Indicator on Home (Decorated Title Box)
+        var boxGradient = state.theme === "dark"
+          ? "linear-gradient(135deg, #2C3E50 0%, #1A2533 100%)"
+          : "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%)";
+
+        html += '<div style="margin: 24px 0 12px; padding: 24px 20px; background:' + boxGradient + '; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); border: 1px solid ' + colors.B + '; display: flex; align-items: center; justify-content: space-between;">'
           + '<div>'
-          + '<div style="font-size:calc(26px * var(--font-scale));font-weight:800;color:' + colors.T + ';letter-spacing:-0.5px;">' + (activeCat.label || "All Categories") + '</div>'
-          + '<div style="font-size:calc(14px * var(--font-scale));font-weight:600;color:' + colors.M + ';margin-top:6px;">' + filtered.length + ' emergency recordings</div>'
+          + '<div style="font-size:calc(24px * var(--font-scale));font-weight:900;color:' + colors.T + ';letter-spacing:-0.5px;">' + (activeCat.label || "All Categories") + '</div>'
+          + '<div style="font-size:calc(13px * var(--font-scale));font-weight:700;color:' + colors.N + ';margin-top:4px;display:flex;align-items:center;gap:6px;">'
+          + '<div style="width:6px;height:6px;border-radius:50%;background:' + colors.N + ';"></div>'
+          + filtered.length + ' Emergency Recordings</div>'
           + '</div>'
-          + '<button onclick="window.setState({menuOpen:!state.menuOpen,settingsOpen:false})" style="background:' + colors.N + '1A;border:none;color:' + colors.N + ';font-size:calc(14px * var(--font-scale));font-weight:800;padding:10px 16px;border-radius:12px;cursor:pointer;letter-spacing:0.5px;">FILTER</button>'
+          + '<button onclick="window.setState({menuOpen:!state.menuOpen,settingsOpen:false})" style="background:' + colors.W + '; border:1px solid ' + colors.B + '; color:' + colors.T + '; font-size:calc(13px * var(--font-scale)); font-weight:800; padding:10px 18px; border-radius:14px; cursor:pointer; letter-spacing:0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition:all 0.2s;" onmouseover="this.style.background=' + colors.N + ';this.style.color=\'#fff\'">FILTER</button>'
           + '</div>';
 
         html += '<div style="flex:1;">'

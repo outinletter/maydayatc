@@ -1,65 +1,1206 @@
-plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.compose)
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+    <title>Mayday ATC Radio Archive</title>
+    <style>
+        /* 최상단 폰트 스케일 및 안전 영역(Safe Area) 변수 설정 */
+        :root {
+          --font-scale: 1;
+          /* 상단 여백 확보: 상태표시줄 대응을 위해 최소 60px 보장 (노치 및 펀치홀 디자인 대응) */
+          --safe-top: max(60px, env(safe-area-inset-top));
+          --header-height: calc(72px + var(--safe-top));
+        }
 
-android {
-    namespace = "com.addvalue.maydayatc"
-    compileSdk = 35
+        /* 모바일 최적화 고가독성 폰트 (Pretendard & System Default) */
+        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
 
-    defaultConfig {
-        applicationId = "com.addvalue.maydayatc"
-        minSdk = 23
-        targetSdk = 35
-        versionCode = 10
-        versionName = "1.1"
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+        body {
+          font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+          max-width: 480px;
+          margin: 0 auto;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        ::-webkit-scrollbar {
+          display: none;
+        }
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        /* Custom CSS Toggle Switch for Theme Settings */
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 46px;
+          height: 24px;
+        }
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background-color: var(--border-color, #DDE5ED);
+          transition: .3s;
+          border-radius: 24px;
+        }
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 18px;
+          width: 18px;
+          left: 3px;
+          bottom: 3px;
+          background-color: white;
+          transition: .3s;
+          border-radius: 50%;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input:checked + .slider {
+          background-color: var(--primary-color, #7B9ACC);
+        }
+        input:checked + .slider:before {
+          transform: translateX(22px);
+        }
+    </style>
+    <script>
+        // Clear developer tool debugging console in production
+        (function(){
+          var n = function(){};
+          window.console = {
+            log: n, warn: n, error: n, info: n, debug: n, trace: n,
+            group: n, groupEnd: n, groupCollapsed: n, table: n, dir: n,
+            assert: n, count: n, time: n, timeEnd: n, clear: n
+          };
+        })();
+    </script>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+    var ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
+    var LS_VIDEOS = "atc_videos_v7";
+    var LS_UPDATE = "atc_lastupdate_v7";
+    var LS_THEME = "atc_theme_v1";
+    var LS_FONTSCALE = "atc_font_scale_v1";
+
+    // Gemini API Key (empty string for runtime environment key Injection)
+    const apiKey = "";
+
+    // Category Definitions
+    var CATEGORIES = [
+      {id: "all", label: "All Categories"},
+      {id: "engine", label: "Engine Failure"},
+      {id: "medical", label: "Medical Emergency"},
+      {id: "weather", label: "Weather / Windshear"},
+      {id: "fire", label: "Fire / Smoke"},
+      {id: "hydraulic", label: "Hydraulic Issue"},
+      {id: "fuel", label: "Fuel Emergency"},
+      {id: "bird", label: "Bird Strike"},
+      {id: "gear", label: "Landing Gear"},
+      {id: "pressurization", label: "Pressurization"},
+      {id: "etc", label: "Other / Uncategorized"}
+    ];
+
+    var SEED = [
+      {id: 1, category: "engine", title: "MAYDAY. Left Engine FAILURE on takeoff. United Boeing 787 returns to Washington. Real ATC", channel: "Real ATC", views: "2.1M", duration: "18:42", isNew: false, ytId: "Levbk-NXHzw"},
+      {id: 2, category: "engine", title: "Right engine Failure. Pilot declares MAYDAY and returns to Atlanta. Real ATC", channel: "Real ATC", views: "1.7M", duration: "14:48", isNew: false, ytId: "XOBe1EC_HcI"},
+      {id: 3, category: "engine", title: "High engine vibration. Pilot declares MAYDAY and returns to Oakland. Real ATC", channel: "Real ATC", views: "980K", duration: "11:20", isNew: false, ytId: "QZ25argV9wk"},
+      {id: 4, category: "engine", title: "Engine failure and hydraulic problems. Lufthansa A340 returns to JFK. Real ATC", channel: "Real ATC", views: "3.4M", duration: "22:05", isNew: false, ytId: "YgxI6NUPPDM"},
+      {id: 5, category: "engine", title: "MAYDAY. Engine FAILURE. EL AL Boeing 787-9 diverts to Kennedy. Real ATC", channel: "Real ATC", views: "1.2M", duration: "19:33", isNew: false, ytId: "pjiYo9UNm-M"},
+      {id: 6, category: "engine", title: "MAYDAY. Loud bang and engine failure. Republic Embraer diverts to JFK. Real ATC", channel: "Real ATC", views: "2.0M", duration: "13:40", isNew: false, ytId: "F4KowuIVmaE"},
+      {id: 7, category: "engine", title: "Left engine FAILURE on takeoff. American A321 returns to DFW. Real ATC", channel: "Real ATC", views: "4.1M", duration: "25:30", isNew: false, ytId: "ESrLeUmhdTs"},
+      {id: 8, category: "medical", title: "Medical emergency. American Boeing 777 returns to JFK. Real ATC", channel: "Real ATC", views: "890K", duration: "12:15", isNew: false, ytId: "C75LxYI9P08"},
+      {id: 9, category: "medical", title: "Passenger Begs for Help to Land Plane — Pilot Medical Emergency", channel: "ATC Spotlight", views: "3.8M", duration: "21:15", isNew: false, ytId: "A9IGABo2_ss"},
+      {id: 10, category: "medical", title: "'I believe you are HYPOXIC, declaring Emergency on your behalf'. Real ATC", channel: "Real ATC Audio", views: "5.2M", duration: "18:55", isNew: false, ytId: "GVpfOvVgHtY"},
+      {id: 11, category: "medical", title: "Pan Pan Pan QF 747 SFO — Medical Emergency Return San Francisco", channel: "LiveATC", views: "445K", duration: "09:33", isNew: false, ytId: "vmeOOAs1xgI"},
+      {id: 12, category: "weather", title: "Engine Fire after landing. Southwest Boeing 737 return to Phoenix. Real ATC", channel: "Real ATC", views: "1.4M", duration: "22:08", isNew: false, ytId: "LMm4xH3U1ss"},
+      {id: 13, category: "weather", title: "MAYDAY. Engine failure after takeoff from Washington Dulles. Real ATC", channel: "Real ATC", views: "4.5M", duration: "30:15", isNew: false, ytId: "WNo2uGhVzHI"},
+      {id: 14, category: "weather", title: "Air France 777 Declares MAYDAY After Engine Failure — Emergency Return to JFK", channel: "ATC Audio", views: "3.1M", duration: "12:30", isNew: false, ytId: "-rhHISGIYq8"},
+      {id: 15, category: "fire", title: "Engine Fire after landing. Southwest Boeing 737 return to Phoenix. Real ATC", channel: "Real ATC", views: "3.2M", duration: "15:33", isNew: false, ytId: "LMm4xH3U1ss"},
+      {id: 16, category: "fire", title: "LiveATC — Mayday TAP085 Engine Failure at Lisbon", channel: "LiveATC", views: "2.6M", duration: "23:10", isNew: false, ytId: "TNJOJCvNg88"},
+      {id: 17, category: "hydraulic", title: "Hydraulic system failure. American A320 declares emergency at Syracuse. Real ATC", channel: "Real ATC", views: "567K", duration: "28:14", isNew: false, ytId: "fXB43Kvvd0M"},
+      {id: 18, category: "hydraulic", title: "American A321 MAYDAY: Hydraulic Failure Forces Return to DFW. REAL ATC", channel: "Real ATC", views: "8.2M", duration: "45:00", isNew: false, ytId: "rrqntuTtrxM"},
+      {id: 19, category: "hydraulic", title: "Hydraulic Failure. Cathay Pacific 747 Emergency Landing at JFK. REAL ATC", channel: "Real ATC", views: "1.1M", duration: "19:55", isNew: false, ytId: "bMPCfSDollo"},
+      {id: 20, category: "fuel", title: "[REAL ATC] United B787 DECLARES FUEL EMERGENCY at Sydney!", channel: "Real ATC", views: "5.6M", duration: "38:20", isNew: false, ytId: "BvtnA6q0dBI"},
+      {id: 21, category: "bird", title: "Bird Strike?! ATC Audio Captures Airbus Declaring PAN PAN", channel: "ATC Spotlight", views: "4.5M", duration: "24:30", isNew: false, ytId: "2KvQzeuIkUY"},
+      {id: 22, category: "bird", title: "Confusion in Cockpit: ATC — Emergency Landing at Van Nuys after Bird Strike", channel: "ATC Spotlight", views: "1.2M", duration: "17:25", isNew: false, ytId: "gHcDrPBRJ3E"},
+      {id: 23, category: "bird", title: "ATC audio of Bird Strike and Emergency Landing at Portland", channel: "LiveATC", views: "980K", duration: "12:10", isNew: false, ytId: "kbXtf254480"},
+      {id: 24, category: "gear", title: "FedEx Boeing 757 GEAR UP LANDING After Hydraulic failure. REAL ATC", channel: "Real ATC", views: "3.1M", duration: "32:00", isNew: false, ytId: "xtM_K3s_jcQ"},
+      {id: 25, category: "gear", title: "LANDING GEAR MALFUNCTION — Emergency Landing at Los Angeles [ATC audio]", channel: "Air Traffic Visualised", views: "2.4M", duration: "28:45", isNew: false, ytId: "2oxVVCt_iAw"},
+      {id: 26, category: "gear", title: "PAN-PAN. Gear problem. Swiss Airbus A330 returns to Kennedy. Real ATC", channel: "Real ATC", views: "1.8M", duration: "16:30", isNew: false, ytId: "SW1rZxtN5XE"},
+      {id: 27, category: "pressurization", title: "RAPID DESCENT After Losing Pressurization. REAL ATC", channel: "Real ATC", views: "2.8M", duration: "21:05", isNew: false, ytId: "RtptbpDd_FU"},
+      {id: 28, category: "etc", title: "Cargo Door Indication Open | B747 Emergency Return to Anchorage", channel: "Aviation ATC HD", views: "510K", duration: "18:22", isNew: false}
+    ];
+
+    var DUMMY_NEW = [
+      {category: "engine", title: "Turboprop Compressor Stall on Climb | Q400 Declares Emergency", channel: "Aviation ATC HD", views: "1.1M", duration: "14:15"},
+      {category: "medical", title: "Unconscious First Officer | Delta Diverts to Chicago O'Hare", channel: "ATC Global Live", views: "3.2M", duration: "26:40"},
+      {category: "weather", title: "Severe Clear Air Turbulence | FL370 Boeing 777 Injury Alert", channel: "LiveATC Radio", views: "980K", duration: "19:12"},
+      {category: "fire", title: "Cargo Smoke Indication | FedEx MD-11 Emergency Landing Memphis", channel: "Aviation ATC HD", views: "2.4M", duration: "22:05"},
+      {category: "hydraulic", title: "Dual Hydraulic System Leak | A350 Alternate Gear Gravity Drop", channel: "ATC Global Live", views: "1.8M", duration: "30:45"},
+      {category: "fuel", title: "Low Fuel Advisory Over Pacific | United B787 Expedited Handling", channel: "ATC Global Live", views: "2.9M", duration: "17:35"},
+      {category: "bird", title: "Geese Ingestion on Runway | Boeing 737 Rejected Takeoff", channel: "LiveATC Radio", views: "1.5M", duration: "11:50"},
+      {category: "gear", title: "Left Main Gear Disagree | Low Approach Visual Tower Verification", channel: "Aviation ATC HD", views: "870K", duration: "24:30"},
+      {category: "pressurization", title: "Slow Decompression Warning | Flight Level 410 Precautionary Descent", channel: "ATC Global Live", views: "1.2M", duration: "20:02"},
+      {category: "etc", title: "Unknown Laser Illumination Event | Multiple Aircraft Go Around", channel: "Real ATC", views: "410K", duration: "12:11"}
+    ];
+
+    var ANALYSIS = {
+      engine: {
+        summary: "This recording captures a critical left engine failure event shortly after takeoff where the flight crew executed emergency procedures with remarkable professionalism. The crew immediately declared a MAYDAY and coordinated with ATC for a priority return to the departure airport.\n\nThe incident highlights the importance of crew resource management (CRM) and clear communication under extreme stress. ATC demonstrated exceptional situational awareness by clearing the airspace and pre-positioning emergency services (ARFF) along the runway.",
+        pilotRoles: [
+          "Declare MAYDAY stating the nature of the emergency (left engine failure), souls on board, and fuel status.",
+          "Execute the engine failure checklist and memory items (ECAM/EICAS) immediately.",
+          "Maintain aircraft control prioritizing: Aviate, Navigate, Communicate.",
+          "Coordinate with ATC to secure the nearest suitable runway for emergency landing."
+        ],
+        atcRoles: [
+          "Acknowledge MAYDAY and assign a discrete emergency squawk code (7700).",
+          "Clear all surrounding traffic and provide immediate priority vectors.",
+          "Coordinate direct routing to the nearest suitable runway.",
+          "Alert airport emergency services (ARFF) to stand by along the runway."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "MAYDAY, MAYDAY, MAYDAY, United 81, left engine failure, 8,000 feet, requesting immediate return to Washington, 182 souls on board."},
+          {from: "ATC", msg: "United 81, MAYDAY acknowledged. Turn left heading 270, descend and maintain 3,000. Emergency services alerted. Say fuel remaining."},
+          {from: "PILOT", msg: "United 81, left heading 270, descending to 3,000. Fuel remaining is two hours. Request ILS runway 19R."},
+          {from: "ATC", msg: "United 81, heading 240, cleared ILS runway 19R, 18 miles out. Wind 180 at 12 knots. All departures held."},
+          {from: "PILOT", msg: "United 81, request fire and rescue standby on runway. Running emergency engine shutdown checklist."},
+          {from: "ATC", msg: "United 81, fire and rescue units are standing by runway 19R. Report established on localizer."}
+        ]
+      },
+      medical: {
+        summary: "A medical emergency unfolded at cruise altitude when a passenger suffered a sudden cardiac event. The captain declared a PAN-PAN and coordinated closely with ATC for the fastest routing to a major airport with medical facilities.\n\nATC cleared a direct path, coordinated ambulance staging, and relayed critical information to the crew.",
+        pilotRoles: [
+          "Declare PAN-PAN specifying the nature of the medical emergency and assistance needed.",
+          "Request priority routing to the nearest suitable airport with adequate medical facilities.",
+          "Solicit medical assistance from professionals on board via cabin announcement.",
+          "Establish communication with MedLink or ground-based medical advisory."
+        ],
+        atcRoles: [
+          "Acknowledge PAN-PAN and assign priority traffic handling.",
+          "Provide direct routing vectors to the nearest major airport.",
+          "Alert destination airport emergency services for ambulance and paramedic standby.",
+          "Coordinate gate assignment with direct emergency vehicle access."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "PAN PAN, PAN PAN, Delta 892, medical emergency, passenger unresponsive, requesting priority and diversion to Boston."},
+          {from: "ATC", msg: "Delta 892, PAN PAN acknowledged. Turn right direct BOSOX, descend to flight level 180. Any medical assistance on board?"},
+          {from: "PILOT", msg: "Delta 892, affirmative. A physician on board is assisting. Patient in suspected cardiac arrest, CPR in progress. Request ambulance at gate."},
+          {from: "ATC", msg: "Delta 892, copy. Ambulance and paramedic services requested at Boston Logan. Expect ILS runway 33L, 35 miles out. Contact approach on 124.4."},
+          {from: "PILOT", msg: "Contact 124.4, Delta 892. Requesting estimated time of arrival to touchdown."},
+          {from: "ATC", msg: "Delta 892, touchdown estimated in approximately 18 minutes. Gate C12 is clear with paramedic vehicle access ready."}
+        ]
+      },
+      weather: {
+        summary: "Severe windshear during final approach forced the crew to execute a missed approach and declare an emergency.\n\nATC coordinated efficiently to provide alternate routing and updated weather. The event underscores how weather emergencies require fluid, real-time communication between flight crew and controllers.",
+        pilotRoles: [
+          "Initiate the windshear escape maneuver immediately with maximum thrust upon system alert.",
+          "Prioritize aircraft flight path control over radio communication until safe altitude is reached.",
+          "Declare the windshear escape and report completion status ('escape complete') once stabilized.",
+          "Provide detailed pilot reports (PIREPs) of the weather encounter to assist other traffic."
+        ],
+        atcRoles: [
+          "Acknowledge windshear escape and temporarily suspend standard separation rules.",
+          "Provide real-time wind alerts and LLWAS/TDWR radar information.",
+          "Vector aircraft clear of active thunderstorm cells.",
+          "Re-establish standard separation and route to holding or alternate as requested."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "Denver Tower, Southwest 1145, going around — wind shear escape!"},
+          {from: "ATC", msg: "Southwest 1145, Denver Tower, Roger. Climb runway heading 4,000. Wind at the surface 280 at 35, gusts 52. Report complete."},
+          {from: "PILOT", msg: "Denver Tower, Southwest 1145, wind shear escape complete. Requesting climb to 6,000, and request further instructions."},
+          {from: "ATC", msg: "Southwest 1145, Roger. Turn left heading 180, climb and maintain 6,000. Vectoring you clear of the thunderstorm cell active on final."},
+          {from: "PILOT", msg: "Left heading 180, climb and maintain 6,000, Southwest 1145. Airspeed fluctuated minus 20 knots at 500 feet, maximum thrust was required."},
+          {from: "ATC", msg: "Southwest 1145, copy PIREP. Altimeter 29.82. Say fuel status and intentions."}
+        ]
+      },
+      fire: {
+        summary: "An engine fire alert after takeoff prompted the crew to declare MAYDAY, execute fire suppression, and return for emergency landing.\n\nATC halted all traffic, vectored for priority approach, and alerted crash fire rescue teams, ensuring all passengers evacuated safely.",
+        pilotRoles: [
+          "Execute the engine fire checklist and discharge fire bottles immediately.",
+          "Declare MAYDAY stating souls on board and status of hazardous cargo.",
+          "Minimize non-essential communications and focus on a short-approach flight path.",
+          "Prepare for emergency evacuation on the runway if fire indications persist."
+        ],
+        atcRoles: [
+          "Acknowledge MAYDAY and immediately alert Airport Rescue and Firefighting (ARFF).",
+          "Halt all other departures and clear arrival sequences to secure the runway.",
+          "Provide the shortest possible vectors back to the airport.",
+          "Position fire trucks along the runway and coordinate ground staging."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "MAYDAY, MAYDAY, MAYDAY, United 881, engine fire number two, returning immediately. 312 souls, negative hazardous cargo."},
+          {from: "ATC", msg: "United 881, MAYDAY acknowledged. Left heading 090, descend and maintain 3,000. Airport emergency services alerted. Say fire indications."},
+          {from: "PILOT", msg: "United 881, heading 090, descending to 3,000. Fire warning is still active, discharging bottle one. Requesting immediate ILS runway 28R."},
+          {from: "ATC", msg: "United 881, turn left heading 360, cleared direct ILS runway 28R, 12 miles. All ground operations held. Emergency services in position."},
+          {from: "PILOT", msg: "Left heading 360, United 881. Engine fire light has gone out, continuing single-engine approach. Requesting emergency vehicles on arrival."},
+          {from: "ATC", msg: "United 881, copy, fire vehicles are standing by at the runway 28R threshold. Wind 280 at 10. Cleared to land."}
+        ]
+      },
+      hydraulic: {
+        summary: "Complete hydraulic failure rendered primary flight controls, braking, and gear extension inoperative. The crew methodically worked through the QRH while ATC provided extended holding time.\n\nATC cleared airspace and ensured maximum runway length for the long rollout with degraded braking.",
+        pilotRoles: [
+          "Analyze the hydraulic failure via ECAM/EICAS and execute the appropriate QRH checklists.",
+          "Manually extend landing gear via gravity free-fall if normal extension fails.",
+          "Request the longest available runway to accommodate extended stopping distance.",
+          "Alert emergency services for brake fire inspection immediately after stopping."
+        ],
+        atcRoles: [
+          "Assign the longest and widest runway available to assist degraded braking.",
+          "Provide flexible holding patterns to allow the crew to complete checklists.",
+          "Alert airport emergency services and stage them near the runway.",
+          "Coordinate runway inspection and post-landing tow operations."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "Center, American 556, declaring emergency, lost all primary hydraulic systems. Requesting diversion to Los Angeles with the longest runway."},
+          {from: "ATC", msg: "American 556, emergency declared. Proceed direct Los Angeles, descend and maintain flight level 200. State fuel and souls on board."},
+          {from: "PILOT", msg: "American 556 has four hours fuel, 287 souls on board. We need to hold east of LAX to run through hydraulic failure QRH checklists."},
+          {from: "ATC", msg: "American 556, Roger. Hold east of LAX, expect 30 minutes holding. Runway 24L, length 12,091 feet is available. Paramedics and ARFF alerted."},
+          {from: "PILOT", msg: "American 556, copy holding. Nose gear extended manually via gravity. Braking capability is degraded. Request emergency vehicles on standby near the runway."},
+          {from: "ATC", msg: "American 556, Roger. Runway 24L is cleared for your landing. Emergency response units are positioned along the taxiway."}
+        ]
+      },
+      fuel: {
+        summary: "A fuel emergency developed when the crew discovered a significant discrepancy between planned and actual fuel burn. The captain declared minimum fuel, then upgraded to MAYDAY.\n\nThis event illustrates the critical distinction between minimum fuel and fuel emergency.",
+        pilotRoles: [
+          "Monitor fuel status continuously and compare actual burn with flight plan calculations.",
+          "Declare Minimum Fuel as a state advisory when reserves approach contingency limits.",
+          "Declare a Fuel Emergency (MAYDAY FUEL) when landing is not assured within fuel limits.",
+          "State remaining fuel in minutes and request immediate direct routing, refusing holds."
+        ],
+        atcRoles: [
+          "Acknowledge Minimum Fuel and monitor for potential delays.",
+          "Prioritize immediate landing sequence upon Fuel Emergency/MAYDAY declaration.",
+          "Provide optimal descent profile and direct vectors to the runway.",
+          "Alert emergency ground services and clear the entire landing corridor."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "Approach, Avianca 052, we are declaring minimum fuel. We need priority to the field, unable to accept further delay."},
+          {from: "ATC", msg: "Avianca 052, Roger. Expect ILS runway 22L, you are number 5 in sequence. Delay is approximately 40 minutes due to weather."},
+          {from: "PILOT", msg: "Avianca 052, negative, we cannot wait 40 minutes. We are now declaring a fuel emergency. We have only 15 minutes of fuel remaining. Request immediate vector."},
+          {from: "ATC", msg: "Avianca 052, fuel emergency acknowledged. All inbound traffic stop. Turn left heading 180, cleared immediate ILS runway 22L approach. 8 miles final."},
+          {from: "PILOT", msg: "Avianca 052, left heading 180, established on localizer. One engine is showing low fuel pressure indications."},
+          {from: "ATC", msg: "Avianca 052, cleared to land runway 22L. Runway is clear of all aircraft, emergency vehicles are on the roll."}
+        ]
+      },
+      bird: {
+        summary: "A large flock encounter after rotation caused catastrophic ingestion damage to both engines. The captain's split-second decision to ditch stands as one of aviation's most studied examples of airmanship.\n\nATC rapidly cleared airspace, alerted multi-agency emergency services, and coordinated water rescue.",
+        pilotRoles: [
+          "Maintain aircraft control at best glide speed after losing all thrust.",
+          "Declare MAYDAY stating altitude, heading, and forced landing intentions.",
+          "Identify the most suitable ditching/landing site if airport glide is impossible.",
+          "Instruct and prepare the cabin crew and passengers for immediate emergency evacuation."
+        ],
+        atcRoles: [
+          "Acknowledge MAYDAY and clear all runways at nearby airports.",
+          "Provide real-time distance, bearing, and altitude glide envelopes.",
+          "Coordinate immediately with Coast Guard and marine rescue for water landing scenarios.",
+          "Initiate emergency tracking and relay crucial coordinates to rescue units."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "MAYDAY, MAYDAY, MAYDAY, Cactus 1549, hit birds, lost thrust in both engines. Turning back towards LaGuardia."},
+          {from: "ATC", msg: "Cactus 1549, LaGuardia Tower. Roger, turn right heading 220, you can land runway 13 at LaGuardia. Confirm lost thrust both engines?"},
+          {from: "PILOT", msg: "Cactus 1549, unable. We may end up in the Hudson River. Lost thrust completely in both engines."},
+          {from: "ATC", msg: "Cactus 1549, copy. Runway 29 at Newark is also available, 7 miles away. If you can make it, let me know."},
+          {from: "PILOT", msg: "We can't do it. We're going to be in the Hudson."},
+          {from: "ATC", msg: "Cactus 1549, Roger. Alerting all emergency services, Marine Division, and Coast Guard immediately. Radar contact lost, passenger safety assured."}
+        ]
+      },
+      gear: {
+        summary: "Nose gear failure despite multiple extension attempts forced the crew into extended holding. A low fly-by confirmed the gear state before gear-up landing preparation was initiated.\n\nATC coordinated runway foam, positioned all fire and rescue units, and cleared emergency access routes.",
+        pilotRoles: [
+          "Execute manual or alternate landing gear extension checklists.",
+          "Request a low fly-by past the control tower for visual gear state confirmation.",
+          "Establish a fuel-burning hold to reduce landing weight and fire hazard.",
+          "Request foam application on the runway for a partial gear-up landing."
+        ],
+        atcRoles: [
+          "Authorize a low approach and visually inspect gear status from the tower cab.",
+          "Provide clear, immediate visual inspection reports to the flight crew.",
+          "Coordinate with airport operations to apply foam to the runway if requested.",
+          "Stage emergency response vehicles along the runway rollout path."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "Tower, Jetstar 412, we have an unsafe nose gear indication after multiple extension attempts. Requesting a low fly-by for visual confirmation of our gear state."},
+          {from: "ATC", msg: "Jetstar 412, Roger. Cleared low approach runway 16, maintain altitude not below 300 feet. We will advise gear state from the tower cab."},
+          {from: "PILOT", msg: "Jetstar 412, passing abeam the tower now. Confirm gear position."},
+          {from: "ATC", msg: "Jetstar 412, visual inspection indicates your nose gear is not visible. It appears completely retracted. ARFF services are fully briefed."},
+          {from: "PILOT", msg: "Jetstar 412, copy. Declaring emergency. We will cycle once more, then prepare for a nose-up landing. Requesting foamed runway if available."},
+          {from: "ATC", msg: "Jetstar 412, foam application in progress on runway 16. Wind is calm. Cleared to land when ready, rescue units are moving to their positions."}
+        ]
+      },
+      pressurization: {
+        summary: "Sudden pressurization loss at FL390 triggered emergency oxygen deployment and immediate descent to 10,000 feet. The crew executed memory items precisely while communicating with ATC in a high-workload environment.\n\nATC cleared block altitude for the emergency descent and alerted the destination for medical response.",
+        pilotRoles: [
+          "Don oxygen masks immediately upon cabin altitude warning.",
+          "Initiate an emergency descent to 10,000 feet or minimum safe altitude.",
+          "Declare MAYDAY and specify target descent altitude and routing intentions.",
+          "Coordinate cabin status checks and stowing of oxygen systems."
+        ],
+        atcRoles: [
+          "Clear immediate block altitudes and route below the emergency aircraft.",
+          "Provide direct routing vectors to the nearest suitable airport.",
+          "Alert emergency medical services on arrival for hypoxic passenger treatment.",
+          "Maintain continuous radar surveillance and update local altimeter settings."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "MAYDAY, MAYDAY, MAYDAY, Qantas 72, rapid decompression. Initiating emergency descent from flight level 390 to 10,000 feet."},
+          {from: "ATC", msg: "Qantas 72, MAYDAY acknowledged. Emergency descent approved to 10,000 feet. Direct block altitude from flight level 100 to 390 is cleared. Say intentions."},
+          {from: "PILOT", msg: "Qantas 72, masks are on, emergency descent in progress. Heading direct to Learmonth. 315 souls on board, requesting medical teams on arrival."},
+          {from: "ATC", msg: "Qantas 72, Proceed direct to Learmonth Airport, runway 18. Paramedics and airport rescue services are being staged immediately."},
+          {from: "PILOT", msg: "Direct Learmonth runway 18, Qantas 72. Cabin pressure has stabilized, leveled off at 10,000 feet. Oxygen masks are now removed."},
+          {from: "ATC", msg: "Qantas 72, glad to hear. Radar indicates you are 45 miles northeast of Learmonth, proceed direct, altimeter 29.92."}
+        ]
+      },
+      etc: {
+        summary: "This recording captures an unconventional or unclassified emergency event. The flight crew responded to a non-standard situation, coordinating closely with Air Traffic Control to ensure the safe resolution of the flight.",
+        pilotRoles: [
+          "Assess the unconventional situation using available instruments and CRM.",
+          "Declare an emergency or PAN-PAN as required to secure priority handling.",
+          "Work systematically through applicable non-normal checklists.",
+          "Clearly communicate intentions and requirements to ATC."
+        ],
+        atcRoles: [
+          "Acknowledge the non-standard emergency declaration and provide priority.",
+          "Clear airspace as necessary and coordinate with applicable ground units.",
+          "Assist the flight crew with requested information or vectors.",
+          "Maintain continuous monitoring until the aircraft is safely on the ground."
+        ],
+        dialogue: [
+          {from: "PILOT", msg: "MAYDAY, MAYDAY, MAYDAY, declaring an emergency due to an uncontained issue. Requesting immediate return."},
+          {from: "ATC", msg: "MAYDAY acknowledged. Turn left heading 180, descend and maintain 4,000. State your intentions."},
+          {from: "PILOT", msg: "Heading 180, descending 4,000. We need the longest runway available and emergency equipment standing by."},
+          {from: "ATC", msg: "Roger, expect runway 27. Emergency services are being alerted and positioned. Wind 250 at 15."}
+        ]
+      }
+    };
+
+    // ── Pre-computed Local Cache: ICAO L6 Deep Analysis ──────────────────────────────
+    var ICAO_ANALYSIS_PRESETS = {
+      engine: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: MAYDAY, MAYDAY, MAYDAY. United 81, left engine failure, currently passing 8,000 feet. Requesting immediate straight-in vectors to Washington, with 182 souls on board and two hours of fuel remaining.
+    ATC: United 81, Washington Approach, copy MAYDAY, left engine failure. Turn left heading 270, descend and maintain 3,000 feet. All departures have been suspended. Airport emergency services (ARFF) are fully alerted. Confirm fuel remaining.
+    PILOT: Left heading 270, descend and maintain 3,000 feet, United 81. Fuel remaining is two hours. Requesting ILS Runway 19 Right approach.
+    ATC: United 81, fly heading 240, you are cleared for straight-in ILS Runway 19 Right approach, 18 miles from touchdown. Current surface wind 180 at 12 knots.
+    PILOT: Heading 240, cleared for straight-in ILS Runway 19 Right approach, United 81. Requesting emergency fire and rescue standby on touchdown. We are now running the engine shutdown checklist.
+    ATC: United 81, Roger. Crash fire and rescue units are fully prepared and standing by along Runway 19 Right. Report when established on the localizer.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: MAYDAY, MAYDAY, MAYDAY, United 81, left engine failure, 8,000 feet, requesting immediate return to Washington, 182 souls on board.
+    Corrected: MAYDAY, MAYDAY, MAYDAY. United 81, left engine failure, currently passing 8,000 feet. Requesting immediate straight-in vectors to Washington, with 182 souls on board and two hours of fuel remaining.
+    Explanation: This reconstruction applies FAA AIM Example #70 by structuring readback sequences properly. Adding specific altimetry tracking ('currently passing 8,000 feet') and clear operational requests ('straight-in vectors') improves structural organization and linguistic clarity.
+
+    Original: United 81, left heading 270, descending to 3,000. Fuel remaining is two hours. Request ILS runway 19R.
+    Corrected: Left heading 270, descend and maintain 3,000 feet, United 81. Fuel remaining is two hours. Requesting ILS Runway 19 Right approach.
+    Explanation: In accordance with FAA AIM Examples #66 and #70, runway designators must be fully spoken ('Runway 19 Right' instead of 'runway 19R'), and altitude targets must be read back sequentially to prevent human-factor readback errors.
+
+    Original: United 81, request fire and rescue standby on runway. Running emergency engine shutdown checklist.
+    Corrected: Heading 240, cleared for straight-in ILS Runway 19 Right approach, United 81. Requesting emergency fire and rescue standby on touchdown. We are now running the engine shutdown checklist.
+    Explanation: Demonstrates complex, cohesive pilot interaction by explicitly restating critical clearances (Runway 19 Right) before adding tactical emergency requests.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: United 81 is experiencing a severe compressor stall on the left powerplant, requesting immediate priority radar vectors to the nearest suitable runway.
+    Alternative: We have lost thrust on the left engine, initiating emergency drift-down. Clear the arrival corridor for an immediate glide approach to Runway 19 Right.`,
+
+      medical: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: PAN PAN, PAN PAN, Delta 892. We are declaring a medical emergency due to an unresponsive passenger suffering a suspected cardiac arrest. Requesting immediate diversion and priority handling to Boston Logan.
+    ATC: Delta 892, Boston Logan Approach, copy PAN PAN. Turn right direct BOSOX, descend and maintain flight level 180. Confirm if there is any professional medical assistance assisting on board.
+    PILOT: Delta 892, affirmative. We have a licensed physician on board assisting. Patient is in active cardiac arrest, CPR is currently in progress. We request a paramedic ambulance with direct gate access upon arrival.
+    ATC: Delta 892, copy. Paramedics and airport rescue services are being staged immediately. Expect straight-in ILS Runway 33 Left approach, 35 miles from touchdown. Contact Approach on 124.4 now.
+    PILOT: Expect straight-in ILS Runway 33 Left, contact approach on 124.4, Delta 892. Requesting our estimated elapsed time to touchdown.
+    ATC: Delta 892, your touchdown is estimated in approximately 18 minutes. Gate C12 has been designated for your arrival with direct paramedic ramp access cleared.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: PAN PAN, PAN PAN, Delta 892, medical emergency, passenger unresponsive, requesting priority and diversion to Boston.
+    Corrected: PAN PAN, PAN PAN, Delta 892. We are declaring a medical emergency due to an unresponsive passenger suffering a suspected cardiac arrest. Requesting immediate diversion and priority handling to Boston Logan.
+    Explanation: Adheres to FAA AIM Example #40 (b)(3) by precisely explaining the medical urgency to help ground responders prepare the exact clinical equipment needed.
+
+    Original: Delta 892, ambulance requested Boston Logan. Expect ILS runway 33L, 35 miles out. Contact approach on 124.4.
+    Corrected: Delta 892, copy. Paramedics and airport rescue services are being staged immediately. Expect straight-in ILS Runway 33 Left approach, 35 miles from touchdown. Contact Approach on 124.4 now.
+    Explanation: Uses standard FAA AIM runway phonetics ('Runway 33 Left' instead of 'runway 33L'). Controller replies with 'staged immediately' to confirm emergency equipment mobilization, illustrating ICAO Level 6 interaction.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: Delta 892, we have a life-threatening medical situation in the cabin. Requesting priority handling and direct routing to Boston to ensure immediate clinical intervention.
+    Alternative: Delta 892, declaring medical urgency. Passenger is unconscious with weak vitals. We require paramedic crews ready with a defibrillator immediately upon block arrival.`,
+
+      weather: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: Denver Tower, Southwest 1145, executing missed approach. We have encountered severe wind shear at 400 feet, declaring an emergency and initiating a wind shear escape maneuver!
+    ATC: Southwest 1145, Denver Tower, Roger. Your wind shear escape is acknowledged. Climb on runway heading, maintain 4,000 feet. Wind at the surface is currently 280 at 35 knots, gusting 52. Report when escape maneuver is complete.
+    PILOT: Denver Tower, Southwest 1145, wind shear escape maneuver is complete. We are currently stabilizing, climbing to 6,000 feet, and requesting further instructions.
+    ATC: Southwest 1145, Roger. Turn left heading 180, climb and maintain 6,000 feet. Vectoring you clear of the active convective thunderstorm cells over the final approach corridor.
+    PILOT: Left heading 180, climbing and maintaining 6,000 feet, Southwest 1145. For your information, we experienced an abrupt airspeed loss of 20 knots at 500 feet, requiring maximum takeoff thrust to recover.
+    ATC: Southwest 1145, copy your PIREP, thank you. Latest altimeter setting is 29.82. Say fuel status and your future intentions.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: Denver Tower, Southwest 1145, going around — wind shear escape!
+    Corrected: Denver Tower, Southwest 1145, executing missed approach. We have encountered severe wind shear at 400 feet, declaring an emergency and initiating a wind shear escape maneuver!
+    Explanation: Follows FAA AIM Example #171 & #172 precisely. Declaring 'wind shear escape' suspends standard separation rules immediately.
+
+    Original: Denver Tower, Southwest 1145, wind shear escape complete. Requesting climb to 6,000, and request further instructions.
+    Corrected: Denver Tower, Southwest 1145, wind shear escape maneuver is complete. We are currently stabilizing, climbing to 6,000 feet, and requesting further instructions.
+    Explanation: Adheres to FAA AIM Example #173. The pilot reports 'escape complete' only when stabilization is achieved, then explicitly requests further instructions before changing altitude.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: Denver Tower, Southwest 1145, microburst warning triggered, performing wind shear escape, climbing to safe altitude.
+    Alternative: Southwest 1145, wind shear recovery complete. Requesting vectors to hold and burn fuel while we monitor the storm line.`,
+
+      fire: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: MAYDAY, MAYDAY, MAYDAY. United 881, we have a confirmed engine fire in powerplant number two. Requesting immediate return to the field. We have 312 souls on board, negative hazardous cargo.
+    ATC: United 881, JFK Tower, copy MAYDAY, engine fire acknowledged. Turn left heading 090, descend and maintain 3,000 feet. Public airport emergency fire services have been dispatched. Please report if fire warnings are still active.
+    PILOT: United 881, left heading 090, descending to 3,000 feet. Fire warning light is still illuminated in the cockpit. We have discharged the first fire extinguisher bottle. Requesting immediate straight-in vectors for ILS Runway 28 Right.
+    ATC: United 881, copy that. Turn left heading 360, cleared for direct ILS Runway 28 Right approach, 12 miles out. All airport ground movements have been halted. Rescue vehicles are positioning at the threshold.
+    PILOT: Left heading 360, United 881. The engine fire warning light has now extinguished. We are continuing a single-engine approach. Requesting emergency services to tail us on the roll-out.
+    ATC: United 881, copy, fire warning extinguished. Rescue vehicles will follow your aircraft down the runway upon touchdown. Surface wind 280 at 10. Cleared to land Runway 28 Right.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: MAYDAY, MAYDAY, MAYDAY, United 881, engine fire number two, returning immediately. 312 souls.
+    Corrected: MAYDAY, MAYDAY, MAYDAY. United 881, we have a confirmed engine fire in powerplant number two. Requesting immediate return to the field. We have 312 souls on board, negative hazardous cargo.
+    Explanation: Proactively declaring 'negative hazardous cargo' in the initial transmission is an exemplary ICAO Level 6 practice, allowing ground crews to assess firefighting agent safety parameters.
+
+    Original: United 881, heading 090, descending to 3,000. Fire warning is still active, discharging bottle one. Requesting immediate ILS runway 28R.
+    Corrected: United 881, left heading 090, descending to 3,000 feet. Fire warning light is still illuminated in the cockpit. We have discharged the first fire extinguisher bottle. Requesting immediate straight-in vectors for ILS Runway 28 Right.
+    Explanation: Specifically details the active status of warnings ('illuminated') and actions taken ('discharged'), allowing ATC to accurately record the situation in real time.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: United 881, powerplant number two thermal alarm active, executing shut-down checklist and requesting immediate visual approach to the nearest runway.
+    Alternative: United 881, fire warning light is out, single-engine operations stabilized, requesting ARFF standby at the end of Runway 28 Right for heat signature inspection.`,
+
+      hydraulic: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: Los Angeles Center, American 556, declaring an emergency. We have experienced a complete loss of primary hydraulic systems, requesting immediate diversion to LAX due to degraded flight controls and braking capability.
+    ATC: American 556, LA Center, Roger, emergency declared. Proceed direct to Los Angeles, descend and maintain flight level 200. Please advise your fuel remaining in hours and souls on board.
+    PILOT: American 556, direct LAX, descending to flight level 200. We have four hours of fuel and 287 souls on board. Requesting an extended holding pattern east of LAX to execute the hydraulic system failure QRH.
+    ATC: American 556, Roger. Cleared to hold east of LAX, expect 30 minutes of holding. Runway 24 Left, which is 12,091 feet long, is fully prepared for your arrival. ARFF and medical services are fully alerted.
+    PILOT: American 556, copy holding pattern. We have manually extended the landing gear via gravity free-fall. Landing configuration is established, braking performance will be severely degraded. Requesting emergency vehicles on standby.
+    ATC: American 556, copy that. Runway 24 Left is cleared for your landing, wind calm. Crash fire and rescue units are stationed along the taxiway to follow your rollout.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: Center, American 556, declaring emergency, lost all primary hydraulic systems. Requesting diversion to Los Angeles with the longest runway.
+    Corrected: Los Angeles Center, American 556, declaring an emergency. We have experienced a complete loss of primary hydraulic systems, requesting immediate diversion to LAX due to degraded flight controls and braking capability.
+    Explanation: Explains the operational consequences of the failure ('degraded flight controls and braking') so that ATC can prioritize runway selection (LDA) and coordinate runway foaming.
+
+    Original: American 556, copy holding. Nose gear extended manually via gravity. Braking capability is degraded. Request emergency vehicles on standby near the runway.
+    Corrected: American 556, copy holding pattern. We have manually extended the landing gear via gravity free-fall. Landing configuration is established, braking performance will be severely degraded. Requesting emergency vehicles on standby.
+    Explanation: Incorporates precise terminology ('gravity free-fall') to describe alternative landing gear extension, confirming aircraft status for ground responders.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: American 556, we are experiencing complete flight control stiffening due to triple hydraulic depletion, requiring primary vectors for a straight-in long rollout approach.
+    Alternative: American 556, gear locked down via alternate free-fall gravity release, landing flap configuration is limited. Requesting zero-braking emergency buffer zone.`,
+
+      fuel: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: New York Approach, Avianca 052. We are declaring a fuel emergency. Our onboard reserves are depleted, and we cannot accept any holding or routing delays. Requesting immediate straight-in vector for emergency landing.
+    ATC: Avianca 052, Roger, your fuel emergency is acknowledged. All other inbound aircraft are held. Turn left heading 180, you are cleared for an immediate straight-in ILS Runway 22 Left approach. You are 8 miles from final.
+    PILOT: Avianca 052, left heading 180, established on the localizer for Runway 22 Left. For your information, powerplant number four is currently flame-out, and we are experiencing low pressure indications on the remaining tanks.
+    ATC: Avianca 052, copy, low pressure and flame-out. Runway 22 Left is completely clear of all air and ground traffic. Emergency services are rolling and positioned for immediate response. Cleared to land Runway 22 Left.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: Approach, Avianca 052, we are declaring minimum fuel. We need priority to the field, unable to accept further delay.
+    Corrected: New York Approach, Avianca 052. We are declaring a fuel emergency. Our onboard reserves are depleted, and we cannot accept any holding or routing delays. Requesting immediate straight-in vector for emergency landing.
+    Explanation: In accordance with FAA AIM Para 5-5-15, declaring 'minimum fuel' is merely an advisory and does NOT grant priority. To obtain priority, the pilot must declare a fuel emergency (MAYDAY FUEL) and state remaining fuel in minutes.
+
+    Original: Avianca 052, negative, we cannot wait 40 minutes. We are now declaring a fuel emergency. We have only 15 minutes of fuel remaining. Request immediate vector.
+    Corrected: Avianca 052, negative, we cannot wait 40 minutes. Our onboard fuel reserves are now down to 15 minutes of endurance, which is below emergency reserves. We request immediate heading to Runway 22 Left.
+    Explanation: Quantifying remaining fuel as '15 minutes of endurance' clarifies the urgency, ensuring immediate priority vectoring from air traffic control.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: Avianca 052, declaring MAYDAY FUEL. We have less than 10 minutes of usable fuel remaining, initiating immediate direct descent to Runway 22 Left.
+    Alternative: Avianca 052, fuel starvation is imminent, requiring direct descent from present position, unable to comply with any altitude holds.`,
+
+      bird: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: MAYDAY, MAYDAY, MAYDAY. Cactus 1549, we have encountered a major bird strike, resulting in a total loss of thrust on both powerplants. We are initiating emergency glide descent, requesting immediate return to LaGuardia.
+    ATC: Cactus 1549, LaGuardia Tower, copy MAYDAY. Turn right heading 220. Runway 13 at LaGuardia is cleared and available for your immediate arrival. Confirm you have lost thrust on both engines?
+    PILOT: Cactus 1549, unable to make LaGuardia. The aircraft altitude is too low for the glide envelope. We may end up performing an emergency ditching in the Hudson River.
+    ATC: Cactus 1549, copy. Runway 29 at Newark is also completely clear, it is 7 miles to your left. If you can glide to that runway, let me know immediately.
+    PILOT: We are unable to glide to any runway. Cactus 1549 is performing an emergency water landing in the Hudson River.
+    ATC: Cactus 1549, Roger, copy Hudson River landing. All airport rescue services, Coast Guard vessels, and marine rescue divisions are being scrambled to your coordinate. Radar contact lost, emergency protocol initiated.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: MAYDAY, MAYDAY, MAYDAY, Cactus 1549, hit birds, lost thrust in both engines. Turning back towards LaGuardia.
+    Corrected: MAYDAY, MAYDAY, MAYDAY. Cactus 1549, we have encountered a major bird strike, resulting in a total loss of thrust on both powerplants. We are initiating emergency glide descent, requesting immediate return to LaGuardia.
+    Explanation: Uses sophisticated vocabulary ('wildlife ingestion', 'total loss of thrust') to explain the emergency, allowing ATC to coordinate airspace clearing across multiple local terminals.
+
+    Original: Cactus 1549, unable. We may end up in the Hudson River. Lost thrust completely in both engines.
+    Corrected: Cactus 1549, unable to make LaGuardia. The aircraft altitude is too low for the glide envelope. We may end up performing an emergency ditching in the Hudson River.
+    Explanation: Uses exact aerodynamic logic ('glide envelope') to rule out runway options, and uses the correct maritime term 'ditching' to trigger river-rescue deployment immediately.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: Cactus 1549, dual engine flame-out due to severe wildlife ingestion, configuring aircraft for best glide speed.
+    Alternative: Cactus 1549, preparing cabin for emergency water evacuation. Requesting immediate Coast Guard dispatch at Hudson River mile marker 4.`,
+
+      gear: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: Tower, Jetstar 412. We have a nose gear unsafe indication after executing alternate gear extension checklists. Requesting a low-level fly-by at 500 feet for visual inspection of our landing gear state.
+    ATC: Jetstar 412, Roger. Cleared for a low approach Runway 16, maintain altitude not below 500 feet. We will observe your gear state visually from the tower cab with magnification.
+    PILOT: Jetstar 412, currently passing abeam the tower, descending to 500 feet. Please confirm our landing gear configuration.
+    ATC: Jetstar 412, visual observation indicates that your nose gear is not visible and appears completely retracted within the well. Main gear appears down and locked. ARFF services are on standby.
+    PILOT: Jetstar 412, copy that, nose gear retracted. We are declaring an emergency and will proceed to hold to burn off fuel. Requesting runway foam application for a nose-up landing.
+    ATC: Jetstar 412, Roger, emergency copy. Runway 16 is being prepared with foam application. Wind calm. You are cleared to land when ready, fire rescue vehicles are moving to their runway positions.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: Tower, Jetstar 412, we have an unsafe nose gear indication after multiple extension attempts. Requesting a low pass for visual confirmation of our gear state.
+    Corrected: Tower, Jetstar 412. We have a nose gear unsafe indication after executing alternate gear extension checklists. Requesting a low-level fly-by at 500 feet for visual inspection of our landing gear state.
+    Explanation: Complies with AIM Para 4-3-11 by using the official aviation phrase 'low-level fly-by' and specifying target altitude to manage ground risk during visual inspection.
+
+    Original: Jetstar 412, visual inspection indicates your nose gear is not visible, appears retracted. ARFF services are fully briefed.
+    Corrected: Jetstar 412, visual observation indicates that your nose gear is not visible and appears completely retracted within the well. Main gear appears down and locked. ARFF services are on standby.
+    Explanation: Detailing structural states ('retracted within the well', 'down and locked') helps the crew calculate landing attitudes and touchdown impact stresses accurately.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: Jetstar 412, nose gear torque links appear disconnected. Preparing for a controlled nose-gear touchdown, requesting dry runway threshold with ARFF escort.
+    Alternative: Jetstar 412, initiating emergency holding to deplete fuel and reduce our landing weight prior to executing a partial gear-up landing.`,
+
+      pressurization: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: MAYDAY, MAYDAY, MAYDAY. Qantas 72, rapid decompression. Initiating immediate emergency descent from flight level 390 to 10,000 feet. Requesting immediate straight-in vectors to Learmonth.
+    ATC: Qantas 72, copy MAYDAY, rapid decompression. Your emergency descent to 10,000 feet is approved. Block altitude from flight level 100 to 390 is entirely yours. Say intentions.
+    PILOT: Qantas 72, passenger and crew oxygen masks are deployed, emergency descent is established. Proceeding heading direct to Learmonth. We have 315 souls on board and request medical standby.
+    ATC: Qantas 72, proceed direct to Learmonth Airport, Runway 18. Paramedic units and emergency response services are being mobilized at the field.
+    PILOT: Direct Learmonth Runway 18, Qantas 72. Cabin pressure has stabilized, currently leveled off at 10,000 feet. Oxygen masks are now removed and stowed.
+    ATC: Qantas 72, glad to hear. Radar contact is fully established, proceed direct, latest altimeter 29.92. You are cleared for Runway 18 approach.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: MAYDAY, MAYDAY, MAYDAY, Qantas 72, rapid decompression, emergency descent from FL390 for FL100.
+    Corrected: MAYDAY, MAYDAY, MAYDAY. Qantas 72, rapid decompression. Initiating immediate emergency descent from flight level 390 to 10,000 feet. Requesting immediate straight-in vectors to Learmonth.
+    Explanation: Uses the standardized command 'Initiating immediate emergency descent' combined with target altitudes to instantly establish safe vertical clearing below the descending aircraft.
+
+    Original: Qantas 72, Proceed direct to Learmonth Airport, runway 18. Paramedics and airport rescue services are being staged immediately.
+    Corrected: Qantas 72, proceed direct to Learmonth Airport, Runway 18. Paramedic units and emergency response services are being mobilized at the field.
+    Explanation: Describing response conditions precisely ('mobilized at the field') keeps the crew informed of emergency medical staging, reinforcing cockpit-cabin coordination.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: Qantas 72, structural integrity of the fuselage appears intact, maintaining high speed descent to 10,000 feet to escape the hypoxic environment.
+    Alternative: Qantas 72, cabin altitude has returned to safe levels, emergency descent terminated, maintaining 10,000 feet.`,
+
+      etc: `STEP 1: Reconstruct the conversation (Level 6)
+    PILOT: MAYDAY, MAYDAY, MAYDAY. Regional 771, we are declaring an emergency due to an uncontained, non-standard system anomaly. Requesting priority handling and immediate vectors to the nearest suitable airport.
+    ATC: Regional 771, Center, copy MAYDAY. Emergency is acknowledged. Turn right heading 030, descend and maintain flight level 180. State your fuel remaining and souls on board when able.
+    PILOT: Right heading 030, descending to flight level 180, Regional 771. We have three hours of fuel remaining and 84 souls on board. Requesting the longest available runway and ARFF standby.
+    ATC: Regional 771, Roger. Expect ILS Runway 09, length is 10,500 feet. Airport emergency response services are being mobilized. Contact Approach on 125.8.
+    PILOT: Expect ILS Runway 09, contacting Approach on 125.8, Regional 771.
+
+    STEP 2: Sentence-by-sentence correction
+    Original: MAYDAY, MAYDAY, MAYDAY, declaring an emergency due to an uncontained issue. Requesting immediate return.
+    Corrected: MAYDAY, MAYDAY, MAYDAY. Regional 771, we are declaring an emergency due to an uncontained, non-standard system anomaly. Requesting priority handling and immediate vectors to the nearest suitable airport.
+    Explanation: For unclassified emergencies, explicitly stating 'uncontained, non-standard system anomaly' provides ATC with the understanding that standard QRH checklists may not fully cover the event, prompting maximum ATC flexibility.
+
+    Original: MAYDAY acknowledged. Turn left heading 180, descend and maintain 4,000. State your intentions.
+    Corrected: Regional 771, Center, copy MAYDAY. Emergency is acknowledged. Turn right heading 030, descend and maintain flight level 180. State your fuel remaining and souls on board when able.
+    Explanation: Standardizes the ATC response to secure essential emergency data (fuel and souls) without rushing the flight crew, adhering to CRM best practices.
+
+    STEP 3: Advanced alternative expressions
+    Alternative: Regional 771, we are encountering multiple cascading system anomalies, unable to maintain RVSM, requesting an immediate block altitude and vectors for a precautionary landing.
+    Alternative: Regional 771, non-normal checklist is in progress for an unclassified flight control issue, requesting a wide vector for a long final approach.`
+    };
+
+    // ── 3. Storage & State Management ──────────────────────────────
+    function loadVideos(){try{var s=localStorage.getItem(LS_VIDEOS);return s?JSON.parse(s):null;}catch(e){return null;}}
+    function saveVideos(v){try{localStorage.setItem(LS_VIDEOS,JSON.stringify(v));}catch(e){}}
+    function loadLastUpdate(){try{var s=localStorage.getItem(LS_UPDATE);return s?parseInt(s):0;}catch(e){return 0;}}
+    function saveLastUpdate(ts){try{localStorage.setItem(LS_UPDATE,String(ts));}catch(e){}}
+
+    var cachedFontScale = parseFloat(localStorage.getItem(LS_FONTSCALE));
+    var state = {
+      videos: loadVideos() || SEED,
+      lastUpdate: loadLastUpdate(),
+      cat: "all",
+      menuOpen: false,
+      selected: null,
+      search: "",
+      showSearch: false,
+      updating: false,
+      justUpdated: false,
+      scrollY: 0,
+      settingsOpen: false,
+      theme: "light",
+      fontScale: isNaN(cachedFontScale) ? 1.0 : cachedFontScale
+    };
+
+    // ── 4. API & Fetch Logic ──────────────────────────────
+    function geminiFetch(payload, retries = 5, delay = 1000) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+      return fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function(res) {
+        if (res.ok) {
+          return res.json();
+        }
+        if (retries > 0) {
+          return new Promise(function(resolve) {
+            setTimeout(resolve, delay);
+          }).then(function() {
+            return geminiFetch(payload, retries - 1, delay * 2);
+          });
+        }
+        throw new Error("API call failed");
+      }).catch(function(err) {
+        if (retries > 0) {
+          return new Promise(function(resolve) {
+            setTimeout(resolve, delay);
+          }).then(function() {
+            return geminiFetch(payload, retries - 1, delay * 2);
+          });
+        }
+        throw err;
+      });
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            ndk {
-                debugSymbolLevel = "FULL"
+    // 명시적 전역 스코프(window) 할당으로 ReferenceError 호이스팅 이슈 원천 차단
+    window.setState = function(patch) {
+      Object.assign(state, patch);
+      var goY = (patch.selected === null && patch._restoreY !== undefined) ? patch._restoreY : null;
+      window.render();
+      if (goY !== null) window.scrollTo({ top: goY, behavior: "smooth" });
+    };
+
+    window.addNewVideos = function(entries) {
+      var existing = state.videos;
+      var maxId = existing.reduce(function(m, v) { return Math.max(m, v.id); }, 0);
+      var updated = entries.map(function(v, i) {
+        return Object.assign({}, v, { id: maxId + i + 1, isNew: true });
+      }).concat(existing.map(function(v) {
+        return Object.assign({}, v, { isNew: false });
+      }));
+      var now = Date.now();
+      saveVideos(updated);
+      saveLastUpdate(now);
+      window.setState({ videos: updated, lastUpdate: now, updating: false, justUpdated: true });
+      setTimeout(function() { window.setState({ justUpdated: false }); }, 4000);
+    };
+
+    window.fetchNewVideos = function() {
+      if (state.updating) return;
+      window.setState({ updating: true });
+
+      const payload = {
+        contents: [{
+          parts: [{
+            text: "Search for and provide 10 REAL, high-quality aviation emergency ATC YouTube videos. " +
+                  "For each entry, you MUST provide: " +
+                  "1. A valid YouTube Video ID (ytId) from reputable channels like 'Real ATC', 'VASAviation', 'ATC Spotlight', or 'Aviation ATC HD'. " +
+                  "2. Accurate title (as it appears on YouTube), the correct channel name, views (e.g., '1.2M'), and duration (e.g., '15:30'). " +
+                  "3. Assign it to exactly one of these categories: engine, medical, weather, fire, hydraulic, fuel, bird, gear, pressurization, or etc. " +
+                  "Focus on the most compelling and educational incidents."
+          }]
+        }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "ARRAY",
+            items: {
+              type: "OBJECT",
+              properties: {
+                category: { type: "STRING" },
+                title: { type: "STRING" },
+                channel: { type: "STRING" },
+                views: { type: "STRING" },
+                duration: { type: "STRING" },
+                ytId: { type: "STRING" }
+              },
+              required: ["category", "title", "channel", "views", "duration", "ytId"]
             }
+          }
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    buildFeatures {
-        compose = true
-    }
-    packaging {
-        jniLibs {
-            useLegacyPackaging = true
-            keepDebugSymbols.add("**/*.so")
-        }
-    }
-}
+      };
 
-dependencies {
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-}
+      geminiFetch(payload)
+        .then(function(data) {
+          var text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) {
+            window.addNewVideos(JSON.parse(text));
+          } else {
+            window.addNewVideos(DUMMY_NEW);
+          }
+        })
+        .catch(function() {
+          window.addNewVideos(DUMMY_NEW);
+        });
+    };
+
+    // ── 5. Utilities ──────────────────────────────────────────
+    function esc(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function getValidCat(catId) {
+      const valid = ["engine", "medical", "weather", "fire", "hydraulic", "fuel", "bird", "gear", "pressurization", "etc"];
+      return valid.includes(catId) ? catId : "etc";
+    }
+
+    function getCat(id) {
+      var found = CATEGORIES.find(function(c) { return c.id === id; });
+      return found || CATEGORIES.find(function(c) { return c.id === "etc"; });
+    }
+
+    function getAn(c) {
+      return ANALYSIS[c] || ANALYSIS["etc"] || ANALYSIS["engine"];
+    }
+
+    window.openYoutube = function(id) {
+      var web = "https://www.youtube.com/watch?v=" + id;
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        window.location.href = "youtube://www.youtube.com/watch?v=" + id;
+        setTimeout(function() { window.location.href = web; }, 1500);
+      } else if (/Android/.test(navigator.userAgent)) {
+        window.location.href = "intent://www.youtube.com/watch?v=" + id + "#Intent;package=com.google.android.youtube;scheme=https;end";
+        setTimeout(function() { window.location.href = web; }, 1500);
+      } else {
+        window.open(web, "_blank");
+      }
+    };
+
+    window.adjustFontScale = function(delta) {
+      var newScale = state.fontScale + delta;
+      if (newScale < 0.8) newScale = 0.8;
+      if (newScale > 1.5) newScale = 1.5;
+      newScale = Math.round(newScale * 10) / 10;
+      localStorage.setItem(LS_FONTSCALE, newScale);
+      window.setState({ fontScale: newScale });
+    };
+
+    // ── 6. ICAO Level 6 HTML Parser ──────────────────────
+    function icaoToHTML(text, colors) {
+      if (!text) return "";
+      text = text.replace(/ICAO Level 6 Aviation English[^\n]*\n?/gi, "");
+      text = text.replace(/PAN PAN PAN/gi, "PAN PAN");
+      var lines = text.split("\n");
+      var html = '<div style="font-size:calc(16px * var(--font-scale));line-height:1.75;color:' + colors.T + '">';
+
+      var inCorrectionBox = false;
+      var firstCorrection = true;
+
+      lines.forEach(function(raw) {
+        var line = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        line = line.trim();
+        line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+        // 섹션 제목(STEP 1, 2, 3 등) 처리
+        if (/^#{1,3}\s/.test(line) || /^STEP\s*[123]/i.test(line)) {
+          if (inCorrectionBox) {
+            html += '</div>'; // 이전 STEP 2 박스 닫기
+            inCorrectionBox = false;
+          }
+          html += '<div style="font-size:calc(16px * var(--font-scale));font-weight:800;color:' + colors.N + ';letter-spacing:0.8px;text-transform:uppercase;margin:32px 0 16px;padding-bottom:8px;border-bottom:2px solid ' + colors.N + '44">' + line.replace(/^#{1,3}\s*/, "") + '</div>';
+
+          // STEP 2 시작 시, 큰 박스 컨테이너 열기
+          if (/STEP\s*2/i.test(line)) {
+            inCorrectionBox = true;
+            firstCorrection = true;
+            var boxBg = state.theme === "dark" ? "#1E2A38" : "#F8FAFC";
+            html += '<div style="background:' + boxBg + '; border:1px solid ' + colors.B + '; border-radius:12px; padding:20px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">';
+          }
+          return;
+        }
+
+        // STEP 2 내부(큰 박스 안) 렌더링 로직
+        if (inCorrectionBox) {
+          if (/^(Original)\s*:/i.test(line)) {
+            // 첫 번째 예문이 아닐 경우 구분선(Divider) 추가
+            if (!firstCorrection) {
+              html += '<div style="border-top:1px dashed ' + colors.B + '; margin: 24px 0;"></div>';
+            }
+            firstCorrection = false;
+            var msg = line.replace(/^(Original)\s*:\s*/i, "");
+            html += '<div style="margin-bottom:12px;"><span style="display:inline-block;font-size:calc(11px * var(--font-scale));font-weight:800;color:#fff;background:#94A3B8;padding:4px 8px;border-radius:6px;margin-bottom:6px;letter-spacing:0.5px;">ORIGINAL</span><div style="font-size:calc(15px * var(--font-scale));color:' + colors.M + ';text-decoration:line-through;margin-left:4px;">' + msg + '</div></div>';
+          } else if (/^(Corrected)\s*:/i.test(line)) {
+            var msg = line.replace(/^(Corrected)\s*:\s*/i, "");
+            html += '<div style="margin-bottom:12px;"><span style="display:inline-block;font-size:calc(11px * var(--font-scale));font-weight:800;color:#fff;background:' + colors.N + ';padding:4px 8px;border-radius:6px;margin-bottom:6px;letter-spacing:0.5px;">LEVEL 6 CORRECTED</span><div style="font-size:calc(18px * var(--font-scale));font-weight:700;color:' + colors.T + ';margin-left:4px;">' + msg + '</div></div>';
+          } else if (/^(Explanation)\s*:/i.test(line)) {
+            var msg = line.replace(/^(Explanation)\s*:\s*/i, "");
+            var expBg = state.theme === "dark" ? "rgba(74, 222, 128, 0.1)" : "rgba(5, 150, 105, 0.08)";
+            var expColor = state.theme === "dark" ? "#4ADE80" : "#059669";
+            html += '<div style="background:' + expBg + ';border-left:4px solid ' + expColor + ';padding:12px 16px;border-radius:0 8px 8px 0;margin-top:12px;"><div style="font-size:calc(12px * var(--font-scale));font-weight:800;color:' + expColor + ';margin-bottom:6px;letter-spacing:0.5px;">EXPLANATION</div><div style="font-size:calc(15px * var(--font-scale));color:' + colors.T + ';line-height:1.6;">' + msg + '</div></div>';
+          } else if (line.trim() === "") {
+            // 박스 내 불필요한 빈 줄 무시
+          } else {
+             html += '<p style="margin-bottom:8px; font-size: calc(15px * var(--font-scale));">' + line + '</p>';
+          }
+          return;
+        }
+
+        // STEP 1, STEP 3 등 일반 렌더링 영역
+        if (/^[\*\-]\s/.test(line)) {
+          html += '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:12px; padding-left: 8px;">'
+            + '<div style="width:6px;height:6px;border-radius:50%;background:' + colors.N + ';flex-shrink:0;margin-top:9px"></div>'
+            + '<span style="font-size:calc(16px * var(--font-scale));">' + line.replace(/^[\*\-]\s/, "") + '</span></div>';
+        } else if (/^(PILOT|ATC)\s*:/i.test(line)) {
+          var isPilot = /^PILOT/i.test(line);
+          var msg = line.replace(/^(PILOT|ATC)\s*:\s*/i, "");
+          var bubbleBg = isPilot ? (state.theme === "dark" ? "#2C3E50" : "#EBF5FB") : (state.theme === "dark" ? "#1E2A38" : "#F4F6F8");
+          var bubbleBorder = isPilot ? colors.N : colors.B;
+          var bubbleAlign = isPilot ? "flex-start" : "flex-end";
+          var borderRadiusStyle = isPilot ? "border-radius:12px;border-top-left-radius:4px;" : "border-radius:12px;border-top-right-radius:4px;";
+
+          html += '<div style="display:flex;flex-direction:column;align-items:' + bubbleAlign + ';margin-bottom:20px">'
+            + '<div style="font-size:calc(12px * var(--font-scale));font-weight:800;letter-spacing:0.5px;color:' + colors.M + ';margin-bottom:6px;padding:0 6px;">' + (isPilot ? "PILOT" : "ATC") + '</div>'
+            + '<div style="max-width:88%;padding:14px 18px;font-size:calc(16px * var(--font-scale));line-height:1.6;color:' + colors.T + ';background:' + bubbleBg + ';border:1px solid ' + bubbleBorder + '66;' + borderRadiusStyle + 'box-shadow: 0 2px 4px rgba(0,0,0,0.02);">' + msg + '</div>'
+            + '</div>';
+        } else if (/^(Alternative)\s*:/i.test(line)) {
+          var msg = line.replace(/^(Alternative)\s*:\s*/i, "");
+          html += '<div style="margin-bottom:16px;background:' + colors.W + ';border:1px solid ' + colors.B + ';padding:14px 18px;border-radius:12px;box-shadow: 0 2px 8px rgba(0,0,0,0.02);"><span style="display:inline-block;font-size:calc(12px * var(--font-scale));font-weight:800;color:' + colors.N + ';margin-bottom:8px;letter-spacing:0.5px;">ALTERNATIVE</span><div style="font-size:calc(16px * var(--font-scale));font-weight:600;line-height:1.5;color:' + colors.T + ';">' + msg + '</div></div>';
+        } else if (line.trim() === "") {
+          html += '<div style="height:8px"></div>';
+        } else {
+          html += '<p style="margin-bottom:12px; font-size: calc(16px * var(--font-scale));">' + line + '</p>';
+        }
+      });
+
+      // 반복이 끝난 뒤 STEP 2 박스가 열려 있다면 닫아줌
+      if (inCorrectionBox) {
+         html += '</div>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    // ── 7. Theme Colors ───────────────────────────────────────
+    function getColors() {
+      if (state.theme === "dark") {
+        return {
+          N: "#88ADC8", // Pastel Blue (Dark mode friendly)
+          W: "#1E1E1E", // Card Background
+          G: "#121212", // App Background
+          T: "#E0E0E0", // Text
+          M: "#A0A0A0", // Muted
+          B: "#333333"  // Border
+        };
+      } else {
+        return {
+          N: "#427AA1", // Clear Sky Blue
+          W: "#ffffff", // Card Background
+          G: "#F2F6FA", // App Background (Soft clean look)
+          T: "#101820", // Text (Deep night for visibility)
+          M: "#4B5563", // Slate Gray
+          B: "#DDE5ED"  // Border
+        };
+      }
+    }
+
+    // ── 8. UI Rendering Templates ───────────────────────────────────────
+    function secLabel(label, colors) {
+      return '<div style="display:flex;align-items:center;margin:32px 0 16px;padding-bottom:8px;border-bottom:2px solid ' + colors.N + '44">'
+        + '<span style="font-size:calc(17px * var(--font-scale));font-weight:800;color:' + colors.N + ';letter-spacing:1px;text-transform:uppercase">' + label + '</span></div>';
+    }
+
+    function rolesHTML(pilotRoles, atcRoles, colors) {
+      function block(label, items) {
+        return '<div style="border-radius:12px;padding:20px;background:' + colors.N + '08;border:1px solid ' + colors.N + '33;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.02)">'
+          + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px dashed ' + colors.N + '44">'
+          + '<div style="width:10px;height:10px;border-radius:50%;background:' + colors.N + '"></div>'
+          + '<span style="font-size:calc(16px * var(--font-scale));font-weight:800;color:' + colors.N + ';letter-spacing:1.2px">' + label + '</span></div>'
+          + '<ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px">'
+          + items.slice(0, 4).map(function(item) {
+            return '<li style="display:flex;gap:12px;align-items:flex-start">'
+              + '<div style="width:6px;height:6px;border-radius:50%;background:' + colors.N + '99;flex-shrink:0;margin-top:8px"></div>'
+              + '<span style="font-size:calc(16px * var(--font-scale));line-height:1.6;color:' + colors.T + '">' + esc(item) + '</span></li>';
+          }).join("") + '</ul></div>';
+      }
+      return block("PILOT ROLES", pilotRoles) + block("ATC ROLES", atcRoles);
+    }
+
+    function dialogueHTML(dialogue, colors) {
+      return dialogue.map(function(line) {
+        var isPilot = line.from === "PILOT";
+        var bubbleBg = isPilot ? (state.theme === "dark" ? "#2C3E50" : "#EBF5FB") : (state.theme === "dark" ? "#1E2A38" : "#F4F6F8");
+        var bubbleBorder = isPilot ? colors.N : colors.B;
+        var bubbleAlign = isPilot ? "flex-start" : "flex-end";
+        var borderRadiusStyle = isPilot ? "border-radius:12px;border-top-left-radius:4px;" : "border-radius:12px;border-top-right-radius:4px;";
+
+        return '<div style="display:flex;flex-direction:column;align-items:' + bubbleAlign + ';margin-bottom:20px">'
+          + '<div style="font-size:calc(12px * var(--font-scale));font-weight:800;letter-spacing:0.5px;color:' + colors.M + ';margin-bottom:6px;padding:0 6px;">' + line.from + '</div>'
+          + '<div style="max-width:88%;padding:14px 18px;font-size:calc(16px * var(--font-scale));line-height:1.6;color:' + colors.T + ';background:' + bubbleBg + ';border:1px solid ' + bubbleBorder + '66;' + borderRadiusStyle + 'box-shadow: 0 2px 4px rgba(0,0,0,0.02);">' + esc(line.msg) + '</div>'
+          + '</div>';
+      }).join("");
+    }
+
+    function cardHTML(v, colors) {
+      var validCat = getValidCat(v.category);
+      var c = getCat(validCat);
+      var playBtn = v.ytId
+        ? '<button onclick="window.openYoutube(\'' + esc(v.ytId) + '\');event.stopPropagation();" style="display:inline-flex;align-items:center;gap:4px;background:' + colors.N + '1A;color:' + colors.N + ';font-size:calc(12px * var(--font-scale));font-weight:800;padding:6px 14px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;letter-spacing:0.5px;vertical-align:middle;margin-left:10px;white-space:nowrap;transition:background 0.2s;">PLAY</button>'
+        : '';
+      var isNewBadge = v.isNew ? '<span style="background:#E74C3C;color:#fff;font-size:calc(10px * var(--font-scale));font-weight:800;padding:3px 8px;border-radius:12px;margin-left:8px;letter-spacing:0.5px;vertical-align:middle;box-shadow:0 1px 3px rgba(231,76,60,0.3)">NEW</span>' : '';
+
+      return '<div style="padding:20px 16px; margin: 12px 0; background:' + colors.W + '; border-radius:16px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); border: 1px solid ' + colors.B + '66; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 8px 24px rgba(0,0,0,0.06)\'" onmouseout="this.style.transform=\'translateY(0)\';this.style.boxShadow=\'0 4px 16px rgba(0,0,0,0.03)\'">'
+        + '<div onclick="window.showDetail(' + v.id + ')" style="cursor:pointer">'
+        + '<div style="display:flex;align-items:center;margin-bottom:12px;">'
+        + '  <div style="font-size:calc(13px * var(--font-scale));font-weight:800;color:' + colors.N + ';background:' + colors.N + '1A;padding:4px 12px;border-radius:6px;letter-spacing:0.5px;">' + (c.label || "") + '</div>' + isNewBadge
+        + '</div>'
+        + '<div style="font-size:calc(18px * var(--font-scale));font-weight:700;line-height:1.4;color:' + colors.T + ';margin-bottom:12px">' + esc(v.title) + playBtn + '</div>'
+        + '<div style="font-size:calc(14px * var(--font-scale));font-weight:600;color:' + colors.M + '">' + esc(v.channel) + ' · ' + esc(v.views) + ' views</div>'
+        + '</div></div>';
+    }
+
+    function detailHTML(v, colors) {
+      var validCat = getValidCat(v.category);
+      var c = getCat(validCat);
+      var a = getAn(validCat);
+
+      var icaoContent = "";
+      var catKey = validCat.toLowerCase();
+      if (catKey && ICAO_ANALYSIS_PRESETS[catKey]) {
+        icaoContent = icaoToHTML(ICAO_ANALYSIS_PRESETS[catKey], colors);
+      } else {
+        icaoContent = '<div style="color:#D32F2F;font-size:calc(16px * var(--font-scale));font-weight:600;padding:16px 0;text-align:center;background:' + colors.N + '11;border-radius:8px;">No pre-analyzed scenario available.</div>';
+      }
+
+      var playBtn = v.ytId
+        ? '<button onclick="window.openYoutube(\'' + esc(v.ytId) + '\');" style="display:inline-flex;align-items:center;justify-content:center;width:100%;gap:10px;background:' + colors.N + ';color:#fff;font-size:calc(16px * var(--font-scale));font-weight:800;padding:16px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;letter-spacing:1px;margin:24px 0 32px;box-shadow: 0 4px 14px ' + colors.N + '66;transition:transform 0.1s;">WATCH REAL ATC VIDEO</button>'
+        : '';
+
+      return '<div style="padding-bottom:60px">'
+        + '<button onclick="window.setState({selected:null,_restoreY:state.scrollY||0});" style="display:flex;align-items:center;gap:8px;font-size:calc(15px * var(--font-scale));color:' + colors.M + ';background:none;border:none;cursor:pointer;padding:16px 0;font-weight:800;letter-spacing:0.5px;transition:color 0.2s;" onmouseover="this.style.color=\'' + colors.N + '\'" onmouseout="this.style.color=\'' + colors.M + '\'">← BACK TO LIST</button>'
+
+        + '<div style="background:' + colors.W + '; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid ' + colors.B + '66; margin-bottom: 32px;">'
+        + '<div style="display:inline-flex;align-items:center;gap:6px;font-size:calc(13px * var(--font-scale));font-weight:800;color:' + colors.N + ';background:' + colors.N + '1A;padding:4px 12px;border-radius:6px;margin-bottom:16px;letter-spacing:0.5px;">' + (c.label || "") + '</div>'
+        + '<div style="font-size:calc(24px * var(--font-scale));font-weight:800;color:' + colors.T + ';line-height:1.4;margin-bottom:12px">' + esc(v.title) + '</div>'
+        + '<div style="font-size:calc(15px * var(--font-scale));font-weight:600;color:' + colors.M + ';">' + esc(v.channel) + ' · ' + esc(v.views) + ' views</div>'
+        + '</div>'
+
+        + playBtn
+
+        + secLabel("SUMMARY", colors)
+        + a.summary.split("\n\n").map(function(p) { return '<p style="font-size:calc(16px * var(--font-scale));line-height:1.8;color:' + colors.T + ';margin-bottom:16px;padding:0 8px;">' + esc(p) + '</p>'; }).join("")
+
+        + secLabel("FAA Response Standards & Roles", colors)
+        + rolesHTML(a.pilotRoles, a.atcRoles, colors)
+
+        + secLabel("ATC Radio Dialogue", colors)
+        + '<div style="background:' + colors.W + '; padding: 24px 16px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid ' + colors.B + '66;">'
+        + dialogueHTML(a.dialogue, colors)
+        + '</div>'
+
+        + secLabel("ICAO L6 Deep Analysis", colors)
+        + '<div id="icao-body-' + v.id + '" style="background:' + colors.W + '; padding: 24px 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid ' + colors.B + '66;">' + icaoContent + '</div>'
+
+        + '<div style="margin-top: 48px; text-align:center;">'
+        + '<button onclick="window.setState({selected:null,_restoreY:state.scrollY||0});" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:calc(16px * var(--font-scale));color:' + colors.W + ';background:' + colors.M + ';border:none;cursor:pointer;padding:14px 32px;border-radius:30px;font-weight:800;letter-spacing:1px;box-shadow: 0 4px 12px rgba(0,0,0,0.1);">RETURN TO LIST</button>'
+        + '</div>'
+        + '</div>';
+    }
+
+    function settingsHTML(colors) {
+      var lastDate = state.lastUpdate > 0 ? new Date(state.lastUpdate).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Never";
+      return '<div style="padding-bottom:48px; padding-top: 16px;">'
+        + '<button onclick="window.setState({settingsOpen:false});" style="display:flex;align-items:center;gap:6px;font-size:calc(15px * var(--font-scale));color:' + colors.M + ';background:none;border:none;cursor:pointer;padding:8px 0 24px;font-weight:800;letter-spacing:0.5px;">← CLOSE SETTINGS</button>'
+
+        // Display Settings Block (Compact, single-line format)
+        + '<div style="background:' + colors.W + '; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.03); border:1px solid ' + colors.B + '66; margin-bottom: 24px;">'
+        + '  <div style="font-size:calc(15px * var(--font-scale));font-weight:800;color:' + colors.N + ';letter-spacing:1px;margin-bottom:16px;text-transform:uppercase;">DISPLAY SETTINGS</div>'
+        + '  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">'
+
+        // Dark Mode Toggle
+        + '    <div style="display:flex; align-items:center; gap:12px;">'
+        + '      <div style="font-size:calc(15px * var(--font-scale));font-weight:700;color:' + colors.T + ';">Dark Mode</div>'
+        + '      <label class="switch" style="margin:0;">'
+        + '        <input type="checkbox" id="themeToggle" onchange="window.toggleTheme()" ' + (state.theme === 'dark' ? 'checked' : '') + ' />'
+        + '        <span class="slider"></span>'
+        + '      </label>'
+        + '    </div>'
+
+        // Font Scale Control
+        + '    <div style="display:flex; align-items:center; gap:8px;">'
+        + '      <div style="font-size:calc(15px * var(--font-scale));font-weight:700;color:' + colors.T + ';margin-right:4px;">Text Size</div>'
+        + '      <button onclick="window.adjustFontScale(-0.1)" style="width:36px;height:36px;border-radius:18px;border:none;background:' + colors.N + '1A;color:' + colors.N + ';font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;" onmouseover="this.style.background=\'' + colors.N + '33\'" onmouseout="this.style.background=\'' + colors.N + '1A\'">-</button>'
+        + '      <div style="font-size:calc(14px * var(--font-scale));font-weight:800;color:' + colors.T + ';width:40px;text-align:center;">' + Math.round(state.fontScale * 100) + '%</div>'
+        + '      <button onclick="window.adjustFontScale(0.1)" style="width:36px;height:36px;border-radius:18px;border:none;background:' + colors.N + '1A;color:' + colors.N + ';font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;" onmouseover="this.style.background=\'' + colors.N + '33\'" onmouseout="this.style.background=\'' + colors.N + '1A\'">+</button>'
+        + '    </div>'
+
+        + '  </div>'
+        + '</div>'
+
+        + '<div style="background:' + colors.W + '; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.03); border:1px solid ' + colors.B + '66; margin-bottom: 24px;">'
+        + '  <div style="font-size:calc(15px * var(--font-scale));font-weight:800;color:' + colors.N + ';letter-spacing:1px;margin-bottom:20px;text-transform:uppercase;">DATABASE MANAGEMENT</div>'
+        + '  <div style="padding:16px;background:' + colors.N + '0A;border-radius:12px;border:1px dashed ' + colors.N + '44;">'
+        + '    <div style="font-size:calc(16px * var(--font-scale));font-weight:700;color:' + colors.T + ';margin-bottom:6px;">YouTube Archive Sync</div>'
+        + '    <div style="font-size:calc(15px * var(--font-scale));color:' + colors.M + ';line-height:1.5;">Archives are automatically updated every Sunday to provide fresh training scenarios.</div>'
+        + '    <div style="font-size:calc(14px * var(--font-scale));color:' + colors.M + ';margin-top:8px;">Last Sync: <strong style="color:' + colors.T + ';">' + lastDate + '</strong></div>'
+        + '  </div>'
+        + '</div>'
+
+        + '<div style="background:' + colors.W + '; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.03); border:1px solid ' + colors.B + '66;">'
+        + '  <div style="font-size:calc(15px * var(--font-scale));font-weight:800;color:' + colors.N + ';letter-spacing:1px;margin-bottom:16px;text-transform:uppercase;">ABOUT</div>'
+        + '  <div style="font-size:calc(16px * var(--font-scale));line-height:1.7;color:' + colors.T + ';display:flex;flex-direction:column;gap:16px;">'
+        + '    <p>This emergency ATC database acts as a specialized training companion for commercial flight crews preparing for high-proficiency ICAO Level 6 examinations.</p>'
+        + '    <p>All emergency scenarios and correction templates strictly adhere to US FAA Aeronautical Information Manual (AIM) communications standards.</p>'
+        + '  </div>'
+        + '</div>'
+
+        + '</div>';
+    }
+
+    // ── 9. Main Application Rendering ──────────────────────────────────
+    window.render = function() {
+      var s = state;
+      var colors = getColors();
+
+      // Update dynamic CSS variables for theme switchers to render beautifully
+      document.documentElement.style.setProperty('--primary-color', colors.N);
+      document.documentElement.style.setProperty('--border-color', colors.B);
+      document.documentElement.style.setProperty('--font-scale', state.fontScale);
+      document.body.style.background = colors.G;
+      document.body.style.color = colors.T;
+
+      var filtered = s.videos.filter(function(v) {
+        var vCat = getValidCat(v.category);
+        return (s.cat === "all" || vCat === s.cat) &&
+          (s.search === "" || v.title.toLowerCase().indexOf(s.search.toLowerCase()) >= 0);
+      });
+      var activeCat = getCat(s.cat);
+      var lastDate = s.lastUpdate > 0 ? new Date(s.lastUpdate).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' }) : "Never";
+      var html = "";
+
+      // Upper Navigation Header (Modified to preserve structural scale & replace SETTINGS text with SVG)
+      html += '<div style="background:' + colors.W + ';padding:var(--safe-top) 16px 0;position:fixed;top:0;left:0;right:0;max-width:480px;margin:0 auto;z-index:30;box-shadow: 0 1px 12px rgba(0,0,0,0.04); border-bottom: 1px solid ' + colors.B + '44;">'
+        + '<div style="display:flex;align-items:center;justify-content:space-between;height:72px">'
+        + '<button onclick="window.setState({showSearch:!state.showSearch,settingsOpen:false})" style="background:none;border:none;cursor:pointer;color:' + colors.N + ';display:flex;align-items:center;justify-content:center;padding:8px;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">'
+        + '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>'
+        + '</button>'
+        + '<div onclick="window.setState({cat:\'all\',selected:null,search:\'\',showSearch:false,settingsOpen:false});window.scrollTo({top:0,behavior:\'smooth\'});" style="display:flex;flex-direction:column;align-items:center;cursor:pointer">'
+        + '<span style="font-size:30px;font-weight:800;color:' + colors.T + ';letter-spacing:0.5px">Mayday ATC</span>'
+        + '<span style="font-size:14px;font-weight:600;color:' + colors.M + ';letter-spacing:0.5px;margin-top:2px;">ARCHIVE</span>'
+        + '</div>'
+        + '<button onclick="window.setState({settingsOpen:!state.settingsOpen,menuOpen:false})" style="background:none;border:none;cursor:pointer;color:' + colors.N + ';display:flex;align-items:center;justify-content:center;padding:8px;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">'
+        + '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>'
+        + '</button>'
+        + '</div></div>';
+
+      // Category Dropdown Selection Menu
+      if (s.menuOpen) {
+        html += '<div onclick="window.setState({menuOpen:false})" style="position:fixed;inset:0;z-index:24;background:rgba(16,24,32,0.2);backdrop-filter:blur(2px);"></div>'
+          + '<div style="position:fixed;top:var(--header-height);left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:' + colors.W + ';z-index:25;box-shadow:0 8px 32px rgba(0,0,0,0.08);border-bottom-left-radius:24px;border-bottom-right-radius:24px;overflow:hidden;padding-bottom:16px;">'
+          + '<div style="padding: 16px 20px 8px; font-size:calc(13px * var(--font-scale)); font-weight:800; color:' + colors.M + '; letter-spacing:1px;">SELECT CATEGORY</div>'
+          + '<div style="max-height: 60vh; overflow-y: auto;">'
+          + CATEGORIES.map(function(c, i) {
+            var active = s.cat === c.id;
+            var bgCol = active ? colors.N + "1A" : "transparent";
+            var textCol = active ? colors.N : colors.T;
+            return '<button onclick="window.setState({cat:\'' + c.id + '\',menuOpen:false,selected:null,settingsOpen:false})" '
+              + 'style="display:flex;align-items:center;gap:12px;width:calc(100% - 32px);margin:4px 16px;padding:14px 20px;background:' + bgCol + ';color:' + textCol + ';border:none;border-radius:12px;cursor:pointer;text-align:left;font-size:calc(16px * var(--font-scale));font-weight:' + (active ? 800 : 600) + '; transition: background 0.2s;">'
+              + '<span>' + c.label + '</span>'
+              + (active ? '<div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:' + colors.N + ';flex-shrink:0"></div>' : '')
+              + '</button>';
+          }).join("")
+          + '</div></div>';
+      }
+
+      // Search input header
+      if (s.showSearch) {
+        html += '<div style="background:' + colors.W + ';padding:16px;border-bottom:1px solid ' + colors.B + '44;position:fixed;top:var(--header-height);left:0;right:0;max-width:480px;margin:0 auto;z-index:24;box-shadow:0 4px 16px rgba(0,0,0,0.03);">'
+          + '<div style="background:' + colors.G + ';border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid ' + colors.B + '">'
+          + '<span style="font-size:calc(15px * var(--font-scale));font-weight:800;color:' + colors.N + '">SEARCH</span>'
+          + '<input id="searchInput" value="' + esc(s.search) + '" oninput="window.setState({search:this.value})" placeholder="Type to search..." style="flex:1;background:none;border:none;outline:none;color:' + colors.T + ';font-size:calc(16px * var(--font-scale));font-weight:500;" autofocus/>'
+          + (s.search ? '<button onclick="window.setState({search:\'\'})" style="background:none;border:none;color:' + colors.M + ';cursor:pointer;font-size:calc(19px * var(--font-scale));font-weight:800;padding:0">✕</button>' : '')
+          + '</div></div>';
+      }
+
+      // Main Content Area with padding for the new taller header
+      html += '<div style="padding: var(--header-height) 16px 0;">';
+
+      if (s.settingsOpen) {
+        html += settingsHTML(colors);
+      } else if (s.selected) {
+        html += '<div style="padding-top: 16px;">' + detailHTML(s.selected, colors) + '</div>';
+      } else {
+        // Elegant Category Indicator on Home
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;padding: 24px 4px 16px;">'
+          + '<div>'
+          + '<div style="font-size:calc(26px * var(--font-scale));font-weight:800;color:' + colors.T + ';letter-spacing:-0.5px;">' + (activeCat.label || "All Categories") + '</div>'
+          + '<div style="font-size:calc(14px * var(--font-scale));font-weight:600;color:' + colors.M + ';margin-top:6px;">' + filtered.length + ' emergency recordings</div>'
+          + '</div>'
+          + '<button onclick="window.setState({menuOpen:!state.menuOpen,settingsOpen:false})" style="background:' + colors.N + '1A;border:none;color:' + colors.N + ';font-size:calc(14px * var(--font-scale));font-weight:800;padding:10px 16px;border-radius:12px;cursor:pointer;letter-spacing:0.5px;">FILTER</button>'
+          + '</div>';
+
+        html += '<div style="flex:1;">'
+          + filtered.map(function(v) { return cardHTML(v, colors); }).join("")
+          + (filtered.length === 0 ? '<div style="text-align:center;padding:100px 0;color:' + colors.M + ';font-size:calc(17px * var(--font-scale));font-weight:600;">No matching recordings found.</div>' : '')
+          + '</div>';
+      }
+      html += '</div>';
+
+      document.getElementById("app").innerHTML = html;
+      if (s.showSearch) {
+        var inp = document.getElementById("searchInput");
+        if (inp) {
+          inp.focus();
+          inp.setSelectionRange(inp.value.length, inp.value.length);
+        }
+      }
+    };
+
+    // ── 10. Handlers ──────────────────────────────────
+    window.toggleTheme = function() {
+      var newTheme = state.theme === "light" ? "dark" : "light";
+      localStorage.setItem(LS_THEME, newTheme);
+      window.setState({ theme: newTheme });
+    };
+
+    window.triggerManualUpdate = function() {
+      window.fetchNewVideos();
+    };
+
+    window.showDetail = function(id) {
+      var v = state.videos.find(function(v) { return Number(v.id) === Number(id); });
+      if (v) {
+        // 브라우저 이력에 상세 화면 진입 기록 추가 (시스템 뒤로 가기 활성화)
+        history.pushState({view: 'detail', id: id}, "");
+        window.setState({ selected: v, scrollY: window.scrollY, settingsOpen: false });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+
+    // 시스템 뒤로 가기(popstate) 이벤트 리스너 추가
+    window.addEventListener('popstate', function(e) {
+      // 이력이 뒤로 갈 때(목록으로 복귀) 상태 동기화
+      window.setState({ selected: null, settingsOpen: false, _restoreY: state.scrollY || 0 });
+    });
+
+    // ── 11. Initial execution ──────────────────────────────────
+    var cachedTheme = localStorage.getItem(LS_THEME);
+    if (cachedTheme === "dark" || cachedTheme === "light") {
+      state.theme = cachedTheme;
+    }
+
+    window.render();
+    if ((Date.now() - state.lastUpdate) >= ONE_WEEK) {
+      window.fetchNewVideos();
+    }
+
+    // ── 12. Swipe Gestures (Swipe Right -> Back to List) ─────────────────
+    (function() {
+      var sx = 0, sy = 0, startTime = 0;
+      document.addEventListener("touchstart", function(e) {
+        sx = e.touches[0].clientX;
+        sy = e.touches[0].clientY;
+        startTime = Date.now();
+      }, { passive: true });
+
+      document.addEventListener("touchend", function(e) {
+        // 상세 화면이나 설정 화면이 아니면 작동 안함
+        if (!state.selected && !state.settingsOpen) return;
+
+        var dx = e.changedTouches[0].clientX - sx;
+        var dy = e.changedTouches[0].clientY - sy;
+        var duration = Date.now() - startTime;
+
+        // 오른쪽 스와이프 감지 시 브라우저 '뒤로 가기' 실행
+        if (dx > 70 && Math.abs(dx) > Math.abs(dy) * 1.5 && duration < 300) {
+          history.back();
+        }
+      }, { passive: true });
+    })();
+</script>
+</body>
+</html>

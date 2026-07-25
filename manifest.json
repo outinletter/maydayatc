@@ -1,0 +1,33 @@
+{
+  "name": "Mayday ATC Radio Archive",
+  "short_name": "Mayday ATC",
+  "description": "Real ATC emergency radio communications archive",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#427AA1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "ic_launcher-playstore.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "ic_launcher-playstore.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["education", "news"],
+  "screenshots": [
+    {
+      "src": "ic_launcher-playstore.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

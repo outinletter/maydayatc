@@ -90,9 +90,21 @@ struct MaydayATCApp: App {
     var body: some Scene {
         WindowGroup {
             MainView().environmentObject(library)
+                .preferredColorScheme(.light)
+                .tint(ArchiveTheme.accent)
+                .foregroundStyle(ArchiveTheme.ink)
                 .task { if automaticUpdates { await library.sync() } }
         }
     }
+}
+
+enum ArchiveTheme {
+    static let accent = Color(red: 0.29, green: 0.48, blue: 0.59)
+    static let ink = Color(red: 0.20, green: 0.30, blue: 0.37)
+    static let background = Color(red: 0.95, green: 0.97, blue: 0.98)
+    static let card = Color(red: 1.0, green: 0.99, blue: 0.97)
+    static let sky = Color(red: 0.86, green: 0.93, blue: 0.97)
+    static let mint = Color(red: 0.87, green: 0.95, blue: 0.91)
 }
 
 struct MainView: View {
@@ -102,7 +114,7 @@ struct MainView: View {
     @State private var savedOnly = false
     @State private var showSearch = false
     @State private var settings = false
-    private let blue = Color(red: 0.259, green: 0.478, blue: 0.631)
+    private let blue = ArchiveTheme.accent
     var videos: [VideoReference] {
         (library.catalog?.references ?? []).filter {
             (category == "all" || $0.category == category) &&
@@ -155,7 +167,7 @@ struct MainView: View {
                     }
                 }.padding(16)
             }
-            .background(Color(uiColor: .systemGroupedBackground))
+            .background(ArchiveTheme.background)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -164,7 +176,7 @@ struct MainView: View {
                 ToolbarItem(placement: .principal) {
                     Button { category = "all"; query = ""; savedOnly = false } label: {
                         VStack(spacing: 1) {
-                            Text("Mayday ATC").font(.system(size: 27, weight: .heavy)).foregroundStyle(.primary)
+                            Text("Mayday ATC").font(.system(size: 27, weight: .heavy)).foregroundStyle(ArchiveTheme.ink)
                             Text("ARCHIVE").font(.caption.weight(.semibold)).tracking(1).foregroundStyle(.secondary)
                         }
                     }.buttonStyle(.plain).accessibilityLabel("Mayday ATC, show all recordings")
@@ -173,6 +185,8 @@ struct MainView: View {
                     Button("Settings", systemImage: "gearshape") { settings = true }.labelStyle(.iconOnly)
                 }
             }
+            .toolbarBackground(ArchiveTheme.card, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .tint(blue)
             .navigationDestination(for: VideoReference.self) { VideoDetailView(video: $0) }
             .sheet(isPresented: $settings) { SettingsView() }
@@ -185,15 +199,15 @@ struct ArchiveCard: View {
     @EnvironmentObject private var library: Library
     let video: VideoReference
     let categoryTitle: String
-    private let blue = Color(red: 0.259, green: 0.478, blue: 0.631)
+    private let blue = ArchiveTheme.accent
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             NavigationLink(value: video) {
                 VStack(alignment: .leading, spacing: 12) {
                     Text(categoryTitle).font(.caption.bold()).foregroundStyle(blue)
                         .padding(.horizontal, 12).padding(.vertical, 6)
-                        .background(blue.opacity(0.1), in: RoundedRectangle(cornerRadius: 6))
-                    Text(video.title).font(.headline).foregroundStyle(.primary).multilineTextAlignment(.leading)
+                        .background(ArchiveTheme.sky, in: RoundedRectangle(cornerRadius: 6))
+                    Text(video.title).font(.headline).foregroundStyle(ArchiveTheme.ink).multilineTextAlignment(.leading)
                 }.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
             }.buttonStyle(.plain)
             HStack {
@@ -202,12 +216,12 @@ struct ArchiveCard: View {
                 if library.saved.contains(video.id) { Image(systemName: "bookmark.fill").foregroundStyle(blue).accessibilityLabel("Saved") }
                 Link(destination: video.url) {
                     Label("PLAY", systemImage: "play.fill").font(.caption.bold()).padding(.horizontal, 14).frame(minHeight: 44)
-                        .background(blue.opacity(0.1), in: Capsule())
+                        .background(ArchiveTheme.mint, in: Capsule())
                 }
             }
         }
         .padding(18)
-        .background(.background, in: RoundedRectangle(cornerRadius: 16))
+        .background(ArchiveTheme.card, in: RoundedRectangle(cornerRadius: 16))
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(blue.opacity(0.12)))
     }
 }
@@ -232,6 +246,9 @@ struct VideoDetailView: View {
                 ShareLink(item: video.url) { Label("Share video", systemImage: "square.and.arrow.up") }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(ArchiveTheme.background)
+        .listRowBackground(ArchiveTheme.card)
         .navigationTitle("ATC Archive").navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Button(library.saved.contains(video.id) ? "Unsave recording" : "Save recording", systemImage: library.saved.contains(video.id) ? "bookmark.fill" : "bookmark") { library.toggleSaved(video.id) }
@@ -304,9 +321,11 @@ struct SettingsView: View {
                     Text(AppInformation.disclaimer)
                     Text("Independent learning aid. No affiliation with or endorsement by ICAO, FAA, Apple, airlines, or ATC authorities.")
                     Link("Support / report a content issue", destination: URL(string: "https://github.com/outinletter/maydayatc/issues")!)
-                    Text("App version 1.0 (2)")
+                    Text("App version 1.0 (3)")
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(ArchiveTheme.background)
             .navigationTitle("Settings")
             .toolbar { Button("Done") { dismiss() } }
             .confirmationDialog("Delete saved lessons, progress, and downloaded content?", isPresented: $reset, titleVisibility: .visible) {

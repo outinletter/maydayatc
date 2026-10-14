@@ -314,12 +314,12 @@
         };
       } else {
         return {
-          N: "#427AA1", // Clear Sky Blue
-          W: "#ffffff", // Card Background
-          G: "#F2F6FA", // App Background (Soft clean look)
-          T: "#101820", // Text (Deep night for visibility)
-          M: "#4B5563", // Slate Gray
-          B: "#DDE5ED"  // Border
+          N: "#4A7A96", // Clear Sky Blue
+          W: "#FFFCF7", // Card Background
+          G: "#F2F7FA", // App Background (Soft clean look)
+          T: "#334D5F", // Text (Deep night for visibility)
+          M: "#627B8A", // Slate Gray
+          B: "#DCEBF2"  // Border
         };
       }
     }
@@ -606,7 +606,8 @@
     });
 
     // ── 11. Initial execution ──────────────────────────────────
-    var cachedTheme = safeGet(LS_THEME);
+    var cachedTheme = safeGet("pastelThemeV1") ? safeGet(LS_THEME) : "light";
+    safeSet("pastelThemeV1","1");
     if (cachedTheme === "dark" || cachedTheme === "light") {
       state.theme = cachedTheme;
     }

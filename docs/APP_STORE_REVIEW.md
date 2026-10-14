@@ -3,7 +3,7 @@
 Native SwiftUI app, iOS 17+, iPhone and iPad. No login, ads, payments, tracking, microphone, location, or third-party SDKs. Includes ten fictional English lessons offline, dialogue rehearsal, saved lessons, practice progress, Dynamic Type, system appearance, and native sharing.
 
 ## Review notes (paste into App Store Connect)
-Mayday ATC is an independent aviation English practice aid. All dialogues are fictional and clearly labeled. It is not operational guidance or an accredited ICAO course. No account or special access is needed. Select a lesson, enable Rehearse pilot responses, reveal examples, save it, and mark it practiced. Settings contains privacy policy, support, reset, content revision, and manual sync. The app works offline from first launch. GitHub checks download validated JSON lesson text only; no executable code or feature updates are downloaded. Turn off automatic checks to use offline indefinitely. Binary updates use App Store releases.
+Mayday ATC preserves its original video archive experience: recording cards, category filter, search, PLAY links, and recording details. Select a card to view the recording title/channel and independent category language exercises, then use WATCH REAL ATC VIDEO to open YouTube. The practice examples are fictional and are not transcripts or analyses of the linked recording. No account or special access is needed. Save recordings, rehearse pilot responses in details, or mark a category practiced. Settings contains privacy policy, support, reset, content revision, and manual sync. Text lessons and video metadata work offline; YouTube playback requires internet. GitHub checks download validated JSON only. New app functionality and binaries ship through the App Store.
 
 ## Metadata draft
 Name: Mayday ATC

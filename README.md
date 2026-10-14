@@ -1,6 +1,6 @@
 # Mayday ATC
 
-Native iOS aviation English practice app plus a browser version. All lessons are fictional language exercises, not actual transcripts or flight instructions.
+Mayday ATC video archive with the original recording-card feed, category filter, search, PLAY links, and recording detail flow, implemented natively on iOS plus the original browser version. All lessons are fictional language exercises, not actual transcripts or flight instructions.
 
 Open `ios/MaydayATC.xcodeproj`, select MaydayATC, select your development team and device, and run. iOS 17+. No package dependencies. Ten lessons are bundled for offline first launch.
 

@@ -98,77 +98,157 @@ struct MaydayATCApp: App {
 struct MainView: View {
     @EnvironmentObject private var library: Library
     @State private var query = ""
+    @State private var category = "all"
     @State private var savedOnly = false
+    @State private var showSearch = false
     @State private var settings = false
-    var lessons: [Scenario] {
-        (library.catalog?.scenarios ?? []).filter {
+    private let blue = Color(red: 0.259, green: 0.478, blue: 0.631)
+    var videos: [VideoReference] {
+        (library.catalog?.references ?? []).filter {
+            (category == "all" || $0.category == category) &&
             (!savedOnly || library.saved.contains($0.id)) &&
-            (query.isEmpty || ($0.title + " " + $0.summary).localizedCaseInsensitiveContains(query))
+            (query.isEmpty || ($0.title + " " + $0.channel).localizedCaseInsensitiveContains(query))
         }
+    }
+    var categoryTitle: String {
+        library.catalog?.scenarios.first { $0.id == category }?.title ?? "All Categories"
     }
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    Label("Aviation English practice", systemImage: "waveform")
-                        .font(.title2.bold()).foregroundStyle(.blue)
-                    Text("10 offline situations · Dialogue rehearsal · Personal progress")
-                        .font(.subheadline).foregroundStyle(.secondary)
-                    Text(AppInformation.disclaimer).font(.footnote).foregroundStyle(.secondary)
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 16) {
+                    if showSearch {
+                        HStack {
+                            Image(systemName: "magnifyingglass").foregroundStyle(blue)
+                            TextField("Search recordings or channels", text: $query)
+                                .textInputAutocapitalization(.never).autocorrectionDisabled()
+                            if !query.isEmpty { Button("Clear", systemImage: "xmark.circle.fill") { query = "" }.labelStyle(.iconOnly) }
+                        }.padding().background(.background, in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    HStack(alignment: .center) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(categoryTitle).font(.title2.bold())
+                            Text("\(videos.count) emergency recordings\(savedOnly ? " · Saved" : "")")
+                                .font(.subheadline).foregroundStyle(.secondary)
+                        }
+                        Spacer(minLength: 8)
+                        Menu {
+                            Button("All Categories") { category = "all" }
+                            ForEach(library.catalog?.scenarios ?? []) { item in
+                                Button(item.title) { category = item.id }
+                            }
+                            Divider()
+                            Toggle("Saved recordings only", isOn: $savedOnly)
+                        } label: {
+                            Text("FILTER").font(.subheadline.bold()).padding(12)
+                                .foregroundStyle(blue).background(blue.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
+                        }
+                    }.padding(.vertical, 8)
+                    ForEach(videos) { video in
+                        ArchiveCard(video: video, categoryTitle: library.catalog?.scenarios.first { $0.id == video.category }?.title ?? "Other")
+                    }
+                    if videos.isEmpty {
+                        ContentUnavailableView("No matching recordings", systemImage: "magnifyingglass", description: Text("Try another category or search, or turn off the saved filter."))
+                    }
+                    if library.catalog == nil {
+                        Text(library.message).foregroundStyle(.secondary)
+                    }
+                }.padding(16)
+            }
+            .background(Color(uiColor: .systemGroupedBackground))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Search archive", systemImage: "magnifyingglass") { showSearch.toggle() }.labelStyle(.iconOnly)
                 }
-                Section {
-                    Toggle("Saved lessons only", isOn: $savedOnly)
-                    if lessons.isEmpty { Text("No lessons found. Try another search or turn off the saved filter.").foregroundStyle(.secondary) }
-                    ForEach(lessons) { scenario in
-                        NavigationLink(value: scenario) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(scenario.title).font(.headline)
-                                    Text(library.completed.contains(scenario.id) ? "Practiced" : "Ready to practice")
-                                        .font(.caption).foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                if library.saved.contains(scenario.id) { Image(systemName: "bookmark.fill").foregroundStyle(.blue).accessibilityLabel("Saved") }
-                            }.padding(.vertical, 6)
+                ToolbarItem(placement: .principal) {
+                    Button { category = "all"; query = ""; savedOnly = false } label: {
+                        VStack(spacing: 1) {
+                            Text("Mayday ATC").font(.system(size: 27, weight: .heavy)).foregroundStyle(.primary)
+                            Text("ARCHIVE").font(.caption.weight(.semibold)).tracking(1).foregroundStyle(.secondary)
                         }
-                    }
-                } header: { Text("Lessons") }
-                Section {
-                    Text("Original archive links open YouTube. Fictional lessons above are separate exercises, not transcripts or analyses of these recordings.").font(.footnote).foregroundStyle(.secondary)
-                    ForEach((library.catalog?.references ?? []).filter { query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) }) { video in
-                        Link(destination: video.url) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                Label(video.title, systemImage: "play.rectangle")
-                                Text(video.channel).font(.caption).foregroundStyle(.secondary)
-                            }.padding(.vertical, 4)
-                        }
-                    }
-                } header: { Text("ATC video archive · YouTube") }
-                if !library.message.isEmpty {
-                    Section("Content status") { Text(library.message).font(.footnote).accessibilityAddTraits(.updatesFrequently) }
+                    }.buttonStyle(.plain).accessibilityLabel("Mayday ATC, show all recordings")
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Settings", systemImage: "gearshape") { settings = true }.labelStyle(.iconOnly)
                 }
             }
-            .navigationTitle("Mayday ATC")
-            .searchable(text: $query, prompt: "Search lessons")
-            .navigationDestination(for: Scenario.self) { LessonView(scenario: $0) }
-            .toolbar { Button("Settings", systemImage: "gearshape") { settings = true } }
+            .tint(blue)
+            .navigationDestination(for: VideoReference.self) { VideoDetailView(video: $0) }
             .sheet(isPresented: $settings) { SettingsView() }
             .refreshable { await library.sync() }
-            .overlay { if library.catalog == nil { ContentUnavailableView("Lessons unavailable", systemImage: "exclamationmark.triangle", description: Text(library.message)) } }
         }
     }
 }
 
-struct LessonView: View {
+struct ArchiveCard: View {
+    @EnvironmentObject private var library: Library
+    let video: VideoReference
+    let categoryTitle: String
+    private let blue = Color(red: 0.259, green: 0.478, blue: 0.631)
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            NavigationLink(value: video) {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(categoryTitle).font(.caption.bold()).foregroundStyle(blue)
+                        .padding(.horizontal, 12).padding(.vertical, 6)
+                        .background(blue.opacity(0.1), in: RoundedRectangle(cornerRadius: 6))
+                    Text(video.title).font(.headline).foregroundStyle(.primary).multilineTextAlignment(.leading)
+                }.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
+            }.buttonStyle(.plain)
+            HStack {
+                Text(video.channel).font(.subheadline).foregroundStyle(.secondary)
+                Spacer()
+                if library.saved.contains(video.id) { Image(systemName: "bookmark.fill").foregroundStyle(blue).accessibilityLabel("Saved") }
+                Link(destination: video.url) {
+                    Label("PLAY", systemImage: "play.fill").font(.caption.bold()).padding(.horizontal, 14).frame(minHeight: 44)
+                        .background(blue.opacity(0.1), in: Capsule())
+                }
+            }
+        }
+        .padding(18)
+        .background(.background, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(blue.opacity(0.12)))
+    }
+}
+
+struct VideoDetailView: View {
+    @EnvironmentObject private var library: Library
+    let video: VideoReference
+    var scenario: Scenario? { library.catalog?.scenarios.first { $0.id == video.category } }
+    var body: some View {
+        List {
+            Section {
+                if let scenario { Text(scenario.title).font(.caption.bold()).foregroundStyle(.tint) }
+                Text(video.title).font(.title2.bold())
+                Text(video.channel).foregroundStyle(.secondary)
+                Link(destination: video.url) {
+                    Label("WATCH REAL ATC VIDEO", systemImage: "play.rectangle.fill")
+                        .font(.headline).frame(maxWidth: .infinity, minHeight: 44)
+                }
+            }
+            if let scenario { ScenarioContent(scenario: scenario) }
+            Section {
+                ShareLink(item: video.url) { Label("Share video", systemImage: "square.and.arrow.up") }
+            }
+        }
+        .navigationTitle("ATC Archive").navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            Button(library.saved.contains(video.id) ? "Unsave recording" : "Save recording", systemImage: library.saved.contains(video.id) ? "bookmark.fill" : "bookmark") { library.toggleSaved(video.id) }
+        }
+    }
+}
+
+struct ScenarioContent: View {
     @EnvironmentObject private var library: Library
     let scenario: Scenario
     @State private var rehearsing = false
     @State private var revealed: Set<Int> = []
     var body: some View {
-        List {
-            Section("Fictional language exercise") {
+        Group {
+            Section("Category language practice · fictional") {
                 Text(scenario.summary)
-                Text("Examples below are invented for language practice and are not a transcript or operational checklist.").font(.footnote).foregroundStyle(.secondary)
+                Text("These category examples are independent of the video above. They are not its transcript, incident analysis, or an operational checklist.").font(.footnote).foregroundStyle(.secondary)
             }
             Section("Pilot communication goals") { ForEach(scenario.pilotRoles, id: \.self) { Text($0) } }
             Section("Controller communication goals") { ForEach(scenario.atcRoles, id: \.self) { Text($0) } }
@@ -190,10 +270,6 @@ struct LessonView: View {
                 Button(library.completed.contains(scenario.id) ? "Practiced — practice again anytime" : "Mark as practiced", systemImage: "checkmark.circle") { library.finish(scenario.id) }
                 ShareLink(item: "Mayday ATC — fictional English practice\n\(scenario.title)\n\(scenario.practice)\n\(AppInformation.disclaimer)") { Label("Share practice prompt", systemImage: "square.and.arrow.up") }
             }
-        }
-        .navigationTitle(scenario.title).navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            Button(library.saved.contains(scenario.id) ? "Unsave lesson" : "Save lesson", systemImage: library.saved.contains(scenario.id) ? "bookmark.fill" : "bookmark") { library.toggleSaved(scenario.id) }
         }
     }
 }
@@ -228,7 +304,7 @@ struct SettingsView: View {
                     Text(AppInformation.disclaimer)
                     Text("Independent learning aid. No affiliation with or endorsement by ICAO, FAA, Apple, airlines, or ATC authorities.")
                     Link("Support / report a content issue", destination: URL(string: "https://github.com/outinletter/maydayatc/issues")!)
-                    Text("App version 1.0 (1)")
+                    Text("App version 1.0 (2)")
                 }
             }
             .navigationTitle("Settings")

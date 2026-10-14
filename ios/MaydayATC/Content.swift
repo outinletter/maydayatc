@@ -35,6 +35,7 @@ struct Catalog: Codable {
               value.references.allSatisfy({ v in
                   v.id.range(of: "^[A-Za-z0-9_-]{11}$", options: .regularExpression) != nil
                   && valid(v.title, 200) && valid(v.channel, 120)
+                  && value.scenarios.contains { $0.id == v.category }
               }),
               value.scenarios.allSatisfy({ s in
                   valid(s.id, 64) && s.id.range(of: "^[a-z0-9-]+$", options: .regularExpression) != nil
@@ -48,10 +49,11 @@ struct Catalog: Codable {
     }
 }
 
-struct VideoReference: Codable, Identifiable {
+struct VideoReference: Codable, Identifiable, Hashable {
     let id: String
     let title: String
     let channel: String
+    let category: String
     var url: URL { URL(string: "https://www.youtube.com/watch?v=" + id)! }
 }
 

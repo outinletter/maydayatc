@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 1,
+  "revision": 2,
   "scenarios": [
     {
       "id": "engine",
@@ -18,23 +18,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We have an engine problem and need to return.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "MAYDAY, MAYDAY, MAYDAY, United 81, left engine failure, 8,000 feet, requesting immediate return to Washington, 182 souls on board."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "United 81, MAYDAY acknowledged. Turn left heading 270, descend and maintain 3,000. Emergency services alerted. Say fuel remaining."
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "United 81, left heading 270, descending to 3,000. Fuel remaining is two hours. Request ILS runway 19R."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "United 81, heading 240, cleared ILS runway 19R, 18 miles out. Wind 180 at 12 knots. All departures held."
+        },
+        {
+          "from": "PILOT",
+          "msg": "United 81, request fire and rescue standby on runway. Running emergency engine shutdown checklist."
+        },
+        {
+          "from": "ATC",
+          "msg": "United 81, fire and rescue units are standing by runway 19R. Report established on localizer."
         }
       ],
-      "practice": "1. Describe an engine problem in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: MAYDAY, MAYDAY, MAYDAY. United 81, left engine failure, currently passing 8,000 feet. Requesting immediate straight-in vectors to Washington, with 182 souls on board and two hours of fuel remaining.\n    ATC: United 81, Washington Approach, copy MAYDAY, left engine failure. Turn left heading 270, descend and maintain 3,000 feet. All departures have been suspended. Airport emergency services (ARFF) are fully alerted. Confirm fuel remaining.\n    PILOT: Left heading 270, descend and maintain 3,000 feet, United 81. Fuel remaining is two hours. Requesting ILS Runway 19 Right approach.\n    ATC: United 81, fly heading 240, you are cleared for straight-in ILS Runway 19 Right approach, 18 miles from touchdown. Current surface wind 180 at 12 knots.\n    PILOT: Heading 240, cleared for straight-in ILS Runway 19 Right approach, United 81. Requesting emergency fire and rescue standby on touchdown. We are now running the engine shutdown checklist.\n    ATC: United 81, Roger. Crash fire and rescue units are fully prepared and standing by along Runway 19 Right. Report when established on the localizer.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: MAYDAY, MAYDAY, MAYDAY, United 81, left engine failure, 8,000 feet, requesting immediate return to Washington, 182 souls on board.\n    Corrected: MAYDAY, MAYDAY, MAYDAY. United 81, left engine failure, currently passing 8,000 feet. Requesting immediate straight-in vectors to Washington, with 182 souls on board and two hours of fuel remaining.\n    Explanation: This reconstruction applies FAA AIM Example #70 by structuring readback sequences properly. Adding specific altimetry tracking ('currently passing 8,000 feet') and clear operational requests ('straight-in vectors') improves structural organization and linguistic clarity.\n\n    Original: United 81, left heading 270, descending to 3,000. Fuel remaining is two hours. Request ILS runway 19R.\n    Corrected: Left heading 270, descend and maintain 3,000 feet, United 81. Fuel remaining is two hours. Requesting ILS Runway 19 Right approach.\n    Explanation: In accordance with FAA AIM Examples #66 and #70, runway designators must be fully spoken ('Runway 19 Right' instead of 'runway 19R'), and altitude targets must be read back sequentially to prevent human-factor readback errors.\n\n    Original: United 81, request fire and rescue standby on runway. Running emergency engine shutdown checklist.\n    Corrected: Heading 240, cleared for straight-in ILS Runway 19 Right approach, United 81. Requesting emergency fire and rescue standby on touchdown. We are now running the engine shutdown checklist.\n    Explanation: Demonstrates complex, cohesive pilot interaction by explicitly restating critical clearances (Runway 19 Right) before adding tactical emergency requests.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: United 81 is experiencing a severe compressor stall on the left powerplant, requesting immediate priority radar vectors to the nearest suitable runway.\n    Alternative: We have lost thrust on the left engine, initiating emergency drift-down. Clear the arrival corridor for an immediate glide approach to Runway 19 Right."
     },
     {
       "id": "medical",
@@ -52,23 +60,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We have a medical emergency on board and request assistance on arrival.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "PAN PAN, PAN PAN, Delta 892, medical emergency, passenger unresponsive, requesting priority and diversion to Boston."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Delta 892, PAN PAN acknowledged. Turn right direct BOSOX, descend to flight level 180. Any medical assistance on board?"
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Delta 892, affirmative. A physician on board is assisting. Patient in suspected cardiac arrest, CPR in progress. Request ambulance at gate."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Delta 892, copy. Ambulance and paramedic services requested at Boston Logan. Expect ILS runway 33L, 35 miles out. Contact approach on 124.4."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Contact 124.4, Delta 892. Requesting estimated time of arrival to touchdown."
+        },
+        {
+          "from": "ATC",
+          "msg": "Delta 892, touchdown estimated in approximately 18 minutes. Gate C12 is clear with paramedic vehicle access ready."
         }
       ],
-      "practice": "1. Describe a passenger medical emergency in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: PAN PAN, PAN PAN, Delta 892. We are declaring a medical emergency due to an unresponsive passenger suffering a suspected cardiac arrest. Requesting immediate diversion and priority handling to Boston Logan.\n    ATC: Delta 892, Boston Logan Approach, copy PAN PAN. Turn right direct BOSOX, descend and maintain flight level 180. Confirm if there is any professional medical assistance assisting on board.\n    PILOT: Delta 892, affirmative. We have a licensed physician on board assisting. Patient is in active cardiac arrest, CPR is currently in progress. We request a paramedic ambulance with direct gate access upon arrival.\n    ATC: Delta 892, copy. Paramedics and airport rescue services are being staged immediately. Expect straight-in ILS Runway 33 Left approach, 35 miles from touchdown. Contact Approach on 124.4 now.\n    PILOT: Expect straight-in ILS Runway 33 Left, contact approach on 124.4, Delta 892. Requesting our estimated elapsed time to touchdown.\n    ATC: Delta 892, your touchdown is estimated in approximately 18 minutes. Gate C12 has been designated for your arrival with direct paramedic ramp access cleared.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: PAN PAN, PAN PAN, Delta 892, medical emergency, passenger unresponsive, requesting priority and diversion to Boston.\n    Corrected: PAN PAN, PAN PAN, Delta 892. We are declaring a medical emergency due to an unresponsive passenger suffering a suspected cardiac arrest. Requesting immediate diversion and priority handling to Boston Logan.\n    Explanation: Adheres to FAA AIM Example #40 (b)(3) by precisely explaining the medical urgency to help ground responders prepare the exact clinical equipment needed.\n\n    Original: Delta 892, ambulance requested Boston Logan. Expect ILS runway 33L, 35 miles out. Contact approach on 124.4.\n    Corrected: Delta 892, copy. Paramedics and airport rescue services are being staged immediately. Expect straight-in ILS Runway 33 Left approach, 35 miles from touchdown. Contact Approach on 124.4 now.\n    Explanation: Uses standard FAA AIM runway phonetics ('Runway 33 Left' instead of 'runway 33L'). Controller replies with 'staged immediately' to confirm emergency equipment mobilization, illustrating Advanced English interaction.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Delta 892, we have a life-threatening medical situation in the cabin. Requesting priority handling and direct routing to Boston to ensure immediate clinical intervention.\n    Alternative: Delta 892, declaring medical urgency. Passenger is unconscious with weak vitals. We require paramedic crews ready with a defibrillator immediately upon block arrival."
     },
     {
       "id": "weather",
@@ -86,23 +102,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We are unable to continue through this weather and request an alternative.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Denver Tower, Southwest 1145, going around \u2014 wind shear escape!"
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Southwest 1145, Denver Tower, Roger. Climb runway heading 4,000. Wind at the surface 280 at 35, gusts 52. Report complete."
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Denver Tower, Southwest 1145, wind shear escape complete. Requesting climb to 6,000, and request further instructions."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Southwest 1145, Roger. Turn left heading 180, climb and maintain 6,000. Vectoring you clear of the thunderstorm cell active on final."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Left heading 180, climb and maintain 6,000, Southwest 1145. Airspeed fluctuated minus 20 knots at 500 feet, maximum thrust was required."
+        },
+        {
+          "from": "ATC",
+          "msg": "Southwest 1145, copy PIREP. Altimeter 29.82. Say fuel status and intentions."
         }
       ],
-      "practice": "1. Describe unsafe weather ahead in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: Denver Tower, Southwest 1145, executing missed approach. We have encountered severe wind shear at 400 feet, declaring an emergency and initiating a wind shear escape maneuver!\n    ATC: Southwest 1145, Denver Tower, Roger. Your wind shear escape is acknowledged. Climb on runway heading, maintain 4,000 feet. Wind at the surface is currently 280 at 35 knots, gusting 52. Report when escape maneuver is complete.\n    PILOT: Denver Tower, Southwest 1145, wind shear escape maneuver is complete. We are currently stabilizing, climbing to 6,000 feet, and requesting further instructions.\n    ATC: Southwest 1145, Roger. Turn left heading 180, climb and maintain 6,000 feet. Vectoring you clear of the active convective thunderstorm cells over the final approach corridor.\n    PILOT: Left heading 180, climbing and maintaining 6,000 feet, Southwest 1145. For your information, we experienced an abrupt airspeed loss of 20 knots at 500 feet, requiring maximum takeoff thrust to recover.\n    ATC: Southwest 1145, copy your PIREP, thank you. Latest altimeter setting is 29.82. Say fuel status and your future intentions.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: Denver Tower, Southwest 1145, going around \u2014 wind shear escape!\n    Corrected: Denver Tower, Southwest 1145, executing missed approach. We have encountered severe wind shear at 400 feet, declaring an emergency and initiating a wind shear escape maneuver!\n    Explanation: Follows FAA AIM Example #171 & #172 precisely. Declaring 'wind shear escape' suspends standard separation rules immediately.\n\n    Original: Denver Tower, Southwest 1145, wind shear escape complete. Requesting climb to 6,000, and request further instructions.\n    Corrected: Denver Tower, Southwest 1145, wind shear escape maneuver is complete. We are currently stabilizing, climbing to 6,000 feet, and requesting further instructions.\n    Explanation: Adheres to FAA AIM Example #173. The pilot reports 'escape complete' only when stabilization is achieved, then explicitly requests further instructions before changing altitude.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Denver Tower, Southwest 1145, microburst warning triggered, performing wind shear escape, climbing to safe altitude.\n    Alternative: Southwest 1145, wind shear recovery complete. Requesting vectors to hold and burn fuel while we monitor the storm line."
     },
     {
       "id": "fire",
@@ -120,23 +144,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We have smoke in the cabin and request priority assistance.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "MAYDAY, MAYDAY, MAYDAY, United 881, engine fire number two, returning immediately. 312 souls, negative hazardous cargo."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "United 881, MAYDAY acknowledged. Left heading 090, descend and maintain 3,000. Airport emergency services alerted. Say fire indications."
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "United 881, heading 090, descending to 3,000. Fire warning is still active, discharging bottle one. Requesting immediate ILS runway 28R."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "United 881, turn left heading 360, cleared direct ILS runway 28R, 12 miles. All ground operations held. Emergency services in position."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Left heading 360, United 881. Engine fire light has gone out, continuing single-engine approach. Requesting emergency vehicles on arrival."
+        },
+        {
+          "from": "ATC",
+          "msg": "United 881, copy, fire vehicles are standing by at the runway 28R threshold. Wind 280 at 10. Cleared to land."
         }
       ],
-      "practice": "1. Describe smoke in the cabin in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: MAYDAY, MAYDAY, MAYDAY. United 881, we have a confirmed engine fire in powerplant number two. Requesting immediate return to the field. We have 312 souls on board, negative hazardous cargo.\n    ATC: United 881, JFK Tower, copy MAYDAY, engine fire acknowledged. Turn left heading 090, descend and maintain 3,000 feet. Public airport emergency fire services have been dispatched. Please report if fire warnings are still active.\n    PILOT: United 881, left heading 090, descending to 3,000 feet. Fire warning light is still illuminated in the cockpit. We have discharged the first fire extinguisher bottle. Requesting immediate straight-in vectors for ILS Runway 28 Right.\n    ATC: United 881, copy that. Turn left heading 360, cleared for direct ILS Runway 28 Right approach, 12 miles out. All airport ground movements have been halted. Rescue vehicles are positioning at the threshold.\n    PILOT: Left heading 360, United 881. The engine fire warning light has now extinguished. We are continuing a single-engine approach. Requesting emergency services to tail us on the roll-out.\n    ATC: United 881, copy, fire warning extinguished. Rescue vehicles will follow your aircraft down the runway upon touchdown. Surface wind 280 at 10. Cleared to land Runway 28 Right.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: MAYDAY, MAYDAY, MAYDAY, United 881, engine fire number two, returning immediately. 312 souls.\n    Corrected: MAYDAY, MAYDAY, MAYDAY. United 881, we have a confirmed engine fire in powerplant number two. Requesting immediate return to the field. We have 312 souls on board, negative hazardous cargo.\n    Explanation: Proactively declaring 'negative hazardous cargo' in the initial transmission is an exemplary Advanced English practice, allowing ground crews to assess firefighting agent safety parameters.\n\n    Original: United 881, heading 090, descending to 3,000. Fire warning is still active, discharging bottle one. Requesting immediate ILS runway 28R.\n    Corrected: United 881, left heading 090, descending to 3,000 feet. Fire warning light is still illuminated in the cockpit. We have discharged the first fire extinguisher bottle. Requesting immediate straight-in vectors for ILS Runway 28 Right.\n    Explanation: Specifically details the active status of warnings ('illuminated') and actions taken ('discharged'), allowing ATC to accurately record the situation in real time.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: United 881, powerplant number two thermal alarm active, executing shut-down checklist and requesting immediate visual approach to the nearest runway.\n    Alternative: United 881, fire warning light is out, single-engine operations stabilized, requesting ARFF standby at the end of Runway 28 Right for heat signature inspection."
     },
     {
       "id": "hydraulic",
@@ -154,23 +186,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We have a hydraulic system indication and need time to assess the situation.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Center, American 556, declaring emergency, lost all primary hydraulic systems. Requesting diversion to Los Angeles with the longest runway."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "American 556, emergency declared. Proceed direct Los Angeles, descend and maintain flight level 200. State fuel and souls on board."
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "American 556 has four hours fuel, 287 souls on board. We need to hold east of LAX to run through hydraulic failure QRH checklists."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "American 556, Roger. Hold east of LAX, expect 30 minutes holding. Runway 24L, length 12,091 feet is available. Paramedics and ARFF alerted."
+        },
+        {
+          "from": "PILOT",
+          "msg": "American 556, copy holding. Nose gear extended manually via gravity. Braking capability is degraded. Request emergency vehicles on standby near the runway."
+        },
+        {
+          "from": "ATC",
+          "msg": "American 556, Roger. Runway 24L is cleared for your landing. Emergency response units are positioned along the taxiway."
         }
       ],
-      "practice": "1. Describe a hydraulic system indication in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: Los Angeles Center, American 556, declaring an emergency. We have experienced a complete loss of primary hydraulic systems, requesting immediate diversion to LAX due to degraded flight controls and braking capability.\n    ATC: American 556, LA Center, Roger, emergency declared. Proceed direct to Los Angeles, descend and maintain flight level 200. Please advise your fuel remaining in hours and souls on board.\n    PILOT: American 556, direct LAX, descending to flight level 200. We have four hours of fuel and 287 souls on board. Requesting an extended holding pattern east of LAX to execute the hydraulic system failure QRH.\n    ATC: American 556, Roger. Cleared to hold east of LAX, expect 30 minutes of holding. Runway 24 Left, which is 12,091 feet long, is fully prepared for your arrival. ARFF and medical services are fully alerted.\n    PILOT: American 556, copy holding pattern. We have manually extended the landing gear via gravity free-fall. Landing configuration is established, braking performance will be severely degraded. Requesting emergency vehicles on standby.\n    ATC: American 556, copy that. Runway 24 Left is cleared for your landing, wind calm. Crash fire and rescue units are stationed along the taxiway to follow your rollout.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: Center, American 556, declaring emergency, lost all primary hydraulic systems. Requesting diversion to Los Angeles with the longest runway.\n    Corrected: Los Angeles Center, American 556, declaring an emergency. We have experienced a complete loss of primary hydraulic systems, requesting immediate diversion to LAX due to degraded flight controls and braking capability.\n    Explanation: Explains the operational consequences of the failure ('degraded flight controls and braking') so that ATC can prioritize runway selection (LDA) and coordinate runway foaming.\n\n    Original: American 556, copy holding. Nose gear extended manually via gravity. Braking capability is degraded. Request emergency vehicles on standby near the runway.\n    Corrected: American 556, copy holding pattern. We have manually extended the landing gear via gravity free-fall. Landing configuration is established, braking performance will be severely degraded. Requesting emergency vehicles on standby.\n    Explanation: Incorporates precise terminology ('gravity free-fall') to describe alternative landing gear extension, confirming aircraft status for ground responders.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: American 556, we are experiencing complete flight control stiffening due to triple hydraulic depletion, requiring primary vectors for a straight-in long rollout approach.\n    Alternative: American 556, gear locked down via alternate free-fall gravity release, landing flap configuration is limited. Requesting zero-braking emergency buffer zone."
     },
     {
       "id": "fuel",
@@ -188,23 +228,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We have a critical fuel situation and need priority assistance.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Approach, Avianca 052, we are declaring minimum fuel. We need priority to the field, unable to accept further delay."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Avianca 052, Roger. Expect ILS runway 22L, you are number 5 in sequence. Delay is approximately 40 minutes due to weather."
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Avianca 052, negative, we cannot wait 40 minutes. We are now declaring a fuel emergency. We have only 15 minutes of fuel remaining. Request immediate vector."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Avianca 052, fuel emergency acknowledged. All inbound traffic stop. Turn left heading 180, cleared immediate ILS runway 22L approach. 8 miles final."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Avianca 052, left heading 180, established on localizer. One engine is showing low fuel pressure indications."
+        },
+        {
+          "from": "ATC",
+          "msg": "Avianca 052, cleared to land runway 22L. Runway is clear of all aircraft, emergency vehicles are on the roll."
         }
       ],
-      "practice": "1. Describe a critical fuel situation in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: New York Approach, Avianca 052. We are declaring a fuel emergency. Our onboard reserves are depleted, and we cannot accept any holding or routing delays. Requesting immediate straight-in vector for emergency landing.\n    ATC: Avianca 052, Roger, your fuel emergency is acknowledged. All other inbound aircraft are held. Turn left heading 180, you are cleared for an immediate straight-in ILS Runway 22 Left approach. You are 8 miles from final.\n    PILOT: Avianca 052, left heading 180, established on the localizer for Runway 22 Left. For your information, powerplant number four is currently flame-out, and we are experiencing low pressure indications on the remaining tanks.\n    ATC: Avianca 052, copy, low pressure and flame-out. Runway 22 Left is completely clear of all air and ground traffic. Emergency services are rolling and positioned for immediate response. Cleared to land Runway 22 Left.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: Approach, Avianca 052, we are declaring minimum fuel. We need priority to the field, unable to accept further delay.\n    Corrected: New York Approach, Avianca 052. We are declaring a fuel emergency. Our onboard reserves are depleted, and we cannot accept any holding or routing delays. Requesting immediate straight-in vector for emergency landing.\n    Explanation: In accordance with FAA AIM Para 5-5-15, declaring 'minimum fuel' is merely an advisory and does NOT grant priority. To obtain priority, the pilot must declare a fuel emergency (MAYDAY FUEL) and state remaining fuel in minutes.\n\n    Original: Avianca 052, negative, we cannot wait 40 minutes. We are now declaring a fuel emergency. We have only 15 minutes of fuel remaining. Request immediate vector.\n    Corrected: Avianca 052, negative, we cannot wait 40 minutes. Our onboard fuel reserves are now down to 15 minutes of endurance, which is below emergency reserves. We request immediate heading to Runway 22 Left.\n    Explanation: Quantifying remaining fuel as '15 minutes of endurance' clarifies the urgency, ensuring immediate priority vectoring from air traffic control.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Avianca 052, declaring MAYDAY FUEL. We have less than 10 minutes of usable fuel remaining, initiating immediate direct descent to Runway 22 Left.\n    Alternative: Avianca 052, fuel starvation is imminent, requiring direct descent from present position, unable to comply with any altitude holds."
     },
     {
       "id": "bird",
@@ -222,23 +270,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We suspect a bird strike and are assessing the aircraft.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "MAYDAY, MAYDAY, MAYDAY, Cactus 1549, hit birds, lost thrust in both engines. Turning back towards LaGuardia."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Cactus 1549, LaGuardia Tower. Roger, turn right heading 220, you can land runway 13 at LaGuardia. Confirm lost thrust both engines?"
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Cactus 1549, unable. We may end up in the Hudson River. Lost thrust completely in both engines."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Cactus 1549, copy. Runway 29 at Newark is also available, 7 miles away. If you can make it, let me know."
+        },
+        {
+          "from": "PILOT",
+          "msg": "We can't do it. We're going to be in the Hudson."
+        },
+        {
+          "from": "ATC",
+          "msg": "Cactus 1549, Roger. Alerting all emergency services, Marine Division, and Coast Guard immediately. Radar contact lost, passenger safety assured."
         }
       ],
-      "practice": "1. Describe a suspected bird strike in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: MAYDAY, MAYDAY, MAYDAY. Cactus 1549, we have encountered a major bird strike, resulting in a total loss of thrust on both powerplants. We are initiating emergency glide descent, requesting immediate return to LaGuardia.\n    ATC: Cactus 1549, LaGuardia Tower, copy MAYDAY. Turn right heading 220. Runway 13 at LaGuardia is cleared and available for your immediate arrival. Confirm you have lost thrust on both engines?\n    PILOT: Cactus 1549, unable to make LaGuardia. The aircraft altitude is too low for the glide envelope. We may end up performing an emergency ditching in the Hudson River.\n    ATC: Cactus 1549, copy. Runway 29 at Newark is also completely clear, it is 7 miles to your left. If you can glide to that runway, let me know immediately.\n    PILOT: We are unable to glide to any runway. Cactus 1549 is performing an emergency water landing in the Hudson River.\n    ATC: Cactus 1549, Roger, copy Hudson River landing. All airport rescue services, Coast Guard vessels, and marine rescue divisions are being scrambled to your coordinate. Radar contact lost, emergency protocol initiated.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: MAYDAY, MAYDAY, MAYDAY, Cactus 1549, hit birds, lost thrust in both engines. Turning back towards LaGuardia.\n    Corrected: MAYDAY, MAYDAY, MAYDAY. Cactus 1549, we have encountered a major bird strike, resulting in a total loss of thrust on both powerplants. We are initiating emergency glide descent, requesting immediate return to LaGuardia.\n    Explanation: Uses sophisticated vocabulary ('wildlife ingestion', 'total loss of thrust') to explain the emergency, allowing ATC to coordinate airspace clearing across multiple local terminals.\n\n    Original: Cactus 1549, unable. We may end up in the Hudson River. Lost thrust completely in both engines.\n    Corrected: Cactus 1549, unable to make LaGuardia. The aircraft altitude is too low for the glide envelope. We may end up performing an emergency ditching in the Hudson River.\n    Explanation: Uses exact aerodynamic logic ('glide envelope') to rule out runway options, and uses the correct maritime term 'ditching' to trigger river-rescue deployment immediately.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Cactus 1549, dual engine flame-out due to severe wildlife ingestion, configuring aircraft for best glide speed.\n    Alternative: Cactus 1549, preparing cabin for emergency water evacuation. Requesting immediate Coast Guard dispatch at Hudson River mile marker 4."
     },
     {
       "id": "gear",
@@ -256,23 +312,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We have an abnormal landing gear indication and request time to assess.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Tower, Jetstar 412, we have an unsafe nose gear indication after multiple extension attempts. Requesting a low fly-by for visual confirmation of our gear state."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Jetstar 412, Roger. Cleared low approach runway 16, maintain altitude not below 300 feet. We will advise gear state from the tower cab."
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Jetstar 412, passing abeam the tower now. Confirm gear position."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Jetstar 412, visual inspection indicates your nose gear is not visible. It appears completely retracted. ARFF services are fully briefed."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Jetstar 412, copy. Declaring emergency. We will cycle once more, then prepare for a nose-up landing. Requesting foamed runway if available."
+        },
+        {
+          "from": "ATC",
+          "msg": "Jetstar 412, foam application in progress on runway 16. Wind is calm. Cleared to land when ready, rescue units are moving to their positions."
         }
       ],
-      "practice": "1. Describe a landing gear indication in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: Tower, Jetstar 412. We have a nose gear unsafe indication after executing alternate gear extension checklists. Requesting a low-level fly-by at 500 feet for visual inspection of our landing gear state.\n    ATC: Jetstar 412, Roger. Cleared for a low approach Runway 16, maintain altitude not below 500 feet. We will observe your gear state visually from the tower cab with magnification.\n    PILOT: Jetstar 412, currently passing abeam the tower, descending to 500 feet. Please confirm our landing gear configuration.\n    ATC: Jetstar 412, visual observation indicates that your nose gear is not visible and appears completely retracted within the well. Main gear appears down and locked. ARFF services are on standby.\n    PILOT: Jetstar 412, copy that, nose gear retracted. We are declaring an emergency and will proceed to hold to burn off fuel. Requesting runway foam application for a nose-up landing.\n    ATC: Jetstar 412, Roger, emergency copy. Runway 16 is being prepared with foam application. Wind calm. You are cleared to land when ready, fire rescue vehicles are moving to their runway positions.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: Tower, Jetstar 412, we have an unsafe nose gear indication after multiple extension attempts. Requesting a low pass for visual confirmation of our gear state.\n    Corrected: Tower, Jetstar 412. We have a nose gear unsafe indication after executing alternate gear extension checklists. Requesting a low-level fly-by at 500 feet for visual inspection of our landing gear state.\n    Explanation: Complies with AIM Para 4-3-11 by using the official aviation phrase 'low-level fly-by' and specifying target altitude to manage ground risk during visual inspection.\n\n    Original: Jetstar 412, visual inspection indicates your nose gear is not visible, appears retracted. ARFF services are fully briefed.\n    Corrected: Jetstar 412, visual observation indicates that your nose gear is not visible and appears completely retracted within the well. Main gear appears down and locked. ARFF services are on standby.\n    Explanation: Detailing structural states ('retracted within the well', 'down and locked') helps the crew calculate landing attitudes and touchdown impact stresses accurately.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Jetstar 412, nose gear torque links appear disconnected. Preparing for a controlled nose-gear touchdown, requesting dry runway threshold with ARFF escort.\n    Alternative: Jetstar 412, initiating emergency holding to deplete fuel and reduce our landing weight prior to executing a partial gear-up landing."
     },
     {
       "id": "pressurization",
@@ -290,23 +354,31 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We have a pressurization problem and require assistance.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "MAYDAY, MAYDAY, MAYDAY, Qantas 72, rapid decompression. Initiating emergency descent from flight level 390 to 10,000 feet."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Qantas 72, MAYDAY acknowledged. Emergency descent approved to 10,000 feet. Direct block altitude from flight level 100 to 390 is cleared. Say intentions."
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Qantas 72, masks are on, emergency descent in progress. Heading direct to Learmonth. 315 souls on board, requesting medical teams on arrival."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Qantas 72, Proceed direct to Learmonth Airport, runway 18. Paramedics and airport rescue services are being staged immediately."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Direct Learmonth runway 18, Qantas 72. Cabin pressure has stabilized, leveled off at 10,000 feet. Oxygen masks are now removed."
+        },
+        {
+          "from": "ATC",
+          "msg": "Qantas 72, glad to hear. Radar indicates you are 45 miles northeast of Learmonth, proceed direct, altimeter 29.92."
         }
       ],
-      "practice": "1. Describe a pressurization problem in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: MAYDAY, MAYDAY, MAYDAY. Qantas 72, rapid decompression. Initiating immediate emergency descent from flight level 390 to 10,000 feet. Requesting immediate straight-in vectors to Learmonth.\n    ATC: Qantas 72, copy MAYDAY, rapid decompression. Your emergency descent to 10,000 feet is approved. Block altitude from flight level 100 to 390 is entirely yours. Say intentions.\n    PILOT: Qantas 72, passenger and crew oxygen masks are deployed, emergency descent is established. Proceeding heading direct to Learmonth. We have 315 souls on board and request medical standby.\n    ATC: Qantas 72, proceed direct to Learmonth Airport, Runway 18. Paramedic units and emergency response services are being mobilized at the field.\n    PILOT: Direct Learmonth Runway 18, Qantas 72. Cabin pressure has stabilized, currently leveled off at 10,000 feet. Oxygen masks are now removed and stowed.\n    ATC: Qantas 72, glad to hear. Radar contact is fully established, proceed direct, latest altimeter 29.92. You are cleared for Runway 18 approach.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: MAYDAY, MAYDAY, MAYDAY, Qantas 72, rapid decompression, emergency descent from FL390 for FL100.\n    Corrected: MAYDAY, MAYDAY, MAYDAY. Qantas 72, rapid decompression. Initiating immediate emergency descent from flight level 390 to 10,000 feet. Requesting immediate straight-in vectors to Learmonth.\n    Explanation: Uses the standardized command 'Initiating immediate emergency descent' combined with target altitudes to instantly establish safe vertical clearing below the descending aircraft.\n\n    Original: Qantas 72, Proceed direct to Learmonth Airport, runway 18. Paramedics and airport rescue services are being staged immediately.\n    Corrected: Qantas 72, proceed direct to Learmonth Airport, Runway 18. Paramedic units and emergency response services are being mobilized at the field.\n    Explanation: Describing response conditions precisely ('mobilized at the field') keeps the crew informed of emergency medical staging, reinforcing cockpit-cabin coordination.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Qantas 72, structural integrity of the fuselage appears intact, maintaining high speed descent to 10,000 feet to escape the hypoxic environment.\n    Alternative: Qantas 72, cabin altitude has returned to safe levels, emergency descent terminated, maintaining 10,000 feet."
     },
     {
       "id": "etc",
@@ -324,23 +396,23 @@
       ],
       "dialogue": [
         {
-          "msg": "Training 123, We have an unexpected aircraft problem and need assistance.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "MAYDAY, MAYDAY, MAYDAY, declaring an emergency due to an uncontained issue. Requesting immediate return."
         },
         {
-          "msg": "Training 123, understood. State the assistance you require.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "MAYDAY acknowledged. Turn left heading 180, descend and maintain 4,000. State your intentions."
         },
         {
-          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
-          "from": "PILOT"
+          "from": "PILOT",
+          "msg": "Heading 180, descending 4,000. We need the longest runway available and emergency equipment standing by."
         },
         {
-          "msg": "Training 123, understood. Advise when ready.",
-          "from": "ATC"
+          "from": "ATC",
+          "msg": "Roger, expect runway 27. Emergency services are being alerted and positioned. Wind 250 at 15."
         }
       ],
-      "practice": "1. Describe an unexpected aircraft problem in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: MAYDAY, MAYDAY, MAYDAY. Regional 771, we are declaring an emergency due to an uncontained, non-standard system anomaly. Requesting priority handling and immediate vectors to the nearest suitable airport.\n    ATC: Regional 771, Center, copy MAYDAY. Emergency is acknowledged. Turn right heading 030, descend and maintain flight level 180. State your fuel remaining and souls on board when able.\n    PILOT: Right heading 030, descending to flight level 180, Regional 771. We have three hours of fuel remaining and 84 souls on board. Requesting the longest available runway and ARFF standby.\n    ATC: Regional 771, Roger. Expect ILS Runway 09, length is 10,500 feet. Airport emergency response services are being mobilized. Contact Approach on 125.8.\n    PILOT: Expect ILS Runway 09, contacting Approach on 125.8, Regional 771.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: MAYDAY, MAYDAY, MAYDAY, declaring an emergency due to an uncontained issue. Requesting immediate return.\n    Corrected: MAYDAY, MAYDAY, MAYDAY. Regional 771, we are declaring an emergency due to an uncontained, non-standard system anomaly. Requesting priority handling and immediate vectors to the nearest suitable airport.\n    Explanation: For unclassified emergencies, explicitly stating 'uncontained, non-standard system anomaly' provides ATC with the understanding that standard QRH checklists may not fully cover the event, prompting maximum ATC flexibility.\n\n    Original: MAYDAY acknowledged. Turn left heading 180, descend and maintain 4,000. State your intentions.\n    Corrected: Regional 771, Center, copy MAYDAY. Emergency is acknowledged. Turn right heading 030, descend and maintain flight level 180. State your fuel remaining and souls on board when able.\n    Explanation: Standardizes the ATC response to secure essential emergency data (fuel and souls) without rushing the flight crew, adhering to CRM best practices.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Regional 771, we are encountering multiple cascading system anomalies, unable to maintain RVSM, requesting an immediate block altitude and vectors for a precautionary landing.\n    Alternative: Regional 771, non-normal checklist is in progress for an unclassified flight control issue, requesting a wide vector for a long final approach."
     }
   ],
   "references": [

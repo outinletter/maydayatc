@@ -1,0 +1,504 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "scenarios": [
+    {
+      "id": "engine",
+      "title": "Engine Failure",
+      "summary": "Practice explaining an engine problem in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We have an engine problem and need to return.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe an engine problem in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "medical",
+      "title": "Medical Emergency",
+      "summary": "Practice explaining a passenger medical emergency in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We have a medical emergency on board and request assistance on arrival.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe a passenger medical emergency in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "weather",
+      "title": "Weather / Windshear",
+      "summary": "Practice explaining unsafe weather ahead in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We are unable to continue through this weather and request an alternative.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe unsafe weather ahead in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "fire",
+      "title": "Fire / Smoke",
+      "summary": "Practice explaining smoke in the cabin in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We have smoke in the cabin and request priority assistance.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe smoke in the cabin in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "hydraulic",
+      "title": "Hydraulic Issue",
+      "summary": "Practice explaining a hydraulic system indication in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We have a hydraulic system indication and need time to assess the situation.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe a hydraulic system indication in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "fuel",
+      "title": "Fuel Emergency",
+      "summary": "Practice explaining a critical fuel situation in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We have a critical fuel situation and need priority assistance.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe a critical fuel situation in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "bird",
+      "title": "Bird Strike",
+      "summary": "Practice explaining a suspected bird strike in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We suspect a bird strike and are assessing the aircraft.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe a suspected bird strike in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "gear",
+      "title": "Landing Gear",
+      "summary": "Practice explaining a landing gear indication in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We have an abnormal landing gear indication and request time to assess.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe a landing gear indication in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "pressurization",
+      "title": "Pressurization",
+      "summary": "Practice explaining a pressurization problem in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We have a pressurization problem and require assistance.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe a pressurization problem in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    },
+    {
+      "id": "etc",
+      "title": "Other / Uncategorized",
+      "summary": "Practice explaining an unexpected aircraft problem in plain English. Focus on a clear description, a specific request, and confirmation of information. This is an invented situation, not a reconstruction of an actual flight.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "msg": "Training 123, We have an unexpected aircraft problem and need assistance.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. State the assistance you require.",
+          "from": "ATC"
+        },
+        {
+          "msg": "Training 123, please stand by for further information. We will advise our intentions.",
+          "from": "PILOT"
+        },
+        {
+          "msg": "Training 123, understood. Advise when ready.",
+          "from": "ATC"
+        }
+      ],
+      "practice": "1. Describe an unexpected aircraft problem in one sentence.\n\n2. Make a clear request and explain why you need it.\n\n3. Ask the other speaker to repeat one piece of information.\n\n4. Compare your response with the example. Was it clear, concise, and easy to understand?\n\nThis exercise does not assign an ICAO proficiency rating or teach emergency procedures."
+    }
+  ],
+  "references": [
+    {
+      "id": "Levbk-NXHzw",
+      "title": "MAYDAY. Left Engine FAILURE on takeoff. United Boeing 787 Dreamliner returns to Washington. Real ATC",
+      "channel": "You can see ATC",
+      "category": "engine"
+    },
+    {
+      "id": "XOBe1EC_HcI",
+      "title": "Right engine Failure. Pilot declares MAYDAY and returns to Atlanta. Real ATC",
+      "channel": "You can see ATC",
+      "category": "engine"
+    },
+    {
+      "id": "QZ25argV9wk",
+      "title": "High engine vibration. Pilot declares MAYDAY and returns to Oakland. Real ATC",
+      "channel": "You can see ATC",
+      "category": "engine"
+    },
+    {
+      "id": "YgxI6NUPPDM",
+      "title": "Engine failure and hydraulic problems. Lufthansa Airbus A340 returns to JFK Airport. Real ATC",
+      "channel": "You can see ATC",
+      "category": "engine"
+    },
+    {
+      "id": "pjiYo9UNm-M",
+      "title": "MAYDAY, Engine FAILURE, emergency landing. EL AL Boeing 787-9 diverts to Kennedy Airport. Real ATC",
+      "channel": "You can see ATC",
+      "category": "engine"
+    },
+    {
+      "id": "F4KowuIVmaE",
+      "title": "MAYDAY. Loud bang and engine failure. Republic Embraer E175LR diverts to JFK. Real ATC",
+      "channel": "You can see ATC",
+      "category": "engine"
+    },
+    {
+      "id": "ESrLeUmhdTs",
+      "title": "Left engine FAILURE on takeoff. MAYDAY. American A321 returns to DFW Airport. Real ATC",
+      "channel": "You can see ATC",
+      "category": "engine"
+    },
+    {
+      "id": "C75LxYI9P08",
+      "title": "Emergency return to save the life. Medical emergency. American Boeing 777 returns to JFK. Real ATC",
+      "channel": "You can see ATC",
+      "category": "medical"
+    },
+    {
+      "id": "A9IGABo2_ss",
+      "title": "Passenger Begs for Help to Land Plane: ATC Audio Captures Distress During Pilot's Medical Emergency",
+      "channel": "ATC Spotlight",
+      "category": "medical"
+    },
+    {
+      "id": "GVpfOvVgHtY",
+      "title": "\"I believe you are HYPOXIC, I'm declaring an Emergency on your behalf\". Real ATC Audio",
+      "channel": "ATC AUDIO",
+      "category": "medical"
+    },
+    {
+      "id": "vmeOOAs1xgI",
+      "title": "Pan Pan Pan QF 747 SFO  fuel dump Ret San Francisco after taking off emergency Audio only",
+      "channel": "mikeycbd",
+      "category": "medical"
+    },
+    {
+      "id": "LMm4xH3U1ss",
+      "title": "Engine Fire after landing. Engine surge in flight. Southwest Boeing 737 return to Phoenix. Real ATC",
+      "channel": "You can see ATC",
+      "category": "fire"
+    },
+    {
+      "id": "WNo2uGhVzHI",
+      "title": "MAYDAY. Engine failure after takeoff from Washington Dulles Airport. Real ATC",
+      "channel": "You can see ATC",
+      "category": "engine"
+    },
+    {
+      "id": "-rhHISGIYq8",
+      "title": "(Breaking) Air France 777 Declares MAYDAY After Engine Failure! Emergency Return to JFK #atc",
+      "channel": "Flight Follower",
+      "category": "engine"
+    },
+    {
+      "id": "TNJOJCvNg88",
+      "title": "LiveATC - Mayday TAP085 Engine Failure @LPPT",
+      "channel": "Jorge Silva",
+      "category": "fire"
+    },
+    {
+      "id": "fXB43Kvvd0M",
+      "title": "Hydraulic system failure. American Airbus A320 declares an emergency at Syracuse. Real ATC",
+      "channel": "You can see ATC",
+      "category": "hydraulic"
+    },
+    {
+      "id": "rrqntuTtrxM",
+      "title": "\ud83d\udea8  CALM Under PRESSURE. \ud83d\udea8  American A321 MAYDAY: Hydraulic Failure Forces Return to DFW. REAL ATC",
+      "channel": "REAL ATC",
+      "category": "hydraulic"
+    },
+    {
+      "id": "bMPCfSDollo",
+      "title": "Hydraulic Failure Forces Emergency Landing of Cathay Pacific 747 at JFK. REAL ATC",
+      "channel": "REAL ATC",
+      "category": "hydraulic"
+    },
+    {
+      "id": "BvtnA6q0dBI",
+      "title": "[REAL ATC] United B787 DECLARES FUEL EMERGENCY at Sydney!",
+      "channel": "VASAviation -",
+      "category": "fuel"
+    },
+    {
+      "id": "2KvQzeuIkUY",
+      "title": "Bird Strike?!: ATC Audio Captures Airbus Declaring PAN PAN",
+      "channel": "ATC Spotlight",
+      "category": "bird"
+    },
+    {
+      "id": "gHcDrPBRJ3E",
+      "title": "Confusion in the Cockpit: ATC Audio Captures Emergency Landing at Van Nuys Airport after birdstrike",
+      "channel": "ATC Spotlight",
+      "category": "bird"
+    },
+    {
+      "id": "kbXtf254480",
+      "title": "ATC audio of Bird Strike and Emergency Landing at Portland",
+      "channel": "Aviation Safety Network",
+      "category": "bird"
+    },
+    {
+      "id": "xtM_K3s_jcQ",
+      "title": "FedEX Boeing 757 GEAR UP LANDING After Hydraulic failure. REAL ATC",
+      "channel": "REAL ATC",
+      "category": "gear"
+    },
+    {
+      "id": "2oxVVCt_iAw",
+      "title": "LANDING GEAR MALFUNCTION Leads To EMERGENCY Landing at Los Angeles [ATC audio]",
+      "channel": "AirTrafficVisualised",
+      "category": "gear"
+    },
+    {
+      "id": "SW1rZxtN5XE",
+      "title": "PAN-PAN. Gear problem. Possible bird strike. Swiss Airbus A330 returns to Kennedy Airport. Real ATC",
+      "channel": "You can see ATC",
+      "category": "gear"
+    },
+    {
+      "id": "RtptbpDd_FU",
+      "title": "RAPID DESCENT After Losing Pressurization. REAL ATC",
+      "channel": "REAL ATC",
+      "category": "pressurization"
+    }
+  ]
+}

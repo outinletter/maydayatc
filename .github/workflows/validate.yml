@@ -1,0 +1,16 @@
+name: Validate
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/validate-content.py
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: swiftc ios/MaydayATC/Content.swift tests/main.swift -o /tmp/content-tests && /tmp/content-tests content/catalog.json
+      - run: xcodebuild -project ios/MaydayATC.xcodeproj -scheme MaydayATC -sdk iphonesimulator -configuration Release CODE_SIGNING_ALLOWED=NO build

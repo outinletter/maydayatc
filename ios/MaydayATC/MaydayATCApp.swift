@@ -268,8 +268,6 @@ struct ScenarioContent: View {
                 Text(scenario.summary).lineSpacing(6)
                 Text("These category examples are independent of the video above. They are not its transcript, incident analysis, or an operational checklist.").font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
             }
-            Section("Pilot communication goals") { ForEach(scenario.pilotRoles, id: \.self) { Text($0) } }
-            Section("Controller communication goals") { ForEach(scenario.atcRoles, id: \.self) { Text($0) } }
             Section {
                 Toggle("Rehearse pilot responses", isOn: $rehearsing)
                     .onChange(of: rehearsing) { _, _ in revealed = [] }

@@ -1,6 +1,6 @@
 # App Store preparation
 
-Native SwiftUI app, iOS 17+, iPhone and iPad. No login, ads, payments, tracking, microphone, location, or third-party SDKs. Includes fifteen fictional English lessons offline, dialogue rehearsal, saved lessons, practice progress, Dynamic Type, system appearance, and native sharing.
+Native SwiftUI app, iOS 17+, iPhone only for the first release. No login, ads, payments, tracking, microphone, location, or third-party SDKs. Includes fifteen fictional English lessons offline, dialogue rehearsal, saved lessons, practice progress, Dynamic Type, system appearance, and native sharing.
 
 ## Review notes (paste into App Store Connect)
 Mayday ATC preserves its original video archive experience: recording cards, category filter, search, PLAY links, and recording details. Select a card to view the recording title/channel and independent category language exercises, then use WATCH REAL ATC VIDEO to open YouTube. The practice examples are fictional and are not transcripts or analyses of the linked recording. No account or special access is needed. Save recordings, rehearse pilot responses in details, or mark a category practiced. Settings contains privacy policy, support, reset, content revision, and manual sync. Text lessons and video metadata work offline; YouTube playback requires internet. The Update content button downloads the latest validated shared JSON only; it does not start the scheduled/admin publishing workflow. New app functionality and binaries ship through the App Store.
@@ -20,8 +20,8 @@ Privacy policy URL: https://github.com/outinletter/maydayatc/blob/main/docs/PRIV
 - Review App Privacy answers against the actual GitHub network request and GitHub's terms; no app-level user identifiers, bookmarks, or progress are transmitted. Privacy manifest declares local UserDefaults use CA92.1, no tracking, no SDK collection.
 - Complete age-rating questionnaire honestly (fictional emergency situations; no graphic media), export compliance, territories, pricing, and copyright fields. Cryptography is limited to OS HTTPS; confirm export-compliance answers before upload.
 - Capture screenshots from the actual release build on required device sizes; do not use the launcher icon as a screenshot.
-- Test VoiceOver, largest accessibility text, iPad split view, landscape, offline first launch, reset, failed updates, and interrupted launches on devices.
-- Archive a signed Release build, validate in Xcode Organizer, upload to App Store Connect, test through TestFlight, and submit for review. Approval remains Apple's decision (especially guidelines 2.1, 2.5.2, 4.2, 5.1.1).
+- Test VoiceOver, largest accessibility text, landscape, offline first launch, reset, failed updates, and interrupted launches on devices.
+- Archive a signed Release build, validate in Xcode Organizer, upload to App Store Connect, verify on the connected iPhone (the owner requested no separate TestFlight testing), and submit for review. Approval remains Apple's decision (especially guidelines 2.1, 2.5.2, 4.2, 5.1.1).
 
 Source: https://developer.apple.com/app-store/review/guidelines/ (checked 2026-10-15).
 
@@ -29,8 +29,8 @@ Original video archive: catalog revision 4 contains 31 distinct YouTube links an
 
 ## Submission status — 2026-10-15
 
-App Store Connect app 6822957516, bundle com.addvalue.maydayatc. Release 1.0 (7) archive and upload succeeded. Five original 1206 × 2622 screenshots were captured on the connected iPhone after hiding its floating accessibility panel. The physical-device capture test passed. Education/Reference categories, 9+ rating, public policy/support URLs and review contact were entered.
+App Store Connect app 6822957516, bundle com.addvalue.maydayatc. Release 1.0 (7) archive and upload succeeded; it is superseded by iPhone-only build 8. Five original 1206 × 2622 screenshots were captured on the connected iPhone after hiding its floating accessibility panel. The physical-device capture test passed. Education/Reference categories, 9+ rating, public policy/support URLs and review contact were entered.
 
 Final submission is pending. The owner explicitly said third-party content rights require verification; the necessary-rights attestation must not be selected until verified. Public links alone are not proof of all necessary permissions. Keep a documented permission or applicable license/terms basis for title/channel metadata and linked content, including attribution and refresh/deletion obligations. See Apple guideline 5.2 and https://www.youtube.com/t/terms . Check whether https://developers.google.com/youtube/terms/developer-policies applies to RSS/oEmbed before relying on its license.
 
-The owner confirmed this computer's Simulator does not work normally. iPad captures remain required for the current universal app. Black simulator captures were rejected and not uploaded. Use a working real iPad or another working Simulator; do not repurpose iPhone screenshots as iPad captures. iPad support has not been removed.
+The owner chose an iPhone-only first release on 2026-10-15. App and capture-test device families are iPhone only (1), build 8. iPad support is deferred to a later release. Existing physical-iPhone screenshots still show the current interface. Content rights remain unverified; final submission is pending.

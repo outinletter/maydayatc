@@ -1,6 +1,6 @@
 # App Store preparation
 
-Native SwiftUI app, iOS 17+, iPhone and iPad. No login, ads, payments, tracking, microphone, location, or third-party SDKs. Includes ten fictional English lessons offline, dialogue rehearsal, saved lessons, practice progress, Dynamic Type, system appearance, and native sharing.
+Native SwiftUI app, iOS 17+, iPhone and iPad. No login, ads, payments, tracking, microphone, location, or third-party SDKs. Includes fifteen fictional English lessons offline, dialogue rehearsal, saved lessons, practice progress, Dynamic Type, system appearance, and native sharing.
 
 ## Review notes (paste into App Store Connect)
 Mayday ATC preserves its original video archive experience: recording cards, category filter, search, PLAY links, and recording details. Select a card to view the recording title/channel and independent category language exercises, then use WATCH REAL ATC VIDEO to open YouTube. The practice examples are fictional and are not transcripts or analyses of the linked recording. No account or special access is needed. Save recordings, rehearse pilot responses in details, or mark a category practiced. Settings contains privacy policy, support, reset, content revision, and manual sync. Text lessons and video metadata work offline; YouTube playback requires internet. The Update content button downloads the latest validated shared JSON only; it does not start the scheduled/admin publishing workflow. New app functionality and binaries ship through the App Store.
@@ -9,8 +9,8 @@ Mayday ATC preserves its original video archive experience: recording cards, cat
 Name: Mayday ATC
 Subtitle: Aviation English Practice
 Category: Education
-Description: Practice aviation English with fictional communication situations. Study ten offline lessons, rehearse pilot responses, save favorites, track completed practice, and share reflection prompts. Independent language learning only: not real ATC transcripts, emergency instructions, operational guidance, or an accredited ICAO course.
-Support URL: https://github.com/outinletter/maydayatc/issues
+Description: Practice aviation English with fictional communication situations. Study fifteen offline lessons, rehearse pilot responses, save favorites, track completed practice, and share reflection prompts. Independent language learning only: not real ATC transcripts, emergency instructions, operational guidance, or an accredited ICAO course.
+Support URL: https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md
 Privacy policy URL: https://github.com/outinletter/maydayatc/blob/main/docs/PRIVACY.md (public rendered Markdown; also bundled in app Settings).
 
 ## Required owner actions before submission
@@ -25,4 +25,12 @@ Privacy policy URL: https://github.com/outinletter/maydayatc/blob/main/docs/PRIV
 
 Source: https://developer.apple.com/app-store/review/guidelines/ (checked 2026-10-15).
 
-Original video archive: 26 distinct YouTube links were checked using YouTube oEmbed on 2026-10-15; titles/channel names come from that endpoint. Two duplicate catalog entries were consolidated. View counts and durations were removed because they were unverified. Links open externally; videos are not embedded or downloaded. Fictional lessons are explicitly separate from recordings. Availability can change. Confirm any third-party rights/service requirements before submission.
+Original video archive: catalog revision 4 contains 31 distinct YouTube links and 15 fictional lessons; metadata was checked using YouTube oEmbed on 2026-10-15; titles/channel names come from that endpoint. Two duplicate catalog entries were consolidated. View counts and durations were removed because they were unverified. Links open externally; videos are not embedded or downloaded. Fictional lessons are explicitly separate from recordings. Availability can change. Confirm any third-party rights/service requirements before submission.
+
+## Submission status — 2026-10-15
+
+App Store Connect app 6822957516, bundle com.addvalue.maydayatc. Release 1.0 (7) archive and upload succeeded. Five original 1206 × 2622 screenshots were captured on the connected iPhone after hiding its floating accessibility panel. The physical-device capture test passed. Education/Reference categories, 9+ rating, public policy/support URLs and review contact were entered.
+
+Final submission is pending. The owner explicitly said third-party content rights require verification; the necessary-rights attestation must not be selected until verified. Public links alone are not proof of all necessary permissions. Keep a documented permission or applicable license/terms basis for title/channel metadata and linked content, including attribution and refresh/deletion obligations. See Apple guideline 5.2 and https://www.youtube.com/t/terms . Check whether https://developers.google.com/youtube/terms/developer-policies applies to RSS/oEmbed before relying on its license.
+
+The owner confirmed this computer's Simulator does not work normally. iPad captures remain required for the current universal app. Black simulator captures were rejected and not uploaded. Use a working real iPad or another working Simulator; do not repurpose iPhone screenshots as iPad captures. iPad support has not been removed.

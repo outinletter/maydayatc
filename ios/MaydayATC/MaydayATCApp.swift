@@ -380,9 +380,15 @@ struct SettingsView: View {
                 Section("Content updates") {
                     Text("Download the latest published video list and learning dialogues. New material is prepared centrally; this button does not start collection or generation.").font(.subheadline)
                     Button { Task { await library.sync() } } label: {
-                        HStack { Text("Update content"); if library.syncing { ProgressView() } }
-                    }.disabled(library.syncing)
-                    Text("Content revision: \(library.catalog?.revision ?? 0)")
+                        Label(library.syncing ? "Updating content…" : "Update content now",
+                              systemImage: library.syncing ? "arrow.triangle.2.circlepath" : "arrow.down.circle.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(library.syncing)
+                    Text("Tap the button to download the latest published lessons from GitHub.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     if let date = library.checked { Text("Last checked: \(date.formatted())") }
                     if !library.message.isEmpty { Text(library.message).font(.subheadline) }
                 }
@@ -398,7 +404,7 @@ struct SettingsView: View {
                     Text(AppInformation.disclaimer)
                     Text("Independent learning aid. No affiliation with or endorsement by ICAO, FAA, Apple, airlines, or ATC authorities.")
                     Link("Support / report a content issue", destination: URL(string: "https://github.com/outinletter/maydayatc/issues")!)
-                    Text("App version 1.0 (7)")
+                    Text("App version 1.0 (9)")
                 }
             }
             .scrollContentBackground(.hidden)

@@ -347,14 +347,38 @@ struct PracticeReadingView: View {
             Text(block.text).font(.body).foregroundStyle(ArchiveTheme.ink).lineSpacing(6)
                 .fixedSize(horizontal: false, vertical: true).padding(.horizontal, 6).textSelection(.enabled)
         default:
-            VStack(alignment: .leading, spacing: 10) {
-                Text(label(for: block.kind)).font(.subheadline.weight(.bold))
-                    .foregroundStyle(ArchiveTheme.accent)
+            let stage = stageInfo(for: block.kind)
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
+                    Text(stage.number)
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 24, height: 24)
+                        .background(stage.color, in: Circle())
+                    Text(stage.title.uppercased())
+                        .font(.caption.weight(.bold))
+                        .tracking(0.8)
+                        .foregroundStyle(stage.color)
+                }
                 Text(block.text).font(.body).foregroundStyle(ArchiveTheme.ink).lineSpacing(6)
                     .fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
             }
-            .padding(18).frame(maxWidth: .infinity, alignment: .leading)
-            .background(ArchiveTheme.card, in: RoundedRectangle(cornerRadius: 14))
+            .padding(.vertical, 18).padding(.horizontal, 18)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(stage.color.opacity(0.08), in: RoundedRectangle(cornerRadius: 14))
+            .overlay(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 3).fill(stage.color).frame(width: 4).padding(.vertical, 12)
+            }
+            .padding(.leading, stage.indent)
+        }
+    }
+    private func stageInfo(for kind: PracticeBlock.Kind) -> (number: String, title: String, color: Color, indent: CGFloat) {
+        switch kind {
+        case .original: ("1", "Start with the idea", ArchiveTheme.accent, 0)
+        case .corrected: ("2", "Make it precise", Color(red: 0.10, green: 0.34, blue: 0.27), 18)
+        case .explanation: ("3", "Understand the change", Color(red: 0.38, green: 0.28, blue: 0.58), 36)
+        case .alternative: ("4", "Try another option", Color(red: 0.68, green: 0.35, blue: 0.12), 18)
+        default: ("", label(for: kind), ArchiveTheme.accent, 0)
         }
     }
     private func label(for kind: PracticeBlock.Kind) -> String {

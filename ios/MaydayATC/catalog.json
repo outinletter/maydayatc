@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 2,
+  "revision": 3,
   "scenarios": [
     {
       "id": "engine",
@@ -103,7 +103,7 @@
       "dialogue": [
         {
           "from": "PILOT",
-          "msg": "Denver Tower, Southwest 1145, going around \u2014 wind shear escape!"
+          "msg": "Denver Tower, Southwest 1145, going around — wind shear escape!"
         },
         {
           "from": "ATC",
@@ -126,7 +126,7 @@
           "msg": "Southwest 1145, copy PIREP. Altimeter 29.82. Say fuel status and intentions."
         }
       ],
-      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: Denver Tower, Southwest 1145, executing missed approach. We have encountered severe wind shear at 400 feet, declaring an emergency and initiating a wind shear escape maneuver!\n    ATC: Southwest 1145, Denver Tower, Roger. Your wind shear escape is acknowledged. Climb on runway heading, maintain 4,000 feet. Wind at the surface is currently 280 at 35 knots, gusting 52. Report when escape maneuver is complete.\n    PILOT: Denver Tower, Southwest 1145, wind shear escape maneuver is complete. We are currently stabilizing, climbing to 6,000 feet, and requesting further instructions.\n    ATC: Southwest 1145, Roger. Turn left heading 180, climb and maintain 6,000 feet. Vectoring you clear of the active convective thunderstorm cells over the final approach corridor.\n    PILOT: Left heading 180, climbing and maintaining 6,000 feet, Southwest 1145. For your information, we experienced an abrupt airspeed loss of 20 knots at 500 feet, requiring maximum takeoff thrust to recover.\n    ATC: Southwest 1145, copy your PIREP, thank you. Latest altimeter setting is 29.82. Say fuel status and your future intentions.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: Denver Tower, Southwest 1145, going around \u2014 wind shear escape!\n    Corrected: Denver Tower, Southwest 1145, executing missed approach. We have encountered severe wind shear at 400 feet, declaring an emergency and initiating a wind shear escape maneuver!\n    Explanation: Follows FAA AIM Example #171 & #172 precisely. Declaring 'wind shear escape' suspends standard separation rules immediately.\n\n    Original: Denver Tower, Southwest 1145, wind shear escape complete. Requesting climb to 6,000, and request further instructions.\n    Corrected: Denver Tower, Southwest 1145, wind shear escape maneuver is complete. We are currently stabilizing, climbing to 6,000 feet, and requesting further instructions.\n    Explanation: Adheres to FAA AIM Example #173. The pilot reports 'escape complete' only when stabilization is achieved, then explicitly requests further instructions before changing altitude.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Denver Tower, Southwest 1145, microburst warning triggered, performing wind shear escape, climbing to safe altitude.\n    Alternative: Southwest 1145, wind shear recovery complete. Requesting vectors to hold and burn fuel while we monitor the storm line."
+      "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: Denver Tower, Southwest 1145, executing missed approach. We have encountered severe wind shear at 400 feet, declaring an emergency and initiating a wind shear escape maneuver!\n    ATC: Southwest 1145, Denver Tower, Roger. Your wind shear escape is acknowledged. Climb on runway heading, maintain 4,000 feet. Wind at the surface is currently 280 at 35 knots, gusting 52. Report when escape maneuver is complete.\n    PILOT: Denver Tower, Southwest 1145, wind shear escape maneuver is complete. We are currently stabilizing, climbing to 6,000 feet, and requesting further instructions.\n    ATC: Southwest 1145, Roger. Turn left heading 180, climb and maintain 6,000 feet. Vectoring you clear of the active convective thunderstorm cells over the final approach corridor.\n    PILOT: Left heading 180, climbing and maintaining 6,000 feet, Southwest 1145. For your information, we experienced an abrupt airspeed loss of 20 knots at 500 feet, requiring maximum takeoff thrust to recover.\n    ATC: Southwest 1145, copy your PIREP, thank you. Latest altimeter setting is 29.82. Say fuel status and your future intentions.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: Denver Tower, Southwest 1145, going around — wind shear escape!\n    Corrected: Denver Tower, Southwest 1145, executing missed approach. We have encountered severe wind shear at 400 feet, declaring an emergency and initiating a wind shear escape maneuver!\n    Explanation: Follows FAA AIM Example #171 & #172 precisely. Declaring 'wind shear escape' suspends standard separation rules immediately.\n\n    Original: Denver Tower, Southwest 1145, wind shear escape complete. Requesting climb to 6,000, and request further instructions.\n    Corrected: Denver Tower, Southwest 1145, wind shear escape maneuver is complete. We are currently stabilizing, climbing to 6,000 feet, and requesting further instructions.\n    Explanation: Adheres to FAA AIM Example #173. The pilot reports 'escape complete' only when stabilization is achieved, then explicitly requests further instructions before changing altitude.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Denver Tower, Southwest 1145, microburst warning triggered, performing wind shear escape, climbing to safe altitude.\n    Alternative: Southwest 1145, wind shear recovery complete. Requesting vectors to hold and burn fuel while we monitor the storm line."
     },
     {
       "id": "fire",
@@ -413,9 +413,259 @@
         }
       ],
       "practice": "STEP 1: Reconstruct the conversation (Level 6)\n    PILOT: MAYDAY, MAYDAY, MAYDAY. Regional 771, we are declaring an emergency due to an uncontained, non-standard system anomaly. Requesting priority handling and immediate vectors to the nearest suitable airport.\n    ATC: Regional 771, Center, copy MAYDAY. Emergency is acknowledged. Turn right heading 030, descend and maintain flight level 180. State your fuel remaining and souls on board when able.\n    PILOT: Right heading 030, descending to flight level 180, Regional 771. We have three hours of fuel remaining and 84 souls on board. Requesting the longest available runway and ARFF standby.\n    ATC: Regional 771, Roger. Expect ILS Runway 09, length is 10,500 feet. Airport emergency response services are being mobilized. Contact Approach on 125.8.\n    PILOT: Expect ILS Runway 09, contacting Approach on 125.8, Regional 771.\n\n    STEP 2: Sentence-by-sentence correction\n    Original: MAYDAY, MAYDAY, MAYDAY, declaring an emergency due to an uncontained issue. Requesting immediate return.\n    Corrected: MAYDAY, MAYDAY, MAYDAY. Regional 771, we are declaring an emergency due to an uncontained, non-standard system anomaly. Requesting priority handling and immediate vectors to the nearest suitable airport.\n    Explanation: For unclassified emergencies, explicitly stating 'uncontained, non-standard system anomaly' provides ATC with the understanding that standard QRH checklists may not fully cover the event, prompting maximum ATC flexibility.\n\n    Original: MAYDAY acknowledged. Turn left heading 180, descend and maintain 4,000. State your intentions.\n    Corrected: Regional 771, Center, copy MAYDAY. Emergency is acknowledged. Turn right heading 030, descend and maintain flight level 180. State your fuel remaining and souls on board when able.\n    Explanation: Standardizes the ATC response to secure essential emergency data (fuel and souls) without rushing the flight crew, adhering to CRM best practices.\n\n    STEP 3: Advanced alternative expressions\n    Alternative: Regional 771, we are encountering multiple cascading system anomalies, unable to maintain RVSM, requesting an immediate block altitude and vectors for a precautionary landing.\n    Alternative: Regional 771, non-normal checklist is in progress for an unclassified flight control issue, requesting a wide vector for a long final approach."
+    },
+    {
+      "id": "video-cb59d87d9e7e049e",
+      "title": "Fuel Emergency · Training 857",
+      "summary": "Fictional language practice inspired by the topic of the linked video. This dialogue is newly composed from a reviewed template, not extracted speech or a transcript. No facts about the actual flight are asserted.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "from": "PILOT",
+          "msg": "Training 857, we are dealing with a fuel-related concern. We request assistance."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 857, understood. State the assistance you require when ready."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 857, we need time to assess the situation. Please stand by for our intentions."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 857, understood. Advise when you are ready to continue."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 857, please repeat the last information slowly so we can confirm our understanding."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 857, I will repeat the information. Confirm that you understand before proceeding."
+        }
+      ],
+      "practice": "STEP 1: Fictional conversation\nPILOT: Training 857, we are dealing with a fuel-related concern. We request assistance.\nATC: Training 857, understood. State the assistance you require when ready.\nPILOT: Training 857, we need time to assess the situation. Please stand by for our intentions.\nATC: Training 857, understood. Advise when you are ready to continue.\nPILOT: Training 857, please repeat the last information slowly so we can confirm our understanding.\nATC: Training 857, I will repeat the information. Confirm that you understand before proceeding.\n\nSTEP 2: Clear language\nOriginal: We have a problem.\nCorrected: We are dealing with a fuel-related concern and request assistance.\nExplanation: State the topic clearly, then make an explicit request. These words are an invented language exercise, not operational instructions.\n\nSTEP 3: Alternative expression\nAlternative: Please repeat the last message slowly. We would like to confirm our understanding."
+    },
+    {
+      "id": "video-3194c919cf7ada99",
+      "title": "Other / Uncategorized · Training 192",
+      "summary": "Fictional language practice inspired by the topic of the linked video. This dialogue is newly composed from a reviewed template, not extracted speech or a transcript. No facts about the actual flight are asserted.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "from": "PILOT",
+          "msg": "Training 192, we are dealing with an unexpected aircraft situation. We request assistance."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 192, understood. State the assistance you require when ready."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 192, we need time to assess the situation. Please stand by for our intentions."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 192, understood. Advise when you are ready to continue."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 192, please repeat the last information slowly so we can confirm our understanding."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 192, I will repeat the information. Confirm that you understand before proceeding."
+        }
+      ],
+      "practice": "STEP 1: Fictional conversation\nPILOT: Training 192, we are dealing with an unexpected aircraft situation. We request assistance.\nATC: Training 192, understood. State the assistance you require when ready.\nPILOT: Training 192, we need time to assess the situation. Please stand by for our intentions.\nATC: Training 192, understood. Advise when you are ready to continue.\nPILOT: Training 192, please repeat the last information slowly so we can confirm our understanding.\nATC: Training 192, I will repeat the information. Confirm that you understand before proceeding.\n\nSTEP 2: Clear language\nOriginal: We have a problem.\nCorrected: We are dealing with an unexpected aircraft situation and request assistance.\nExplanation: State the topic clearly, then make an explicit request. These words are an invented language exercise, not operational instructions.\n\nSTEP 3: Alternative expression\nAlternative: Please repeat the last message slowly. We would like to confirm our understanding."
+    },
+    {
+      "id": "video-65eb5882b61301a5",
+      "title": "Fuel Emergency · Training 991",
+      "summary": "Fictional language practice inspired by the topic of the linked video. This dialogue is newly composed from a reviewed template, not extracted speech or a transcript. No facts about the actual flight are asserted.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "from": "PILOT",
+          "msg": "Training 991, we are dealing with a fuel-related concern. We request assistance."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 991, understood. State the assistance you require when ready."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 991, we need time to assess the situation. Please stand by for our intentions."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 991, understood. Advise when you are ready to continue."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 991, please repeat the last information slowly so we can confirm our understanding."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 991, I will repeat the information. Confirm that you understand before proceeding."
+        }
+      ],
+      "practice": "STEP 1: Fictional conversation\nPILOT: Training 991, we are dealing with a fuel-related concern. We request assistance.\nATC: Training 991, understood. State the assistance you require when ready.\nPILOT: Training 991, we need time to assess the situation. Please stand by for our intentions.\nATC: Training 991, understood. Advise when you are ready to continue.\nPILOT: Training 991, please repeat the last information slowly so we can confirm our understanding.\nATC: Training 991, I will repeat the information. Confirm that you understand before proceeding.\n\nSTEP 2: Clear language\nOriginal: We have a problem.\nCorrected: We are dealing with a fuel-related concern and request assistance.\nExplanation: State the topic clearly, then make an explicit request. These words are an invented language exercise, not operational instructions.\n\nSTEP 3: Alternative expression\nAlternative: Please repeat the last message slowly. We would like to confirm our understanding."
+    },
+    {
+      "id": "video-d44458ca159e915e",
+      "title": "Bird Strike · Training 440",
+      "summary": "Fictional language practice inspired by the topic of the linked video. This dialogue is newly composed from a reviewed template, not extracted speech or a transcript. No facts about the actual flight are asserted.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "from": "PILOT",
+          "msg": "Training 440, we are dealing with a suspected bird strike. We request assistance."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 440, understood. State the assistance you require when ready."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 440, we need time to assess the situation. Please stand by for our intentions."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 440, understood. Advise when you are ready to continue."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 440, please repeat the last information slowly so we can confirm our understanding."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 440, I will repeat the information. Confirm that you understand before proceeding."
+        }
+      ],
+      "practice": "STEP 1: Fictional conversation\nPILOT: Training 440, we are dealing with a suspected bird strike. We request assistance.\nATC: Training 440, understood. State the assistance you require when ready.\nPILOT: Training 440, we need time to assess the situation. Please stand by for our intentions.\nATC: Training 440, understood. Advise when you are ready to continue.\nPILOT: Training 440, please repeat the last information slowly so we can confirm our understanding.\nATC: Training 440, I will repeat the information. Confirm that you understand before proceeding.\n\nSTEP 2: Clear language\nOriginal: We have a problem.\nCorrected: We are dealing with a suspected bird strike and request assistance.\nExplanation: State the topic clearly, then make an explicit request. These words are an invented language exercise, not operational instructions.\n\nSTEP 3: Alternative expression\nAlternative: Please repeat the last message slowly. We would like to confirm our understanding."
+    },
+    {
+      "id": "video-5dec4c538e0ff337",
+      "title": "Weather / Windshear · Training 744",
+      "summary": "Fictional language practice inspired by the topic of the linked video. This dialogue is newly composed from a reviewed template, not extracted speech or a transcript. No facts about the actual flight are asserted.",
+      "pilotRoles": [
+        "Describe the problem in clear, brief language.",
+        "State what assistance you need without guessing technical details.",
+        "Ask for clarification if a message is unclear."
+      ],
+      "atcRoles": [
+        "Acknowledge the message and ask for needed information.",
+        "Use clear language and allow time for a response.",
+        "Confirm the assistance requested."
+      ],
+      "dialogue": [
+        {
+          "from": "PILOT",
+          "msg": "Training 744, we are dealing with unfavorable weather. We request assistance."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 744, understood. State the assistance you require when ready."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 744, we need time to assess the situation. Please stand by for our intentions."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 744, understood. Advise when you are ready to continue."
+        },
+        {
+          "from": "PILOT",
+          "msg": "Training 744, please repeat the last information slowly so we can confirm our understanding."
+        },
+        {
+          "from": "ATC",
+          "msg": "Training 744, I will repeat the information. Confirm that you understand before proceeding."
+        }
+      ],
+      "practice": "STEP 1: Fictional conversation\nPILOT: Training 744, we are dealing with unfavorable weather. We request assistance.\nATC: Training 744, understood. State the assistance you require when ready.\nPILOT: Training 744, we need time to assess the situation. Please stand by for our intentions.\nATC: Training 744, understood. Advise when you are ready to continue.\nPILOT: Training 744, please repeat the last information slowly so we can confirm our understanding.\nATC: Training 744, I will repeat the information. Confirm that you understand before proceeding.\n\nSTEP 2: Clear language\nOriginal: We have a problem.\nCorrected: We are dealing with unfavorable weather and request assistance.\nExplanation: State the topic clearly, then make an explicit request. These words are an invented language exercise, not operational instructions.\n\nSTEP 3: Alternative expression\nAlternative: Please repeat the last message slowly. We would like to confirm our understanding."
     }
   ],
   "references": [
+    {
+      "id": "144yQaj0nJQ",
+      "title": "Fuel emergency. Pilot declares emergency for low fuel at JFK Airport. Real ATC",
+      "channel": "You can see ATC",
+      "category": "fuel",
+      "lessonId": "video-cb59d87d9e7e049e",
+      "publishedAt": "2026-10-12T16:59:38+00:00"
+    },
+    {
+      "id": "tt8lh26NAxY",
+      "title": "Military Pilots Lectured by Memphis Controller | ANTI-ICE FAILURE",
+      "channel": "VASAviation -",
+      "category": "etc",
+      "lessonId": "video-3194c919cf7ada99",
+      "publishedAt": "2026-10-10T14:44:05+00:00"
+    },
+    {
+      "id": "SobHzBv32L0",
+      "title": "Possible fuel leak. Pilots need to land at Boston “Fairly Quickly”. Real ATC",
+      "channel": "You can see ATC",
+      "category": "fuel",
+      "lessonId": "video-65eb5882b61301a5",
+      "publishedAt": "2026-10-07T17:35:38+00:00"
+    },
+    {
+      "id": "oEzMx-qv7oY",
+      "title": "Two airplanes report hitting something near Newark. Possible Drone or Bird strike. Real ATC",
+      "channel": "You can see ATC",
+      "category": "bird",
+      "lessonId": "video-d44458ca159e915e",
+      "publishedAt": "2026-10-05T19:59:54+00:00"
+    },
+    {
+      "id": "4ZdiKQlaLlc",
+      "title": "Windshear Alerts! | ATC RADAR [SDF] (West Combined)",
+      "channel": "VASAviation -",
+      "category": "weather",
+      "lessonId": "video-5dec4c538e0ff337",
+      "publishedAt": "2026-10-02T16:48:47+00:00"
+    },
     {
       "id": "Levbk-NXHzw",
       "title": "MAYDAY. Left Engine FAILURE on takeoff. United Boeing 787 Dreamliner returns to Washington. Real ATC",
@@ -514,7 +764,7 @@
     },
     {
       "id": "rrqntuTtrxM",
-      "title": "\ud83d\udea8  CALM Under PRESSURE. \ud83d\udea8  American A321 MAYDAY: Hydraulic Failure Forces Return to DFW. REAL ATC",
+      "title": "🚨  CALM Under PRESSURE. 🚨  American A321 MAYDAY: Hydraulic Failure Forces Return to DFW. REAL ATC",
       "channel": "REAL ATC",
       "category": "hydraulic"
     },
@@ -572,5 +822,6 @@
       "channel": "REAL ATC",
       "category": "pressurization"
     }
-  ]
+  ],
+  "updatedAt": "2026-10-15T00:28:59.719160+00:00"
 }

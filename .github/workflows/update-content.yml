@@ -1,0 +1,37 @@
+name: Publish shared content
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: shared-content-publication
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test publisher
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Collect verified videos and compose fictional practice
+        run: python3 scripts/collect-content.py
+      - name: Validate before publication
+        run: python3 scripts/validate-content.py
+      - name: Publish one shared revision
+        run: |
+          if git diff --quiet -- content/catalog.json ios/MaydayATC/catalog.json; then
+            echo 'No new content to publish.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add content/catalog.json ios/MaydayATC/catalog.json
+          git commit -m 'Update shared video archive and fictional practice'
+          git push origin HEAD:main

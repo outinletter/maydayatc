@@ -1,0 +1,18 @@
+{
+  "channels": [
+    {
+      "id": "UCz3IAwjF4iVxtK86kfjvsWQ",
+      "name": "You can see ATC"
+    },
+    {
+      "id": "UCuedf_fJVrOppky5gl3U6QQ",
+      "name": "VASAviation -"
+    },
+    {
+      "id": "UCFMYD5rfG5tgDXbYLSSL4kw",
+      "name": "ATC Spotlight"
+    }
+  ],
+  "maxNewVideos": 5,
+  "maxPublishedVideos": 80
+}

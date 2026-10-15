@@ -74,6 +74,7 @@ struct Catalog: Codable {
                   v.id.range(of: "^[A-Za-z0-9_-]{11}$", options: .regularExpression) != nil
                   && valid(v.title, 200) && valid(v.channel, 120)
                   && value.scenarios.contains { $0.id == v.category }
+                  && (v.lessonId == nil || value.scenarios.contains { $0.id == v.lessonId })
               }),
               value.scenarios.allSatisfy({ s in
                   valid(s.id, 64) && s.id.range(of: "^[a-z0-9-]+$", options: .regularExpression) != nil
@@ -92,6 +93,7 @@ struct VideoReference: Codable, Identifiable, Hashable {
     let title: String
     let channel: String
     let category: String
+    let lessonId: String?
     var url: URL { URL(string: "https://www.youtube.com/watch?v=" + id)! }
 }
 
@@ -108,5 +110,5 @@ enum ContentError: LocalizedError {
 
 enum AppInformation {
     static let disclaimer = "Fictional aviation English practice only. Not real ATC transcripts, operational instructions, emergency guidance, or an accredited ICAO course. Never use during flight operations. Follow approved training, aircraft procedures, and official ATC instructions."
-    static let privacy = "Lessons, saved items, practice progress, and preferences stay on this device. No account, advertising, analytics, microphone, or location access is used. Automatic content checks send a normal HTTPS request to GitHub, which receives network information such as your IP address and may retain logs under its privacy policy. No bookmarks or practice history are sent. You can disable automatic checks in Settings; manual checks still contact GitHub. Opening video links uses YouTube and its privacy practices; no video is downloaded or embedded by this app. Opening support or GitHub privacy links uses your browser and those services’ policies. Reset local data in Settings to delete saved items, progress, and downloaded lessons. Device backups may retain app data until you delete those backups. Support is available through the repository’s GitHub Issues page; posting there requires a GitHub account and is public."
+    static let privacy = "Lessons, saved items, practice progress, and preferences stay on this device. No account, advertising, analytics, microphone, or location access is used. Manual content updates send a normal HTTPS request to GitHub, which receives network information such as your IP address and may retain logs under its privacy policy. No bookmarks or practice history are sent. Content is requested only when you tap Update content or pull to refresh. Opening video links uses YouTube and its privacy practices; no video is downloaded or embedded by this app. Opening support or GitHub privacy links uses your browser and those services’ policies. Reset local data in Settings to delete saved items, progress, and downloaded lessons. Device backups may retain app data until you delete those backups. Support is available through the repository’s GitHub Issues page; posting there requires a GitHub account and is public."
 }

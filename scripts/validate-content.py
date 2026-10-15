@@ -19,5 +19,7 @@ import re
 for v in c["references"]:
  assert re.fullmatch(r"[A-Za-z0-9_-]{11}",v["id"])
  assert 0<len(v["title"])<=200 and 0<len(v["channel"])<=120
+ assert v["category"] in {s["id"] for s in c["scenarios"]}
+ assert not v.get("lessonId") or v["lessonId"] in {s["id"] for s in c["scenarios"]}
 assert a==(root/'ios/MaydayATC/catalog.json').read_bytes(), 'Copy catalog.json into the iOS bundle before committing'
 print(f"Validated {len(c['scenarios'])} scenarios, revision {c['revision']}")

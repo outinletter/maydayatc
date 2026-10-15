@@ -151,9 +151,9 @@
         if (text.length > 1000000) throw new Error("Too large");
         var data=JSON.parse(text);
         if (!validCatalog(data)) throw new Error("Invalid catalog");
-        var revision=Number(safeGet("catalogRevision"))||2;
+        var revision=state.contentRevision||2;
         if(data.revision<revision) throw new Error("Older catalog");
-        if(data.revision>revision){ applyCatalog(data); safeSet("catalog",JSON.stringify(data)); safeSet("catalogRevision",String(data.revision)); }
+        if(data.revision>revision){ applyCatalog(data); state.contentRevision=data.revision; safeSet("catalog",JSON.stringify(data)); safeSet("catalogRevision",String(data.revision)); }
         saveLastUpdate(Date.now());
         window.setState({videos:SEED,lastUpdate:Date.now(),syncMessage:"Content is up to date."});
       } catch(e){window.setState({syncMessage:"Could not update. Existing lessons remain available offline."});}
@@ -162,10 +162,10 @@
     function validCatalog(d){
       function str(s,n){return typeof s==="string" && s.trim().length>0 && s.length<=n;}
       return d && Array.isArray(d.references) && d.references.length<=100 && new Set(d.references.map(v=>v.id)).size===d.references.length && d.references.every(v=>str(v.title,200)&&str(v.channel,120)&&/^[A-Za-z0-9_-]{11}$/.test(v.id)&&CATEGORIES.some(c=>c.id===v.category&&c.id!=="all")) && d.schemaVersion===1 && Number.isInteger(d.revision) && d.revision>0 && Array.isArray(d.scenarios) && d.scenarios.length>0 && d.scenarios.length<=100 && new Set(d.scenarios.map(s=>s.id)).size===d.scenarios.length && d.scenarios.every(s=>
-        str(s.id,64) && CATEGORIES.some(c=>c.id===s.id && c.id!=="all") && str(s.title,120) && str(s.summary,4000) && str(s.practice,12000) && [s.pilotRoles,s.atcRoles].every(a=>Array.isArray(a)&&a.length>0&&a.length<=20&&a.every(x=>str(x,1000))) && Array.isArray(s.dialogue)&&s.dialogue.length>=2&&s.dialogue.length<=40&&s.dialogue.every(x=>["PILOT","ATC"].includes(x.from)&&str(x.msg,2000)));
+        str(s.id,64) && /^[a-z0-9-]+$/.test(s.id) && str(s.title,120) && str(s.summary,4000) && str(s.practice,12000) && [s.pilotRoles,s.atcRoles].every(a=>Array.isArray(a)&&a.length>0&&a.length<=20&&a.every(x=>str(x,1000))) && Array.isArray(s.dialogue)&&s.dialogue.length>=2&&s.dialogue.length<=40&&s.dialogue.every(x=>["PILOT","ATC"].includes(x.from)&&str(x.msg,2000)));
     }
     function applyCatalog(d){
-      SEED=d.references.map(function(v,i){return {id:i+1,category:v.category,title:v.title,channel:v.channel,views:"",duration:"",ytId:v.id,isNew:false};});
+      SEED=d.references.map(function(v,i){return {id:i+1,category:v.category,title:v.title,channel:v.channel,views:"",duration:"",ytId:v.id,lessonId:v.lessonId||v.category,isNew:false};});
       d.scenarios.forEach(function(s){ANALYSIS[s.id]=s;ICAO_ANALYSIS_PRESETS[s.id]=s.practice;});
     }
     function safeGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
@@ -382,10 +382,10 @@
     function detailHTML(v, colors) {
       var validCat = getValidCat(v.category);
       var c = getCat(validCat);
-      var a = getAn(validCat);
+      var a = ANALYSIS[v.lessonId || validCat] || getAn(validCat);
 
       var icaoContent = "";
-      var catKey = validCat.toLowerCase();
+      var catKey = v.lessonId || validCat.toLowerCase();
       if (catKey && ICAO_ANALYSIS_PRESETS[catKey]) {
         icaoContent = icaoToHTML(ICAO_ANALYSIS_PRESETS[catKey], colors);
       } else {
@@ -461,8 +461,8 @@
         + '  <div style="font-size:calc(15px * var(--font-scale));font-weight:800;color:' + colors.N + ';letter-spacing:1px;margin-bottom:20px;text-transform:uppercase;">DATABASE MANAGEMENT</div>'
         + '  <div style="padding:16px;background:' + colors.N + '0A;border-radius:12px;border:1px dashed ' + colors.N + '44;">'
         + '    <div style="font-size:calc(16px * var(--font-scale));font-weight:700;color:' + colors.T + ';margin-bottom:6px;">GitHub Lesson Sync</div>'
-        + '    <div style="font-size:calc(16px * var(--font-scale));color:' + colors.M + ';line-height:1.5;">Lesson text is checked on launch. App functionality is updated through the App Store.</div>'
-        + '<button onclick="window.triggerManualUpdate()">Check lesson updates</button><p role="status">' + esc(state.syncMessage || "") + '</p>'
+        + '    <div style="font-size:calc(16px * var(--font-scale));color:' + colors.M + ';line-height:1.5;">New videos and learning dialogues are prepared centrally. Tap Update content to download the latest published material.</div>'
+        + '<button onclick="window.triggerManualUpdate()">Update content</button><p role="status">' + esc(state.syncMessage || "") + '</p>'
         + '    <div style="font-size:calc(14px * var(--font-scale));color:' + colors.M + ';margin-top:8px;">Last Sync: <strong style="color:' + colors.T + ';">' + lastDate + '</strong></div>'
         + '  </div>'
         + '</div>'
@@ -612,9 +612,8 @@
       state.theme = cachedTheme;
     }
 
-    try {var cached=JSON.parse(safeGet("catalog"));if(validCatalog(cached)&&cached.revision>=2){applyCatalog(cached);state.videos=SEED;}}catch(e){}
+    try {var cached=JSON.parse(safeGet("catalog"));if(validCatalog(cached)&&cached.revision>=2){applyCatalog(cached);state.contentRevision=cached.revision;state.videos=SEED;}}catch(e){}
     window.render();
-    window.fetchNewVideos();
 
     // ── 12. Swipe Gestures (Swipe Right -> Back to List) ─────────────────
     (function() {

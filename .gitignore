@@ -5,3 +5,6 @@ build/
 *.ipa
 xcuserdata/
 *.xcuserstate
+
+__pycache__/
+*.pyc

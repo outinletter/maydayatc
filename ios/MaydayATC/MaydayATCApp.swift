@@ -73,7 +73,7 @@ final class Library: ObservableObject {
                 try FileManager.default.createDirectory(at: cache.deletingLastPathComponent(), withIntermediateDirectories: true)
                 try data.write(to: cache, options: .atomic)
                 catalog = next
-                message = "New lessons downloaded."
+                message = "Video list and learning dialogues updated."
             }
             checked = Date()
             defaults.set(checked, forKey: "checked")
@@ -86,14 +86,12 @@ final class Library: ObservableObject {
 @main
 struct MaydayATCApp: App {
     @StateObject private var library = Library()
-    @AppStorage("automaticUpdates") private var automaticUpdates = true
     var body: some Scene {
         WindowGroup {
             MainView().environmentObject(library)
                 .preferredColorScheme(.light)
                 .tint(ArchiveTheme.accent)
                 .foregroundStyle(ArchiveTheme.ink)
-                .task { if automaticUpdates { await library.sync() } }
         }
     }
 }
@@ -147,7 +145,7 @@ struct MainView: View {
                         Spacer(minLength: 8)
                         Menu {
                             Button("All Categories") { category = "all" }
-                            ForEach(library.catalog?.scenarios ?? []) { item in
+                            ForEach((library.catalog?.scenarios ?? []).filter { !$0.id.hasPrefix("video-") }) { item in
                                 Button(item.title) { category = item.id }
                             }
                             Divider()
@@ -231,7 +229,7 @@ struct ArchiveCard: View {
 struct VideoDetailView: View {
     @EnvironmentObject private var library: Library
     let video: VideoReference
-    var scenario: Scenario? { library.catalog?.scenarios.first { $0.id == video.category } }
+    var scenario: Scenario? { library.catalog?.scenarios.first { $0.id == (video.lessonId ?? video.category) } }
     var body: some View {
         List {
             Section {
@@ -375,16 +373,14 @@ struct PracticeReadingView: View {
 struct SettingsView: View {
     @EnvironmentObject private var library: Library
     @Environment(\.dismiss) private var dismiss
-    @AppStorage("automaticUpdates") private var automaticUpdates = true
     @State private var reset = false
     var body: some View {
         NavigationStack {
             Form {
                 Section("Content updates") {
-                    Toggle("Check GitHub on app launch", isOn: $automaticUpdates)
-                    Text("Downloads lesson text only. New app features and app versions are delivered through the App Store.").font(.subheadline)
+                    Text("Download the latest published video list and learning dialogues. New material is prepared centrally; this button does not start collection or generation.").font(.subheadline)
                     Button { Task { await library.sync() } } label: {
-                        HStack { Text("Check for lesson updates"); if library.syncing { ProgressView() } }
+                        HStack { Text("Update content"); if library.syncing { ProgressView() } }
                     }.disabled(library.syncing)
                     Text("Content revision: \(library.catalog?.revision ?? 0)")
                     if let date = library.checked { Text("Last checked: \(date.formatted())") }
@@ -402,7 +398,7 @@ struct SettingsView: View {
                     Text(AppInformation.disclaimer)
                     Text("Independent learning aid. No affiliation with or endorsement by ICAO, FAA, Apple, airlines, or ATC authorities.")
                     Link("Support / report a content issue", destination: URL(string: "https://github.com/outinletter/maydayatc/issues")!)
-                    Text("App version 1.0 (5)")
+                    Text("App version 1.0 (6)")
                 }
             }
             .scrollContentBackground(.hidden)

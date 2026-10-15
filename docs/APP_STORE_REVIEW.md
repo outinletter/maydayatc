@@ -38,3 +38,9 @@ The owner chose an iPhone-only first release on 2026-10-15. App and capture-test
 ## Submission completed
 
 On 2026-10-15 at approximately 10:15 KST, version 1.0 (8), iPhone only, was submitted to App Review. App Store Connect confirmed Waiting for Review (심사 대기 중) and one submitted item. Five physical-iPhone screenshots and one 20-second physical-device app preview were included. Preview: 886 × 1920 H.264, 30fps, stereo AAC; the original supplied recording is unchanged. Necessary content rights were declared based on the owner confirmation. Manual release remains selected; approval does not automatically publish the app. No separate TestFlight testing was performed.
+
+## Updated first release candidate — 2026-10-15
+
+The original 1.0 build 8 review item was canceled so the updated first release could replace it. Build 11 keeps the initial App Store version at 1.0 and uses bundle identifier com.addvalue.maydayatc. The archive was uploaded successfully and is awaiting App Store Connect processing. The earlier 1.0.1 build 10 upload is not selected for review.
+
+Five current iPhone screenshots were captured on the connected iPhone 16 Pro and uploaded to the 6.3 inch iPhone screenshot set. They show the updated archive, learning detail, pilot and controller dialogue, language reflection progression, and pastel content update button. The existing device captured app preview was preserved. App Review contact and privacy declarations remain unchanged as requested. App Store promotional text and description were revised to match the current app and avoid the prohibited symbols.

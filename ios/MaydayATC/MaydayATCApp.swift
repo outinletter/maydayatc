@@ -407,6 +407,8 @@ struct SettingsView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
+                    .tint(Color(red: 0.82, green: 0.91, blue: 0.93))
+                    .foregroundStyle(ArchiveTheme.accent)
                     .disabled(library.syncing)
                     Text("Tap the button to download the latest published lessons from GitHub.")
                         .font(.caption)
@@ -426,7 +428,7 @@ struct SettingsView: View {
                     Text(AppInformation.disclaimer)
                     Text("Independent learning aid. No affiliation with or endorsement by ICAO, FAA, Apple, airlines, or ATC authorities.")
                     Link("Support / report a content issue", destination: URL(string: "https://github.com/outinletter/maydayatc/issues")!)
-                    Text("App version 1.0 (9)")
+                    Text("App version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))")
                 }
             }
             .scrollContentBackground(.hidden)

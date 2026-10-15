@@ -99,8 +99,9 @@ struct MaydayATCApp: App {
 }
 
 enum ArchiveTheme {
-    static let accent = Color(red: 0.29, green: 0.48, blue: 0.59)
-    static let ink = Color(red: 0.20, green: 0.30, blue: 0.37)
+    static let accent = Color(red: 0.14, green: 0.31, blue: 0.42)
+    static let ink = Color(red: 0.09, green: 0.13, blue: 0.17)
+    static let secondaryInk = Color(red: 0.28, green: 0.32, blue: 0.37)
     static let background = Color(red: 0.95, green: 0.97, blue: 0.98)
     static let card = Color(red: 1.0, green: 0.99, blue: 0.97)
     static let sky = Color(red: 0.86, green: 0.93, blue: 0.97)
@@ -141,7 +142,7 @@ struct MainView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text(categoryTitle).font(.title2.bold())
                             Text("\(videos.count) emergency recordings\(savedOnly ? " · Saved" : "")")
-                                .font(.subheadline).foregroundStyle(.secondary)
+                                .font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
                         }
                         Spacer(minLength: 8)
                         Menu {
@@ -152,7 +153,7 @@ struct MainView: View {
                             Divider()
                             Toggle("Saved recordings only", isOn: $savedOnly)
                         } label: {
-                            Text("FILTER").font(.subheadline.bold()).padding(12)
+                            Label("Filter", systemImage: "line.3.horizontal.decrease").font(.subheadline.weight(.semibold)).padding(12)
                                 .foregroundStyle(blue).background(blue.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
                         }
                     }.padding(.vertical, 8)
@@ -163,7 +164,7 @@ struct MainView: View {
                         ContentUnavailableView("No matching recordings", systemImage: "magnifyingglass", description: Text("Try another category or search, or turn off the saved filter."))
                     }
                     if library.catalog == nil {
-                        Text(library.message).foregroundStyle(.secondary)
+                        Text(library.message).foregroundStyle(ArchiveTheme.secondaryInk)
                     }
                 }.padding(16)
             }
@@ -176,8 +177,8 @@ struct MainView: View {
                 ToolbarItem(placement: .principal) {
                     Button { category = "all"; query = ""; savedOnly = false } label: {
                         VStack(spacing: 1) {
-                            Text("Mayday ATC").font(.system(size: 27, weight: .heavy)).foregroundStyle(ArchiveTheme.ink)
-                            Text("ARCHIVE").font(.caption.weight(.semibold)).tracking(1).foregroundStyle(.secondary)
+                            Text("Mayday ATC").font(.title2.bold()).foregroundStyle(ArchiveTheme.ink)
+                            Text("ARCHIVE").font(.subheadline.weight(.medium)).tracking(1).foregroundStyle(ArchiveTheme.secondaryInk)
                         }
                     }.buttonStyle(.plain).accessibilityLabel("Mayday ATC, show all recordings")
                 }
@@ -204,23 +205,24 @@ struct ArchiveCard: View {
         VStack(alignment: .leading, spacing: 12) {
             NavigationLink(value: video) {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text(categoryTitle).font(.caption.bold()).foregroundStyle(blue)
+                    Text(categoryTitle).font(.subheadline.weight(.semibold)).foregroundStyle(blue)
                         .padding(.horizontal, 12).padding(.vertical, 6)
                         .background(ArchiveTheme.sky, in: RoundedRectangle(cornerRadius: 6))
-                    Text(video.title).font(.headline).foregroundStyle(ArchiveTheme.ink).multilineTextAlignment(.leading)
+                    Text(video.title).font(.title3.weight(.semibold)).foregroundStyle(ArchiveTheme.ink)
+                        .lineSpacing(4).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.leading)
                 }.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
             }.buttonStyle(.plain)
             HStack {
-                Text(video.channel).font(.subheadline).foregroundStyle(.secondary)
+                Text(video.channel).font(.subheadline.weight(.medium)).foregroundStyle(ArchiveTheme.secondaryInk)
                 Spacer()
                 if library.saved.contains(video.id) { Image(systemName: "bookmark.fill").foregroundStyle(blue).accessibilityLabel("Saved") }
                 Link(destination: video.url) {
-                    Label("PLAY", systemImage: "play.fill").font(.caption.bold()).padding(.horizontal, 14).frame(minHeight: 44)
+                    Label("Play", systemImage: "play.fill").font(.subheadline.weight(.semibold)).padding(.horizontal, 14).frame(minHeight: 44)
                         .background(ArchiveTheme.mint, in: Capsule())
                 }
             }
         }
-        .padding(18)
+        .padding(20)
         .background(ArchiveTheme.card, in: RoundedRectangle(cornerRadius: 16))
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(blue.opacity(0.12)))
     }
@@ -233,11 +235,11 @@ struct VideoDetailView: View {
     var body: some View {
         List {
             Section {
-                if let scenario { Text(scenario.title).font(.caption.bold()).foregroundStyle(.tint) }
-                Text(video.title).font(.title2.bold())
-                Text(video.channel).foregroundStyle(.secondary)
+                if let scenario { Text(scenario.title).font(.subheadline.weight(.semibold)).foregroundStyle(.tint) }
+                Text(video.title).font(.title2.bold()).lineSpacing(4).fixedSize(horizontal: false, vertical: true)
+                Text(video.channel).foregroundStyle(ArchiveTheme.secondaryInk)
                 Link(destination: video.url) {
-                    Label("WATCH REAL ATC VIDEO", systemImage: "play.rectangle.fill")
+                    Label("Watch on YouTube", systemImage: "play.rectangle.fill")
                         .font(.headline).frame(maxWidth: .infinity, minHeight: 44)
                 }
             }
@@ -249,6 +251,7 @@ struct VideoDetailView: View {
         .scrollContentBackground(.hidden)
         .background(ArchiveTheme.background)
         .listRowBackground(ArchiveTheme.card)
+        .environment(\.defaultMinListRowHeight, 52)
         .navigationTitle("ATC Archive").navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Button(library.saved.contains(video.id) ? "Unsave recording" : "Save recording", systemImage: library.saved.contains(video.id) ? "bookmark.fill" : "bookmark") { library.toggleSaved(video.id) }
@@ -264,29 +267,107 @@ struct ScenarioContent: View {
     var body: some View {
         Group {
             Section("Category language practice · fictional") {
-                Text(scenario.summary)
-                Text("These category examples are independent of the video above. They are not its transcript, incident analysis, or an operational checklist.").font(.footnote).foregroundStyle(.secondary)
+                Text(scenario.summary).lineSpacing(6)
+                Text("These category examples are independent of the video above. They are not its transcript, incident analysis, or an operational checklist.").font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
             }
             Section("Pilot communication goals") { ForEach(scenario.pilotRoles, id: \.self) { Text($0) } }
             Section("Controller communication goals") { ForEach(scenario.atcRoles, id: \.self) { Text($0) } }
             Section {
                 Toggle("Rehearse pilot responses", isOn: $rehearsing)
                     .onChange(of: rehearsing) { _, _ in revealed = [] }
-                if rehearsing { Text("Say a response in your own words, then reveal the example. No audio is recorded.").font(.footnote).foregroundStyle(.secondary) }
+                if rehearsing { Text("Say a response in your own words, then reveal the example. No audio is recorded.").font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk) }
                 ForEach(Array(scenario.dialogue.enumerated()), id: \.offset) { index, line in
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(line.from).font(.caption.bold()).foregroundStyle(line.from == "PILOT" ? .blue : .secondary)
-                        if rehearsing && line.from == "PILOT" && !revealed.contains(index) {
-                            Button("Reveal pilot example") { revealed.insert(index) }
-                        } else { Text(line.msg).textSelection(.enabled) }
-                    }.padding(.vertical, 6)
+                    DialogueBubble(isPilot: line.from == "PILOT", message: line.msg,
+                                   hidden: rehearsing && line.from == "PILOT" && !revealed.contains(index)) {
+                        revealed.insert(index)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(ArchiveTheme.background)
                 }
             } header: { Text("Illustrative dialogue") }
-            Section("Language reflection") { Text(scenario.practice).textSelection(.enabled) }
+            Section("Language reflection") { PracticeReadingView(text: scenario.practice) }
             Section {
                 Button(library.completed.contains(scenario.id) ? "Practiced — practice again anytime" : "Mark as practiced", systemImage: "checkmark.circle") { library.finish(scenario.id) }
                 ShareLink(item: "Mayday ATC — fictional English practice\n\(scenario.title)\n\(scenario.practice)\n\(AppInformation.disclaimer)") { Label("Share practice prompt", systemImage: "square.and.arrow.up") }
             }
+        }
+    }
+}
+
+struct DialogueBubble: View {
+    let isPilot: Bool
+    let message: String
+    let hidden: Bool
+    let reveal: () -> Void
+    private var roleColor: Color { isPilot ? ArchiveTheme.accent : Color(red: 0.10, green: 0.34, blue: 0.27) }
+    var body: some View {
+        HStack(alignment: .top, spacing: 0) {
+            if isPilot { Spacer(minLength: 20) }
+            VStack(alignment: .leading, spacing: 12) {
+                Label(isPilot ? "PILOT" : "ATC · CONTROLLER",
+                      systemImage: isPilot ? "airplane" : "antenna.radiowaves.left.and.right")
+                    .font(.subheadline.weight(.bold)).foregroundStyle(roleColor)
+                if hidden {
+                    Button("Reveal pilot response", action: reveal)
+                        .font(.body.weight(.semibold)).frame(minHeight: 44)
+                } else {
+                    Text(message).font(.body).foregroundStyle(ArchiveTheme.ink)
+                        .lineSpacing(6).fixedSize(horizontal: false, vertical: true)
+                        .textSelection(.enabled)
+                }
+            }
+            .padding(18).frame(maxWidth: .infinity, alignment: .leading)
+            .background(isPilot ? ArchiveTheme.sky : ArchiveTheme.mint,
+                        in: RoundedRectangle(cornerRadius: 16))
+            .overlay(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 2).fill(roleColor).frame(width: 3).padding(.vertical, 16)
+            }
+            .accessibilityElement(children: .contain)
+            if !isPilot { Spacer(minLength: 20) }
+        }.padding(.vertical, 4)
+    }
+}
+
+struct PracticeReadingView: View {
+    let text: String
+    var body: some View {
+        ForEach(PracticeBlock.parse(text)) { block in
+            blockView(block)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
+                .listRowBackground(ArchiveTheme.background)
+        }
+    }
+    @ViewBuilder private func blockView(_ block: PracticeBlock) -> some View {
+        switch block.kind {
+        case .pilot, .controller:
+            DialogueBubble(isPilot: block.kind == .pilot, message: block.text, hidden: false, reveal: {})
+        case .step:
+            Text(block.text).font(.title3.weight(.bold)).foregroundStyle(ArchiveTheme.ink)
+                .lineSpacing(4).fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 20).padding(.bottom, 4)
+                .accessibilityAddTraits(.isHeader)
+        case .paragraph:
+            Text(block.text).font(.body).foregroundStyle(ArchiveTheme.ink).lineSpacing(6)
+                .fixedSize(horizontal: false, vertical: true).padding(.horizontal, 6).textSelection(.enabled)
+        default:
+            VStack(alignment: .leading, spacing: 10) {
+                Text(label(for: block.kind)).font(.subheadline.weight(.bold))
+                    .foregroundStyle(ArchiveTheme.accent)
+                Text(block.text).font(.body).foregroundStyle(ArchiveTheme.ink).lineSpacing(6)
+                    .fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
+            }
+            .padding(18).frame(maxWidth: .infinity, alignment: .leading)
+            .background(ArchiveTheme.card, in: RoundedRectangle(cornerRadius: 14))
+        }
+    }
+    private func label(for kind: PracticeBlock.Kind) -> String {
+        switch kind {
+        case .original: "Original phrase"
+        case .corrected: "Revised phrase"
+        case .explanation: "Why this wording"
+        case .alternative: "Alternative expression"
+        default: "Practice"
         }
     }
 }
@@ -301,13 +382,13 @@ struct SettingsView: View {
             Form {
                 Section("Content updates") {
                     Toggle("Check GitHub on app launch", isOn: $automaticUpdates)
-                    Text("Downloads lesson text only. New app features and app versions are delivered through the App Store.").font(.footnote)
+                    Text("Downloads lesson text only. New app features and app versions are delivered through the App Store.").font(.subheadline)
                     Button { Task { await library.sync() } } label: {
                         HStack { Text("Check for lesson updates"); if library.syncing { ProgressView() } }
                     }.disabled(library.syncing)
                     Text("Content revision: \(library.catalog?.revision ?? 0)")
                     if let date = library.checked { Text("Last checked: \(date.formatted())") }
-                    if !library.message.isEmpty { Text(library.message).font(.footnote) }
+                    if !library.message.isEmpty { Text(library.message).font(.subheadline) }
                 }
                 Section("Progress") {
                     Text("\((library.catalog?.scenarios ?? []).filter { library.completed.contains($0.id) }.count) of \(library.catalog?.scenarios.count ?? 0) lessons practiced")
@@ -321,7 +402,7 @@ struct SettingsView: View {
                     Text(AppInformation.disclaimer)
                     Text("Independent learning aid. No affiliation with or endorsement by ICAO, FAA, Apple, airlines, or ATC authorities.")
                     Link("Support / report a content issue", destination: URL(string: "https://github.com/outinletter/maydayatc/issues")!)
-                    Text("App version 1.0 (3)")
+                    Text("App version 1.0 (5)")
                 }
             }
             .scrollContentBackground(.hidden)

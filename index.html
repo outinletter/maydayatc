@@ -211,7 +211,7 @@
       text = text.replace(/ICAO Level 6 Aviation English[^\n]*\n?/gi, "");
       text = text.replace(/PAN PAN PAN/gi, "PAN PAN");
       var lines = text.split("\n");
-      var html = '<div style="font-size:calc(16px * var(--font-scale));line-height:1.75;color:' + colors.T + '">';
+      var html = '<div style="font-size:calc(18px * var(--font-scale));line-height:1.8;color:' + colors.T + '">';
 
       var inCorrectionBox = false;
       var firstCorrection = true;
@@ -248,15 +248,15 @@
             }
             firstCorrection = false;
             var msg = line.replace(/^(Original)\s*:\s*/i, "");
-            html += '<div style="margin-bottom:12px;"><span style="display:inline-block;font-size:calc(11px * var(--font-scale));font-weight:800;color:#fff;background:#94A3B8;padding:4px 8px;border-radius:6px;margin-bottom:6px;letter-spacing:0.5px;">ORIGINAL</span><div style="font-size:calc(15px * var(--font-scale));color:' + colors.M + ';text-decoration:line-through;margin-left:4px;">' + msg + '</div></div>';
+            html += '<div style="margin-bottom:12px;"><span style="display:inline-block;font-size:calc(14px * var(--font-scale));font-weight:800;color:#fff;background:#47525E;padding:4px 8px;border-radius:6px;margin-bottom:6px;letter-spacing:0.5px;">ORIGINAL</span><div style="font-size:calc(16px * var(--font-scale));color:' + colors.M + ';margin-left:4px;">' + msg + '</div></div>';
           } else if (/^(Corrected)\s*:/i.test(line)) {
             var msg = line.replace(/^(Corrected)\s*:\s*/i, "");
-            html += '<div style="margin-bottom:12px;"><span style="display:inline-block;font-size:calc(11px * var(--font-scale));font-weight:800;color:#fff;background:' + colors.N + ';padding:4px 8px;border-radius:6px;margin-bottom:6px;letter-spacing:0.5px;">LEVEL 6 CORRECTED</span><div style="font-size:calc(18px * var(--font-scale));font-weight:700;color:' + colors.T + ';margin-left:4px;">' + msg + '</div></div>';
+            html += '<div style="margin-bottom:12px;"><span style="display:inline-block;font-size:calc(14px * var(--font-scale));font-weight:800;color:#fff;background:' + colors.N + ';padding:4px 8px;border-radius:6px;margin-bottom:6px;letter-spacing:0.5px;">LEVEL 6 CORRECTED</span><div style="font-size:calc(18px * var(--font-scale));font-weight:700;color:' + colors.T + ';margin-left:4px;">' + msg + '</div></div>';
           } else if (/^(Explanation)\s*:/i.test(line)) {
             var msg = line.replace(/^(Explanation)\s*:\s*/i, "");
             var expBg = state.theme === "dark" ? "rgba(74, 222, 128, 0.1)" : "rgba(5, 150, 105, 0.08)";
-            var expColor = state.theme === "dark" ? "#4ADE80" : "#059669";
-            html += '<div style="background:' + expBg + ';border-left:4px solid ' + expColor + ';padding:12px 16px;border-radius:0 8px 8px 0;margin-top:12px;"><div style="font-size:calc(12px * var(--font-scale));font-weight:800;color:' + expColor + ';margin-bottom:6px;letter-spacing:0.5px;">EXPLANATION</div><div style="font-size:calc(15px * var(--font-scale));color:' + colors.T + ';line-height:1.6;">' + msg + '</div></div>';
+            var expColor = state.theme === "dark" ? "#4ADE80" : "#166447";
+            html += '<div style="background:' + expBg + ';border-left:4px solid ' + expColor + ';padding:12px 16px;border-radius:0 8px 8px 0;margin-top:12px;"><div style="font-size:calc(15px * var(--font-scale));font-weight:800;color:' + expColor + ';margin-bottom:6px;letter-spacing:0.5px;">EXPLANATION</div><div style="font-size:calc(16px * var(--font-scale));color:' + colors.T + ';line-height:1.6;">' + msg + '</div></div>';
           } else if (line.trim() === "") {
             // 박스 내 불필요한 빈 줄 무시
           } else {
@@ -273,18 +273,18 @@
         } else if (/^(PILOT|ATC)\s*:/i.test(line)) {
           var isPilot = /^PILOT/i.test(line);
           var msg = line.replace(/^(PILOT|ATC)\s*:\s*/i, "");
-          var bubbleBg = isPilot ? (state.theme === "dark" ? "#2C3E50" : "#EBF5FB") : (state.theme === "dark" ? "#1E2A38" : "#F4F6F8");
+          var bubbleBg = isPilot ? (state.theme === "dark" ? "#2C3E50" : "#EBF5FB") : (state.theme === "dark" ? "#1E2A38" : "#DEF2E8");
           var bubbleBorder = isPilot ? colors.N : colors.B;
-          var bubbleAlign = isPilot ? "flex-start" : "flex-end";
+          var bubbleAlign = isPilot ? "flex-end" : "flex-start";
           var borderRadiusStyle = isPilot ? "border-radius:12px;border-top-left-radius:4px;" : "border-radius:12px;border-top-right-radius:4px;";
 
           html += '<div style="display:flex;flex-direction:column;align-items:' + bubbleAlign + ';margin-bottom:20px">'
-            + '<div style="font-size:calc(12px * var(--font-scale));font-weight:800;letter-spacing:0.5px;color:' + colors.M + ';margin-bottom:6px;padding:0 6px;">' + (isPilot ? "PILOT" : "ATC") + '</div>'
+            + '<div style="font-size:calc(15px * var(--font-scale));font-weight:800;letter-spacing:0.5px;color:' + colors.M + ';margin-bottom:6px;padding:0 6px;">' + (isPilot ? "PILOT" : "ATC") + '</div>'
             + '<div style="max-width:88%;padding:14px 18px;font-size:calc(16px * var(--font-scale));line-height:1.6;color:' + colors.T + ';background:' + bubbleBg + ';border:1px solid ' + bubbleBorder + '66;' + borderRadiusStyle + 'box-shadow: 0 2px 4px rgba(0,0,0,0.02);">' + msg + '</div>'
             + '</div>';
         } else if (/^(Alternative)\s*:/i.test(line)) {
           var msg = line.replace(/^(Alternative)\s*:\s*/i, "");
-          html += '<div style="margin-bottom:16px;background:' + colors.W + ';border:1px solid ' + colors.B + ';padding:14px 18px;border-radius:12px;box-shadow: 0 2px 8px rgba(0,0,0,0.02);"><span style="display:inline-block;font-size:calc(12px * var(--font-scale));font-weight:800;color:' + colors.N + ';margin-bottom:8px;letter-spacing:0.5px;">ALTERNATIVE</span><div style="font-size:calc(16px * var(--font-scale));font-weight:600;line-height:1.5;color:' + colors.T + ';">' + msg + '</div></div>';
+          html += '<div style="margin-bottom:16px;background:' + colors.W + ';border:1px solid ' + colors.B + ';padding:14px 18px;border-radius:12px;box-shadow: 0 2px 8px rgba(0,0,0,0.02);"><span style="display:inline-block;font-size:calc(15px * var(--font-scale));font-weight:800;color:' + colors.N + ';margin-bottom:8px;letter-spacing:0.5px;">ALTERNATIVE</span><div style="font-size:calc(16px * var(--font-scale));font-weight:600;line-height:1.5;color:' + colors.T + ';">' + msg + '</div></div>';
         } else if (line.trim() === "") {
           html += '<div style="height:8px"></div>';
         } else {
@@ -314,11 +314,11 @@
         };
       } else {
         return {
-          N: "#4A7A96", // Clear Sky Blue
+          N: "#24506B", // Clear Sky Blue
           W: "#FFFCF7", // Card Background
           G: "#F2F7FA", // App Background (Soft clean look)
-          T: "#334D5F", // Text (Deep night for visibility)
-          M: "#627B8A", // Slate Gray
+          T: "#17212B", // Text (Deep night for visibility)
+          M: "#47525E", // Slate Gray
           B: "#DCEBF2"  // Border
         };
       }
@@ -349,13 +349,13 @@
     function dialogueHTML(dialogue, colors) {
       return dialogue.map(function(line) {
         var isPilot = line.from === "PILOT";
-        var bubbleBg = isPilot ? (state.theme === "dark" ? "#2C3E50" : "#EBF5FB") : (state.theme === "dark" ? "#1E2A38" : "#F4F6F8");
+        var bubbleBg = isPilot ? (state.theme === "dark" ? "#2C3E50" : "#EBF5FB") : (state.theme === "dark" ? "#1E2A38" : "#DEF2E8");
         var bubbleBorder = isPilot ? colors.N : colors.B;
-        var bubbleAlign = isPilot ? "flex-start" : "flex-end";
+        var bubbleAlign = isPilot ? "flex-end" : "flex-start";
         var borderRadiusStyle = isPilot ? "border-radius:12px;border-top-left-radius:4px;" : "border-radius:12px;border-top-right-radius:4px;";
 
         return '<div style="display:flex;flex-direction:column;align-items:' + bubbleAlign + ';margin-bottom:20px">'
-          + '<div style="font-size:calc(12px * var(--font-scale));font-weight:800;letter-spacing:0.5px;color:' + colors.M + ';margin-bottom:6px;padding:0 6px;">' + line.from + '</div>'
+          + '<div style="font-size:calc(15px * var(--font-scale));font-weight:800;letter-spacing:0.5px;color:' + colors.M + ';margin-bottom:6px;padding:0 6px;">' + line.from + '</div>'
           + '<div style="max-width:88%;padding:14px 18px;font-size:calc(16px * var(--font-scale));line-height:1.6;color:' + colors.T + ';background:' + bubbleBg + ';border:1px solid ' + bubbleBorder + '66;' + borderRadiusStyle + 'box-shadow: 0 2px 4px rgba(0,0,0,0.02);">' + esc(line.msg) + '</div>'
           + '</div>';
       }).join("");
@@ -365,7 +365,7 @@
       var validCat = getValidCat(v.category);
       var c = getCat(validCat);
       var playBtn = v.ytId
-        ? '<button onclick="window.openYoutube(\'' + esc(v.ytId) + '\');event.stopPropagation();" style="display:inline-flex;align-items:center;gap:4px;background:' + colors.N + '1A;color:' + colors.N + ';font-size:calc(12px * var(--font-scale));font-weight:800;padding:6px 14px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;letter-spacing:0.5px;vertical-align:middle;margin-left:10px;white-space:nowrap;transition:background 0.2s;">PLAY</button>'
+        ? '<button onclick="window.openYoutube(\'' + esc(v.ytId) + '\');event.stopPropagation();" style="display:inline-flex;align-items:center;gap:4px;background:' + colors.N + '1A;color:' + colors.N + ';font-size:calc(15px * var(--font-scale));font-weight:800;padding:6px 14px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;letter-spacing:0.5px;vertical-align:middle;margin-left:10px;white-space:nowrap;transition:background 0.2s;">PLAY</button>'
         : '';
       var isNewBadge = v.isNew ? '<span style="background:#E74C3C;color:#fff;font-size:calc(10px * var(--font-scale));font-weight:800;padding:3px 8px;border-radius:12px;margin-left:8px;letter-spacing:0.5px;vertical-align:middle;box-shadow:0 1px 3px rgba(231,76,60,0.3)">NEW</span>' : '';
 
@@ -374,8 +374,8 @@
         + '<div style="display:flex;align-items:center;margin-bottom:12px;">'
         + '  <div style="font-size:calc(13px * var(--font-scale));font-weight:800;color:' + colors.N + ';background:' + colors.N + '1A;padding:4px 12px;border-radius:6px;letter-spacing:0.5px;">' + (c.label || "") + '</div>' + isNewBadge
         + '</div>'
-        + '<div style="font-size:calc(18px * var(--font-scale));font-weight:700;line-height:1.4;color:' + colors.T + ';margin-bottom:12px">' + esc(v.title) + playBtn + '</div>'
-        + '<div style="font-size:calc(14px * var(--font-scale));font-weight:600;color:' + colors.M + '">' + esc(v.channel) + '</div>'
+        + '<div style="font-size:calc(20px * var(--font-scale));font-weight:650;line-height:1.5;color:' + colors.T + ';margin-bottom:12px">' + esc(v.title) + playBtn + '</div>'
+        + '<div style="font-size:calc(15px * var(--font-scale));font-weight:500;color:' + colors.M + '">' + esc(v.channel) + '</div>'
         + '</div></div>';
     }
 
@@ -397,7 +397,7 @@
         : '';
 
       return '<div style="padding-bottom:60px">'
-        + '<button onclick="window.setState({selected:null,_restoreY:state.scrollY||0});" style="display:flex;align-items:center;gap:8px;font-size:calc(15px * var(--font-scale));color:' + colors.M + ';background:none;border:none;cursor:pointer;padding:16px 0;font-weight:800;letter-spacing:0.5px;transition:color 0.2s;" onmouseover="this.style.color=\'' + colors.N + '\'" onmouseout="this.style.color=\'' + colors.M + '\'">← BACK TO LIST</button>'
+        + '<button onclick="window.setState({selected:null,_restoreY:state.scrollY||0});" style="display:flex;align-items:center;gap:8px;font-size:calc(16px * var(--font-scale));color:' + colors.M + ';background:none;border:none;cursor:pointer;padding:16px 0;font-weight:800;letter-spacing:0.5px;transition:color 0.2s;" onmouseover="this.style.color=\'' + colors.N + '\'" onmouseout="this.style.color=\'' + colors.M + '\'">← BACK TO LIST</button>'
 
         + '<div style="background:' + colors.W + '; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid ' + colors.B + '66; margin-bottom: 32px;">'
         + '<div style="display:inline-flex;align-items:center;gap:6px;font-size:calc(13px * var(--font-scale));font-weight:800;color:' + colors.N + ';background:' + colors.N + '1A;padding:4px 12px;border-radius:6px;margin-bottom:16px;letter-spacing:0.5px;">' + (c.label || "") + '</div>'
@@ -430,7 +430,7 @@
     function settingsHTML(colors) {
       var lastDate = state.lastUpdate > 0 ? new Date(state.lastUpdate).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Never";
       return '<div style="padding-bottom:48px; padding-top: 16px;">'
-        + '<button onclick="window.setState({settingsOpen:false});" style="display:flex;align-items:center;gap:6px;font-size:calc(15px * var(--font-scale));color:' + colors.M + ';background:none;border:none;cursor:pointer;padding:8px 0 24px;font-weight:800;letter-spacing:0.5px;">← CLOSE SETTINGS</button>'
+        + '<button onclick="window.setState({settingsOpen:false});" style="display:flex;align-items:center;gap:6px;font-size:calc(16px * var(--font-scale));color:' + colors.M + ';background:none;border:none;cursor:pointer;padding:8px 0 24px;font-weight:800;letter-spacing:0.5px;">← CLOSE SETTINGS</button>'
 
         // Display Settings Block (Compact, single-line format)
         + '<div style="background:' + colors.W + '; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.03); border:1px solid ' + colors.B + '66; margin-bottom: 24px;">'
@@ -461,7 +461,7 @@
         + '  <div style="font-size:calc(15px * var(--font-scale));font-weight:800;color:' + colors.N + ';letter-spacing:1px;margin-bottom:20px;text-transform:uppercase;">DATABASE MANAGEMENT</div>'
         + '  <div style="padding:16px;background:' + colors.N + '0A;border-radius:12px;border:1px dashed ' + colors.N + '44;">'
         + '    <div style="font-size:calc(16px * var(--font-scale));font-weight:700;color:' + colors.T + ';margin-bottom:6px;">GitHub Lesson Sync</div>'
-        + '    <div style="font-size:calc(15px * var(--font-scale));color:' + colors.M + ';line-height:1.5;">Lesson text is checked on launch. App functionality is updated through the App Store.</div>'
+        + '    <div style="font-size:calc(16px * var(--font-scale));color:' + colors.M + ';line-height:1.5;">Lesson text is checked on launch. App functionality is updated through the App Store.</div>'
         + '<button onclick="window.triggerManualUpdate()">Check lesson updates</button><p role="status">' + esc(state.syncMessage || "") + '</p>'
         + '    <div style="font-size:calc(14px * var(--font-scale));color:' + colors.M + ';margin-top:8px;">Last Sync: <strong style="color:' + colors.T + ';">' + lastDate + '</strong></div>'
         + '  </div>'
@@ -556,7 +556,7 @@
         html += '<div style="display:flex;align-items:center;justify-content:space-between;padding: 24px 4px 16px;">'
           + '<div>'
           + '<div style="font-size:calc(26px * var(--font-scale));font-weight:800;color:' + colors.T + ';letter-spacing:-0.5px;">' + (activeCat.label || "All Categories") + '</div>'
-          + '<div style="font-size:calc(14px * var(--font-scale));font-weight:600;color:' + colors.M + ';margin-top:6px;">' + filtered.length + ' emergency recordings</div>'
+          + '<div style="font-size:calc(15px * var(--font-scale));font-weight:500;color:' + colors.M + ';margin-top:6px;">' + filtered.length + ' emergency recordings</div>'
           + '</div>'
           + '<button onclick="window.setState({menuOpen:!state.menuOpen,settingsOpen:false})" style="background:' + colors.N + '1A;border:none;color:' + colors.N + ';font-size:calc(14px * var(--font-scale));font-weight:800;padding:10px 16px;border-radius:12px;cursor:pointer;letter-spacing:0.5px;">FILTER</button>'
           + '</div>';

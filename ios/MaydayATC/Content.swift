@@ -1,5 +1,43 @@
 import Foundation
 
+struct PracticeBlock: Identifiable, Equatable {
+    enum Kind: Equatable {
+        case step, pilot, controller, original, corrected, explanation, alternative, paragraph
+    }
+    let id: Int
+    let kind: Kind
+    var text: String
+
+    static func parse(_ text: String) -> [PracticeBlock] {
+        var blocks: [PracticeBlock] = []
+        var continuing = false
+        let prefixes: [(String, Kind)] = [
+            ("PILOT:", .pilot), ("ATC:", .controller), ("CONTROLLER:", .controller),
+            ("ORIGINAL:", .original), ("CORRECTED:", .corrected),
+            ("EXPLANATION:", .explanation), ("ALTERNATIVE:", .alternative)
+        ]
+        for raw in text.components(separatedBy: .newlines) {
+            let line = raw.trimmingCharacters(in: .whitespaces)
+                .replacingOccurrences(of: "**", with: "")
+                .replacingOccurrences(of: "^#{1,6}\\s+", with: "", options: .regularExpression)
+            guard !line.isEmpty else { continuing = false; continue }
+            if line.uppercased().hasPrefix("STEP ") {
+                blocks.append(PracticeBlock(id: blocks.count, kind: .step, text: line))
+                continuing = false
+            } else if let (prefix, kind) = prefixes.first(where: { line.uppercased().hasPrefix($0.0) }) {
+                blocks.append(PracticeBlock(id: blocks.count, kind: kind,
+                    text: String(line.dropFirst(prefix.count)).trimmingCharacters(in: .whitespaces)))
+                continuing = true
+            } else if continuing, !blocks.isEmpty {
+                blocks[blocks.count - 1].text += " " + line
+            } else {
+                blocks.append(PracticeBlock(id: blocks.count, kind: .paragraph, text: line))
+            }
+        }
+        return blocks
+    }
+}
+
 struct Exchange: Codable, Hashable {
     let from: String
     let msg: String

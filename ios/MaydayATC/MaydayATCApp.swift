@@ -398,7 +398,7 @@ struct SettingsView: View {
                     Text(AppInformation.disclaimer)
                     Text("Independent learning aid. No affiliation with or endorsement by ICAO, FAA, Apple, airlines, or ATC authorities.")
                     Link("Support / report a content issue", destination: URL(string: "https://github.com/outinletter/maydayatc/issues")!)
-                    Text("App version 1.0 (6)")
+                    Text("App version 1.0 (7)")
                 }
             }
             .scrollContentBackground(.hidden)

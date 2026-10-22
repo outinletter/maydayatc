@@ -50,6 +50,17 @@ final class ReviewCapture: XCTestCase {
         app.terminate()
         app.launch()
         XCTAssertTrue(app.buttons["Settings"].waitForExistence(timeout: 10))
+        app.buttons["role-practice"].tap()
+        let savedLesson = app.buttons["lesson-engine"]
+        XCTAssertTrue(savedLesson.waitForExistence(timeout: 5))
+        XCTAssertTrue(savedLesson.label.contains("1 to review"))
+        let reviewFilter = app.switches["Only lessons with mistakes to review"]
+        reviewFilter.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        let filterOn = expectation(for: NSPredicate(format: "value == '1'"), evaluatedWith: reviewFilter)
+        wait(for: [filterOn], timeout: 5)
+        XCTAssertTrue(savedLesson.exists)
+        capture("09-persistent-mistake-review")
+        app.navigationBars.buttons.firstMatch.tap()
         app.buttons["Settings"].tap()
         picker.tap()
         app.buttons["Controller"].tap()

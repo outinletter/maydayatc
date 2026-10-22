@@ -525,7 +525,8 @@ struct RoleQuizView: View {
                     .overlay(RoundedRectangle(cornerRadius: 14).stroke(ArchiveTheme.accent.opacity(0.25)))
                     .contentShape(Rectangle())
                 }.buttonStyle(.plain)
-                .disabled(selections[question.id] != nil)
+                .allowsHitTesting(selections[question.id] == nil)
+                .accessibilityValue(selections[question.id] == nil ? "Choose a response" : "Answer recorded")
                 .accessibilityIdentifier("answer-\(number)-\(option)")
             }
             if let selected = selections[question.id] {

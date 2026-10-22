@@ -1,6 +1,6 @@
 # Response to App Review 4.3 and 4.2.6
 
-Prepared response for the existing review conversation. Not sent. The developer requested preparation only, stopping before submission. Ownership and cross-app statements were confirmed by the developer on October 22, 2026. New device UI verification and matching screenshots are still pending because the iPhone is unavailable. Do not claim external beta testing, accreditation or market exclusivity.
+Prepared response for the existing review conversation. Not sent. The developer requested preparation only, stopping before submission. Ownership and cross-app statements were confirmed by the developer on October 22, 2026. Physical iPhone UI verification passed and six matching screenshots were captured. Do not claim external beta testing, accreditation or market exclusivity.
 
 Dear App Review team,
 
@@ -22,7 +22,7 @@ The specific need is a repeatable role-specific aviation dialogue exercise conne
 
 The original submission was not tested through TestFlight. There was no external beta cohort. I cannot provide examples of external beta feedback because none was conducted. Development validation of the earlier build included a connected iPhone and XCTest screenshot capture. During development, I identified poor text readability, difficulty distinguishing pilot and controller messages, and insufficient visual progression between an original and revised phrase. The production build was changed to use stronger text contrast, separately labelled speaker bubbles, and a staged original phrase to revised phrase to explanation layout. A content update control was also made visibly tappable. These were developer observations and development feedback, not external beta feedback.
 
-For the new role-practice implementation, local automated tests have passed for all 73 questions across 15 bundled lessons, including two distinct answer choices, source-linked answers, stable question identity and isolation when dialogue content changes. Content validation, five publisher tests and the signed Release device build have also passed. The new end-to-end iPhone UI test and screenshots have not yet been completed because the device is currently unavailable. I am distinguishing this pending check from testing that has actually passed.
+For the new role-practice implementation, local automated tests passed for all 73 questions across 15 bundled lessons, including two distinct answer choices, source-linked answers, stable question identity and isolation when dialogue content changes. Content validation, five publisher tests and the signed Release device build also passed. An automated UI test on a physical iPhone 16 Pro passed for the Engine Failure lesson using both roles. It verified role selection, incorrect and correct answer feedback, role preference persistence after relaunch, persistence of a mistake after relaunch, and the enabled mistake-only lesson filter. Six actual iPhone screenshots were captured and visually inspected. The final Release build was then installed on the iPhone. These are developer verification results, not external beta testing. I have not claimed that all 73 questions were individually exercised through the device UI.
 
 5. Standalone product or suite
 
@@ -46,10 +46,10 @@ No client, partner or commissioning third party supplied the concept or branding
 
 The main functional changes in build 12 are role selection, a direct lesson practice library, two-choice response exercises, source-linked answer feedback, persistent role-specific question records and mistake review. These changes make the learning flow accessible independently of the external video archive. Please let me know which specific app or component raised concerns about duplication or a commercial app generation service so I can address that concern directly.
 
-## Evidence to attach after validation
+## Available evidence
 
-- App build number and actual on-device test result.
-- iPhone screenshots of role selection, a two-choice question and feedback.
+- Version 1.0 build 12; physical iPhone test result: Passed, one targeted test, zero failures and zero skipped tests.
+- Six original iPhone screenshots in outputs/app-store-screenshots/iphone-release12, including role selection, both roles, feedback and the enabled mistake filter.
 - Review steps: Home, Role practice, select lesson, read dialogue, answer a question, inspect feedback, start a new round or filter mistakes. Change role through Settings.
 - Source diff showing role selection, question construction, local records and the editorial publication gate.
 - Do not call development observations external beta feedback or claim aviation authority approval.

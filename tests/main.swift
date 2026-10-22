@@ -42,3 +42,27 @@ for scenario in catalog.scenarios {
     precondition(parsed.filter { $0.kind == .step }.count == 3)
 }
 print("PASS: speaker boundaries, multiline messages, step/correction groups in all scenarios")
+
+var questionCount = 0
+for scenario in catalog.scenarios {
+    for role in LearningRole.allCases {
+        let questions = DialogueQuestion.make(scenario: scenario, role: role)
+        precondition(!questions.isEmpty, "Missing role practice: \(scenario.id) \(role)")
+        precondition(Set(questions.map(\.id)).count == questions.count)
+        for question in questions {
+            precondition(question.options.count == 2 && Set(question.options).count == 2)
+            precondition(question.cue.from != role.speaker)
+            precondition(scenario.dialogue.contains { $0.from == role.speaker && $0.msg == question.options[question.correctIndex] })
+            precondition(question.explanation.contains(question.options[question.correctIndex]))
+            precondition(DialogueQuestion.make(scenario: scenario, role: role).contains { $0.id == question.id && $0.correctIndex == question.correctIndex })
+        }
+        questionCount += questions.count
+    }
+}
+let original = catalog.scenarios[0]
+let revised = Scenario(id: original.id, title: original.title, summary: original.summary,
+                       pilotRoles: original.pilotRoles, atcRoles: original.atcRoles,
+                       dialogue: original.dialogue.map { Exchange(from: $0.from, msg: $0.msg + " Revised.") }, practice: original.practice)
+precondition(Set(DialogueQuestion.make(scenario: original, role: .pilot).map(\.id))
+    .isDisjoint(with: DialogueQuestion.make(scenario: revised, role: .pilot).map(\.id)))
+print("PASS: \(questionCount) role questions, two distinct choices, source evidence, stable identity and revision isolation")

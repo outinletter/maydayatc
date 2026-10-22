@@ -53,6 +53,51 @@ struct Scenario: Codable, Identifiable, Hashable {
     let practice: String
 }
 
+enum LearningRole: String, CaseIterable, Identifiable {
+    case pilot, controller
+    var id: String { rawValue }
+    var title: String { self == .pilot ? "Pilot" : "Controller" }
+    var speaker: String { self == .pilot ? "PILOT" : "ATC" }
+}
+
+/// Reading comprehension of the supplied fictional exchange, not a judgement
+/// about the operational suitability of a clearance or response.
+struct DialogueQuestion: Identifiable {
+    let id: String
+    let cue: Exchange
+    let options: [String]
+    let correctIndex: Int
+    let explanation: String
+
+    static func make(scenario: Scenario, role: LearningRole) -> [DialogueQuestion] {
+        scenario.dialogue.indices.compactMap { index in
+            guard index > 0, scenario.dialogue[index].from == role.speaker,
+                  scenario.dialogue[index - 1].from != role.speaker else { return nil }
+            let answer = scenario.dialogue[index].msg
+            // Distractors come from another turn by the same speaker in this
+            // lesson. They are not fabricated aviation instructions.
+            guard let other = scenario.dialogue.indices.first(where: {
+                $0 != index && scenario.dialogue[$0].from == role.speaker && scenario.dialogue[$0].msg != answer
+            }) else { return nil }
+            let correctIndex = (index / 2) % 2
+            var options = [scenario.dialogue[other].msg, scenario.dialogue[other].msg]
+            options[correctIndex] = answer
+            let cue = scenario.dialogue[index - 1]
+            return DialogueQuestion(
+                id: scenario.id + "|" + role.rawValue + "|" + cue.msg + "|" + answer,
+                cue: cue, options: options, correctIndex: correctIndex,
+                explanation: "In this fictional dialogue, the next \(role.title.lowercased()) message is: \(answer)\n\nThe other example belongs to a different turn. Compare the request, acknowledgement and information in the preceding message. This checks the lesson sequence, not operational correctness."
+            )
+        }
+    }
+}
+
+struct PracticeResult: Codable {
+    var attempts: Int
+    var correct: Int
+    var needsReview: Bool
+}
+
 struct Catalog: Codable {
     let schemaVersion: Int
     let revision: Int

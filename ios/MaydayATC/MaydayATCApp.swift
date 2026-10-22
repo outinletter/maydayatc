@@ -8,11 +8,18 @@ final class Library: ObservableObject {
     @Published private(set) var checked: Date?
     @Published private(set) var saved: Set<String>
     @Published private(set) var completed: Set<String>
+    @Published var learningRole: LearningRole {
+        didSet { defaults.set(learningRole.rawValue, forKey: "learningRole") }
+    }
+    @Published private(set) var practiceResults: [String: PracticeResult]
     private let defaults = UserDefaults.standard
     private let cache: URL
     static let feed = URL(string: "https://raw.githubusercontent.com/outinletter/maydayatc/main/content/catalog.json")!
 
     init() {
+        learningRole = LearningRole(rawValue: UserDefaults.standard.string(forKey: "learningRole") ?? "pilot") ?? .pilot
+        practiceResults = UserDefaults.standard.data(forKey: "practiceResults")
+            .flatMap { try? JSONDecoder().decode([String: PracticeResult].self, from: $0) } ?? [:]
         saved = Set(defaults.stringArray(forKey: "saved") ?? [])
         completed = Set(defaults.stringArray(forKey: "completed") ?? [])
         checked = defaults.object(forKey: "checked") as? Date
@@ -39,11 +46,27 @@ final class Library: ObservableObject {
 
     func reset() {
         saved = []; completed = []; checked = nil
-        for key in ["saved", "completed", "checked"] { defaults.removeObject(forKey: key) }
+        practiceResults = [:]
+        learningRole = .pilot
+        for key in ["saved", "completed", "checked", "practiceResults", "learningRole"] { defaults.removeObject(forKey: key) }
         try? FileManager.default.removeItem(at: cache)
         catalog = Bundle.main.url(forResource: "catalog", withExtension: "json")
             .flatMap { try? Data(contentsOf: $0) }.flatMap { try? Catalog.decode($0) }
         message = "Local data deleted. Bundled lessons restored."
+    }
+
+    func record(_ question: DialogueQuestion, selected: Int) {
+        guard question.options.indices.contains(selected) else { return }
+        var result = practiceResults[question.id] ?? PracticeResult(attempts: 0, correct: 0, needsReview: false)
+        result.attempts += 1
+        if selected == question.correctIndex { result.correct += 1 }
+        result.needsReview = selected != question.correctIndex
+        practiceResults[question.id] = result
+        if let data = try? JSONEncoder().encode(practiceResults) { defaults.set(data, forKey: "practiceResults") }
+    }
+
+    var activeQuestions: [DialogueQuestion] {
+        (catalog?.scenarios ?? []).flatMap { DialogueQuestion.make(scenario: $0, role: learningRole) }
     }
 
     func sync() async {
@@ -128,6 +151,19 @@ struct MainView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 16) {
+                    NavigationLink {
+                        RolePracticeLibraryView()
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("\(library.learningRole.title) practice").font(.headline)
+                                Text("Read a dialogue · choose a response · review mistakes")
+                                    .font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                        }.padding(18).background(ArchiveTheme.mint, in: RoundedRectangle(cornerRadius: 16))
+                    }.buttonStyle(.plain).accessibilityIdentifier("role-practice")
                     if showSearch {
                         HStack {
                             Image(systemName: "magnifyingglass").foregroundStyle(blue)
@@ -266,21 +302,23 @@ struct ScenarioContent: View {
         Group {
             Section("Category language practice · fictional") {
                 Text(scenario.summary).lineSpacing(6)
-                Text("These category examples are independent of the video above. They are not its transcript, incident analysis, or an operational checklist.").font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
+                Text("These fictional language examples are independent of linked videos. They are not transcripts, incident analyses, or operational checklists.").font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
             }
             Section {
-                Toggle("Rehearse pilot responses", isOn: $rehearsing)
+                Toggle("Rehearse \(library.learningRole.title.lowercased()) responses", isOn: $rehearsing)
                     .onChange(of: rehearsing) { _, _ in revealed = [] }
+                    .onChange(of: library.learningRole) { _, _ in revealed = [] }
                 if rehearsing { Text("Say a response in your own words, then reveal the example. No audio is recorded.").font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk) }
                 ForEach(Array(scenario.dialogue.enumerated()), id: \.offset) { index, line in
                     DialogueBubble(isPilot: line.from == "PILOT", message: line.msg,
-                                   hidden: rehearsing && line.from == "PILOT" && !revealed.contains(index)) {
+                                   hidden: rehearsing && line.from == library.learningRole.speaker && !revealed.contains(index)) {
                         revealed.insert(index)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(ArchiveTheme.background)
                 }
             } header: { Text("Illustrative dialogue") }
+            RoleQuizView(scenario: scenario).id(scenario.id + library.learningRole.rawValue)
             Section("Language reflection") { PracticeReadingView(text: scenario.practice) }
             Section {
                 Button(library.completed.contains(scenario.id) ? "Practiced — practice again anytime" : "Mark as practiced", systemImage: "checkmark.circle") { library.finish(scenario.id) }
@@ -304,7 +342,7 @@ struct DialogueBubble: View {
                       systemImage: isPilot ? "airplane" : "antenna.radiowaves.left.and.right")
                     .font(.subheadline.weight(.bold)).foregroundStyle(roleColor)
                 if hidden {
-                    Button("Reveal pilot response", action: reveal)
+                    Button(isPilot ? "Reveal pilot response" : "Reveal controller response", action: reveal)
                         .font(.body.weight(.semibold)).frame(minHeight: 44)
                 } else {
                     Text(message).font(.body).foregroundStyle(ArchiveTheme.ink)
@@ -392,6 +430,119 @@ struct PracticeReadingView: View {
     }
 }
 
+struct RolePracticeLibraryView: View {
+    @EnvironmentObject private var library: Library
+    @State private var reviewOnly = false
+    var body: some View {
+        List {
+            Section {
+                Picker("Practice as", selection: $library.learningRole) {
+                    ForEach(LearningRole.allCases) { role in Text(role.title).tag(role) }
+                }
+                Text("Study the exchange, then choose which of two examples comes next. Each answer includes the source message and an explanation.")
+                Toggle("Only lessons with mistakes to review", isOn: $reviewOnly)
+            }
+            Section("Fictional dialogue lessons") {
+                ForEach(library.catalog?.scenarios ?? []) { scenario in
+                    let questions = DialogueQuestion.make(scenario: scenario, role: library.learningRole)
+                    let pending = questions.filter { library.practiceResults[$0.id]?.needsReview == true }.count
+                    if !questions.isEmpty && (!reviewOnly || pending > 0) {
+                        NavigationLink {
+                            List { ScenarioContent(scenario: scenario) }
+                                .scrollContentBackground(.hidden)
+                                .background(ArchiveTheme.background)
+                                .navigationTitle(scenario.title)
+                                .navigationBarTitleDisplayMode(.inline)
+                        } label: {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(scenario.title).font(.headline)
+                                Text("\(questions.count) questions · \(pending) to review")
+                                    .font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
+                            }.padding(.vertical, 6)
+                        }.accessibilityIdentifier("lesson-" + scenario.id)
+                    }
+                }
+                if reviewOnly && !library.activeQuestions.contains(where: { library.practiceResults[$0.id]?.needsReview == true }) {
+                    Text("No mistakes to review for this role. Choose a lesson to start practicing.")
+                }
+            }
+        }
+        .scrollContentBackground(.hidden)
+        .background(ArchiveTheme.background)
+        .navigationTitle("Role practice")
+    }
+}
+
+struct RoleQuizView: View {
+    @EnvironmentObject private var library: Library
+    let scenario: Scenario
+    @State private var selections: [String: Int] = [:]
+    @State private var reviewOnly = false
+    private var questions: [DialogueQuestion] { DialogueQuestion.make(scenario: scenario, role: library.learningRole) }
+    var body: some View {
+        Section {
+            Text("Choose the next \(library.learningRole.title.lowercased()) response")
+                .font(.title3.bold())
+            Text("Read the dialogue above first. These questions check its sequence and meaning; neither choice is an instruction for real operations.")
+                .font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
+            Text("\(selections.count) of \(questions.count) answered this round")
+                .font(.subheadline.weight(.semibold))
+            Toggle("Review mistakes only", isOn: $reviewOnly)
+            ForEach(Array(questions.enumerated()), id: \.element.id) { index, question in
+                if !reviewOnly || library.practiceResults[question.id]?.needsReview == true || selections[question.id] != nil {
+                    questionCard(question, number: index + 1)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(ArchiveTheme.background)
+                }
+            }
+            if reviewOnly && !questions.contains(where: { library.practiceResults[$0.id]?.needsReview == true }) && selections.isEmpty {
+                Text("No mistakes to review in this lesson for your role.")
+            }
+            Button("Start a new round", systemImage: "arrow.clockwise") { selections = [:] }
+                .disabled(selections.isEmpty)
+        } header: { Text("Role practice · \(library.learningRole.title)") }
+    }
+
+    private func questionCard(_ question: DialogueQuestion, number: Int) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("QUESTION \(number)").font(.caption.bold()).foregroundStyle(ArchiveTheme.accent)
+            DialogueBubble(isPilot: question.cue.from == "PILOT", message: question.cue.msg, hidden: false, reveal: {})
+            Text("Which example comes next in this dialogue?").font(.headline)
+            ForEach(question.options.indices, id: \.self) { option in
+                Button {
+                    guard selections[question.id] == nil else { return }
+                    selections[question.id] = option
+                    library.record(question, selected: option)
+                } label: {
+                    HStack(alignment: .top, spacing: 12) {
+                        Text(option == 0 ? "A" : "B").font(.headline)
+                        Text(question.options[option]).lineSpacing(5).frame(maxWidth: .infinity, alignment: .leading)
+                        if selections[question.id] == option { Image(systemName: "checkmark.circle.fill") }
+                    }
+                    .padding(16).foregroundStyle(ArchiveTheme.ink)
+                    .background(selections[question.id] == option ? ArchiveTheme.sky : ArchiveTheme.card,
+                                in: RoundedRectangle(cornerRadius: 14))
+                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(ArchiveTheme.accent.opacity(0.25)))
+                    .contentShape(Rectangle())
+                }.buttonStyle(.plain)
+                .disabled(selections[question.id] != nil)
+                .accessibilityIdentifier("answer-\(number)-\(option)")
+            }
+            if let selected = selections[question.id] {
+                VStack(alignment: .leading, spacing: 10) {
+                    Label(selected == question.correctIndex ? "Correct — follows this dialogue" : "Saved for review — compare the next turn",
+                          systemImage: selected == question.correctIndex ? "checkmark.circle" : "arrow.uturn.backward.circle")
+                        .font(.headline)
+                    Text(question.explanation).lineSpacing(5)
+                    Text("Correct example: \(question.correctIndex == 0 ? "A" : "B")")
+                        .font(.subheadline.bold())
+                }.padding(16).background(ArchiveTheme.mint, in: RoundedRectangle(cornerRadius: 14))
+                    .accessibilityIdentifier("feedback-\(number)")
+            }
+        }.padding(.vertical, 10)
+    }
+}
+
 struct SettingsView: View {
     @EnvironmentObject private var library: Library
     @Environment(\.dismiss) private var dismiss
@@ -399,6 +550,13 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section("Your learning role") {
+                    Picker("Practice as", selection: $library.learningRole) {
+                        ForEach(LearningRole.allCases) { role in Text(role.title).tag(role) }
+                    }.accessibilityIdentifier("learning-role")
+                    Text("Your role changes the response practice and review questions. Both sides of each fictional dialogue remain available to read.")
+                        .font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
+                }
                 Section("Content updates") {
                     Text("Download the latest published video list and learning dialogues. New material is prepared centrally; this button does not start collection or generation.").font(.subheadline)
                     Button { Task { await library.sync() } } label: {
@@ -417,6 +575,9 @@ struct SettingsView: View {
                     if !library.message.isEmpty { Text(library.message).font(.subheadline) }
                 }
                 Section("Progress") {
+                    let questions = library.activeQuestions
+                    Text("\(questions.filter { library.practiceResults[$0.id] != nil }.count) of \(questions.count) \(library.learningRole.title.lowercased()) questions attempted")
+                    Text("\(questions.filter { library.practiceResults[$0.id]?.needsReview == true }.count) questions to review")
                     Text("\((library.catalog?.scenarios ?? []).filter { library.completed.contains($0.id) }.count) of \(library.catalog?.scenarios.count ?? 0) lessons practiced")
                     Button("Delete local data", role: .destructive) { reset = true }
                 }
@@ -425,6 +586,7 @@ struct SettingsView: View {
                     Link("GitHub privacy statement", destination: URL(string: "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement")!)
                 }
                 Section("About and support") {
+                    Text("Created by a pilot for pilots and air traffic controllers to practice aviation English outside operational duties.")
                     Text(AppInformation.disclaimer)
                     Text("Independent learning aid. No affiliation with or endorsement by ICAO, FAA, Apple, airlines, or ATC authorities.")
                     Link("Support / report a content issue", destination: URL(string: "https://github.com/outinletter/maydayatc/issues")!)

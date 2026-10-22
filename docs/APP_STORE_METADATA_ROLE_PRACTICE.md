@@ -1,0 +1,39 @@
+# Proposed metadata for version 1.0 build 12
+
+Prepared text only. Update the submission after device validation and attach screenshots of the new learning flow.
+
+## Promotional text
+
+Practice aviation English as a pilot or controller. Study fictional dialogues, choose responses, read explanations and revisit mistakes offline.
+
+## Description
+
+Mayday ATC is an independent aviation English practice app created by a pilot for pilots and air traffic controllers.
+
+Choose Pilot or Controller in Settings. Open Role practice from the home screen, select a fictional lesson and read both sides of the dialogue. Choose which of two response examples comes next. Compare your answer with the source exchange and explanation, then revisit mistakes in another round.
+
+Role-specific question records and preferences stay on your device. Filter lessons with mistakes to focus your review. Bundled dialogues and exercises work offline.
+
+Language reflection presents original wording, revised examples, explanations and alternative expressions in stages. You can also hide your selected role in the dialogue and reveal each response after rehearsing.
+
+Browse the optional ATC video archive, search titles and channels, save recordings and open credited source links on YouTube. The fictional exercises are independent of those videos and are not transcripts or incident reconstructions.
+
+Update content downloads the latest published learning material. New collected material requires developer review before publication. No account, ads or tracking are used.
+
+Independent language learning only. Not flight instructions, emergency guidance or an accredited ICAO course. Never use during flight operations. No affiliation with aviation authorities, airlines or video publishers.
+
+## Review notes
+
+Developer is a pilot and the original concept owner. No client commission, commercial app template or app generation service. No proprietary code, images or learning materials shared with other apps on this account. No external TestFlight beta was conducted.
+
+Review path for the new functionality:
+
+1. Open Settings and choose Pilot under Your learning role. Return to Home.
+2. Open Pilot practice and select Engine Failure.
+3. Read the fictional pilot and controller exchange. Scroll to Role practice.
+4. Select one of the two examples. The app shows the keyed next response, source-based explanation and an explicit correctness label.
+5. A wrong answer is saved locally for review. Start a new round or use the mistake filter. Records persist after relaunch.
+6. Select Controller in Settings. The dialogue rehearsal and questions now target controller responses. Pilot and controller question results are independent.
+7. Settings shows attempted questions and mistakes for the current role. Delete local data resets question history and preferences as well as saved material.
+
+There is no login, microphone capture, payment, subscription or third-party SDK. Videos open externally. GitHub updates download validated JSON only. These are fictional language comprehension exercises, not a rating of operational correctness or real-world flight readiness.

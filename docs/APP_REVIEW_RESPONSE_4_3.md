@@ -1,10 +1,10 @@
 # Response to App Review 4.3 and 4.2.6
 
-Draft for the existing review conversation. Send after on-device validation and matching screenshots. Ownership and cross-app statements were confirmed by the developer on October 22, 2026. Do not claim external beta testing, accreditation or market exclusivity.
+Prepared response for the existing review conversation. Not sent. The developer requested preparation only, stopping before submission. Ownership and cross-app statements were confirmed by the developer on October 22, 2026. New device UI verification and matching screenshots are still pending because the iPhone is unavailable. Do not claim external beta testing, accreditation or market exclusivity.
 
 Dear App Review team,
 
-I am the developer and a pilot. I conceived Mayday ATC for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I am answering each question and preparing substantial improvements rather than resubmitting the unchanged build.
+Thank you for the opportunity to clarify the purpose and origin of Mayday ATC. I am the developer and a pilot. I conceived this product for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I have implemented the changes described below in version 1.0 build 12. The rejected build has not been resubmitted.
 
 1. What the app does and the problem it solves
 
@@ -20,7 +20,9 @@ The specific need is a repeatable role-specific aviation dialogue exercise conne
 
 4. Testing before submission
 
-The original submission was not tested through TestFlight. There was no external TestFlight beta cohort. Development validation included a connected iPhone and XCTest screenshot capture. Development feedback led to separate labelled pilot and controller bubbles, increased text contrast, a staged original phrase to revised phrase to explanation layout, and a visibly tappable content update control. These were development and product review observations, not external beta feedback. Role-specific exercises are a subsequent improvement in response to this review. Their test evidence will be provided separately after verification.
+The original submission was not tested through TestFlight. There was no external beta cohort. I cannot provide examples of external beta feedback because none was conducted. Development validation of the earlier build included a connected iPhone and XCTest screenshot capture. During development, I identified poor text readability, difficulty distinguishing pilot and controller messages, and insufficient visual progression between an original and revised phrase. The production build was changed to use stronger text contrast, separately labelled speaker bubbles, and a staged original phrase to revised phrase to explanation layout. A content update control was also made visibly tappable. These were developer observations and development feedback, not external beta feedback.
+
+For the new role-practice implementation, local automated tests have passed for all 73 questions across 15 bundled lessons, including two distinct answer choices, source-linked answers, stable question identity and isolation when dialogue content changes. Content validation, five publisher tests and the signed Release device build have also passed. The new end-to-end iPhone UI test and screenshots have not yet been completed because the device is currently unavailable. I am distinguishing this pending check from testing that has actually passed.
 
 5. Standalone product or suite
 
@@ -42,7 +44,7 @@ I have not used a commercial app template, another third-party app codebase or a
 
 No client, partner or commissioning third party supplied the concept or branding. I am the pilot who conceived and developed this app and I am submitting through my own developer account. External videos are credited references. I am responsible for the app and its independent fictional exercises; I am not a template vendor submitting on behalf of a customer.
 
-Please let me know which specific parts raised concerns about a duplicate app or commercial app generation service so I can address those concerns directly. I will provide the revised build and evidence of the completed improvements after validation.
+The main functional changes in build 12 are role selection, a direct lesson practice library, two-choice response exercises, source-linked answer feedback, persistent role-specific question records and mistake review. These changes make the learning flow accessible independently of the external video archive. Please let me know which specific app or component raised concerns about duplication or a commercial app generation service so I can address that concern directly.
 
 ## Evidence to attach after validation
 

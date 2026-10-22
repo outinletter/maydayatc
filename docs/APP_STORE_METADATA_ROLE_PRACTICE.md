@@ -1,4 +1,4 @@
-# Proposed metadata for version 1.0 build 13
+# Proposed metadata for version 1.0 build 14
 
 Prepared text only. Update the submission after device validation and attach screenshots of the new learning flow.
 
@@ -10,7 +10,7 @@ Practice aviation English as a pilot or controller. Study fictional dialogues, c
 
 Mayday ATC is an independent aviation English practice app created by a pilot for pilots and air traffic controllers.
 
-Choose Pilot or Controller in Settings. Open Role practice from the home screen, select a fictional lesson and read both sides of the dialogue. Choose which of two response examples comes next. Compare your answer with the source exchange and explanation, then revisit mistakes in another round.
+Choose Pilot or Controller in Settings. Open Role practice from the home screen, select a fictional lesson and read both sides of the dialogue. Choose which of two response examples comes next. Switch between examples to compare their correct and incorrect explanations. Only your first answer per round is recorded. Compare the examples with the source exchange, then revisit mistakes in another round.
 
 Role-specific question records and preferences stay on your device. Filter lessons with mistakes to focus your review. Bundled dialogues and exercises work offline.
 
@@ -36,5 +36,6 @@ Review path for the new functionality:
 6. Select Controller in Settings. The dialogue rehearsal and questions now target controller responses. Pilot and controller question results are independent.
 7. Settings shows attempted questions and mistakes for the current role. Delete local data resets question history and preferences as well as saved material.
 8. Enable Rehearse pilot responses or Rehearse controller responses. Tap Reveal to see a response, then Hide in the same place to conceal it again. This can be repeated for each message.
+9. After answering a question, select the other example. Its own correct or incorrect explanation replaces the previous one. Switching examples does not record another attempt or overwrite the first answer. Use Start a new round to submit a fresh answer.
 
 There is no login, microphone capture, payment, subscription or third-party SDK. Videos open externally. GitHub updates download validated JSON only. These are fictional language comprehension exercises, not a rating of operational correctness or real-world flight readiness.

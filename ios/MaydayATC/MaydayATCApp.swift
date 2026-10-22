@@ -494,6 +494,8 @@ struct RoleQuizView: View {
                 .font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
             Text("\(selections.count) of \(questions.count) answered this round")
                 .font(.subheadline.weight(.semibold))
+            Text("Try either example to compare its explanation. Only your first answer in each round is recorded; start a new round to answer again.")
+                .font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
             Toggle("Review mistakes only", isOn: $reviewOnly)
             ForEach(Array(questions.enumerated()), id: \.element.id) { index, question in
                 if !reviewOnly || library.practiceResults[question.id]?.needsReview == true || selections[question.id] != nil {
@@ -517,9 +519,9 @@ struct RoleQuizView: View {
             Text("Which example comes next in this dialogue?").font(.headline)
             ForEach(question.options.indices, id: \.self) { option in
                 Button {
-                    guard selections[question.id] == nil else { return }
+                    let firstAnswer = selections[question.id] == nil
                     selections[question.id] = option
-                    library.record(question, selected: option)
+                    if firstAnswer { library.record(question, selected: option) }
                 } label: {
                     HStack(alignment: .top, spacing: 12) {
                         Text(option == 0 ? "A" : "B").font(.headline)
@@ -532,19 +534,18 @@ struct RoleQuizView: View {
                     .overlay(RoundedRectangle(cornerRadius: 14).stroke(ArchiveTheme.accent.opacity(0.25)))
                     .contentShape(Rectangle())
                 }.buttonStyle(.plain)
-                .allowsHitTesting(selections[question.id] == nil)
-                .accessibilityValue(selections[question.id] == nil ? "Choose a response" : "Answer recorded")
+                .accessibilityValue(selections[question.id] == option ? "Selected. Explanation shown below." : "Select to see this example’s explanation")
                 .accessibilityIdentifier("answer-\(number)-\(option)")
             }
             if let selected = selections[question.id] {
                 VStack(alignment: .leading, spacing: 10) {
-                    Label(selected == question.correctIndex ? "Correct — follows this dialogue" : "Saved for review — compare the next turn",
+                    Label(selected == question.correctIndex ? "Correct — follows this dialogue" : "Incorrect — belongs to another turn",
                           systemImage: selected == question.correctIndex ? "checkmark.circle" : "arrow.uturn.backward.circle")
                         .font(.headline)
-                    Text(question.explanation).lineSpacing(5)
+                    Text(question.feedback(for: selected)).lineSpacing(5)
                     Text("Correct example: \(question.correctIndex == 0 ? "A" : "B")")
                         .font(.subheadline.bold())
-                }.padding(16).background(ArchiveTheme.mint, in: RoundedRectangle(cornerRadius: 14))
+                }.padding(16).background(selected == question.correctIndex ? ArchiveTheme.mint : ArchiveTheme.sky, in: RoundedRectangle(cornerRadius: 14))
                     .accessibilityIdentifier("feedback-\(number)")
             }
         }.padding(.vertical, 10)

@@ -54,6 +54,9 @@ for scenario in catalog.scenarios {
             precondition(question.cue.from != role.speaker)
             precondition(scenario.dialogue.contains { $0.from == role.speaker && $0.msg == question.options[question.correctIndex] })
             precondition(question.explanation.contains(question.options[question.correctIndex]))
+            precondition(question.feedback(for: question.correctIndex).contains(question.options[question.correctIndex]))
+            precondition(question.feedback(for: 1 - question.correctIndex).contains(question.options[1 - question.correctIndex]))
+            precondition(question.feedback(for: question.correctIndex) != question.feedback(for: 1 - question.correctIndex))
             precondition(DialogueQuestion.make(scenario: scenario, role: role).contains { $0.id == question.id && $0.correctIndex == question.correctIndex })
         }
         questionCount += questions.count

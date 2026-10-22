@@ -69,6 +69,14 @@ struct DialogueQuestion: Identifiable {
     let correctIndex: Int
     let explanation: String
 
+    func feedback(for selected: Int) -> String {
+        guard options.indices.contains(selected) else { return "Choose an example to read its explanation." }
+        if selected == correctIndex {
+            return "This example is the next response in the supplied dialogue.\n\nPreceding message: \(cue.msg)\n\nNext response: \(options[selected])\n\nIt follows this message in the lesson. This is a reading exercise, not a judgement of operational suitability."
+        }
+        return "This example belongs to a different turn of the supplied dialogue. It is not the next response to the message shown here.\n\nSelected example: \(options[selected])\n\nAfter the preceding message, the lesson instead continues with: \(options[correctIndex])\n\nCompare the information and the request in the preceding message, then choose the other example to see its explanation."
+    }
+
     static func make(scenario: Scenario, role: LearningRole) -> [DialogueQuestion] {
         scenario.dialogue.indices.compactMap { index in
             guard index > 0, scenario.dialogue[index].from == role.speaker,

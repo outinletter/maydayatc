@@ -51,6 +51,7 @@ final class ReviewCapture: XCTestCase {
             attachment.name = name
             attachment.lifetime = .keepAlways
             add(attachment)
+            app.activate()
         }
         capture("01-role-practice-home")
         app.buttons["Settings"].tap()
@@ -75,17 +76,31 @@ final class ReviewCapture: XCTestCase {
         question.name = "06-pilot-role-question"
         question.lifetime = .keepAlways
         add(question)
+        app.activate()
         choice.tap()
         let feedback = app.otherElements["feedback-1"]
         // Feedback is also exposed through its visible text for XCTest versions
         // that flatten the SwiftUI container accessibility tree.
-        let explanation = app.staticTexts["Saved for review — compare the next turn"]
+        let explanation = app.staticTexts["Incorrect — belongs to another turn"]
         reveal(explanation)
         XCTAssertTrue(feedback.exists || explanation.exists)
         let result = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         result.name = "07-answer-explanation"
         result.lifetime = .keepAlways
         add(result)
+        app.activate()
+        let alternate = app.buttons["answer-1-1"]
+        for _ in 0..<12 {
+            if alternate.exists && alternate.isHittable { break }
+            app.swipeDown()
+        }
+        XCTAssertTrue(alternate.isHittable)
+        alternate.tap()
+        let alternateFeedback = app.staticTexts["Correct — follows this dialogue"]
+        reveal(alternateFeedback)
+        XCTAssertTrue(alternateFeedback.exists)
+        XCTAssertFalse(explanation.exists)
+        capture("10-correct-example-explanation")
         app.terminate()
         app.launch()
         XCTAssertTrue(app.buttons["Settings"].waitForExistence(timeout: 10))

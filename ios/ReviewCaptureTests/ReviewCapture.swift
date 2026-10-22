@@ -1,6 +1,45 @@
 import XCTest
 
 final class ReviewCapture: XCTestCase {
+    @MainActor func testRevealAndHideResponses() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        for role in ["Pilot", "Controller"] {
+            app.launch()
+            XCTAssertTrue(app.buttons["Settings"].waitForExistence(timeout: 15))
+            app.buttons["Settings"].tap()
+            app.buttons["learning-role"].tap()
+            app.buttons[role].tap()
+            app.buttons["Done"].tap()
+            app.buttons["role-practice"].tap()
+            app.buttons["lesson-engine"].tap()
+            let rehearsal = app.switches["Rehearse \(role.lowercased()) responses"]
+            for _ in 0..<15 {
+                if rehearsal.exists && rehearsal.isHittable { break }
+                app.swipeUp()
+            }
+            XCTAssertTrue(rehearsal.isHittable)
+            rehearsal.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+            let enabled = expectation(for: NSPredicate(format: "value == '1'"), evaluatedWith: rehearsal)
+            wait(for: [enabled], timeout: 5)
+            let reveal = app.buttons["Reveal \(role.lowercased()) response"].firstMatch
+            let hide = app.buttons["Hide \(role.lowercased()) response"].firstMatch
+            for _ in 0..<2 {
+                for _ in 0..<8 {
+                    if reveal.exists && reveal.isHittable { break }
+                    app.swipeUp()
+                }
+                XCTAssertTrue(reveal.isHittable)
+                reveal.tap()
+                XCTAssertTrue(hide.waitForExistence(timeout: 5))
+                hide.tap()
+                XCTAssertTrue(reveal.waitForExistence(timeout: 5))
+                XCTAssertFalse(hide.exists)
+            }
+            app.terminate()
+        }
+    }
+
     @MainActor func testRolePracticeAndPersistence() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait

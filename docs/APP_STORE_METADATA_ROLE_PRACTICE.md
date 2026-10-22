@@ -1,4 +1,4 @@
-# Proposed metadata for version 1.0 build 12
+# Proposed metadata for version 1.0 build 13
 
 Prepared text only. Update the submission after device validation and attach screenshots of the new learning flow.
 
@@ -14,7 +14,7 @@ Choose Pilot or Controller in Settings. Open Role practice from the home screen,
 
 Role-specific question records and preferences stay on your device. Filter lessons with mistakes to focus your review. Bundled dialogues and exercises work offline.
 
-Language reflection presents original wording, revised examples, explanations and alternative expressions in stages. You can also hide your selected role in the dialogue and reveal each response after rehearsing.
+Language reflection presents original wording, revised examples, explanations and alternative expressions in stages. You can also hide your selected role in the dialogue, reveal each response after rehearsing, and hide it again to repeat the exercise.
 
 Browse the optional ATC video archive, search titles and channels, save recordings and open credited source links on YouTube. The fictional exercises are independent of those videos and are not transcripts or incident reconstructions.
 
@@ -35,5 +35,6 @@ Review path for the new functionality:
 5. A wrong answer is saved locally for review. Start a new round or use the mistake filter. Records persist after relaunch.
 6. Select Controller in Settings. The dialogue rehearsal and questions now target controller responses. Pilot and controller question results are independent.
 7. Settings shows attempted questions and mistakes for the current role. Delete local data resets question history and preferences as well as saved material.
+8. Enable Rehearse pilot responses or Rehearse controller responses. Tap Reveal to see a response, then Hide in the same place to conceal it again. This can be repeated for each message.
 
 There is no login, microphone capture, payment, subscription or third-party SDK. Videos open externally. GitHub updates download validated JSON only. These are fictional language comprehension exercises, not a rating of operational correctness or real-world flight readiness.

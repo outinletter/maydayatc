@@ -311,8 +311,10 @@ struct ScenarioContent: View {
                 if rehearsing { Text("Say a response in your own words, then reveal the example. No audio is recorded.").font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk) }
                 ForEach(Array(scenario.dialogue.enumerated()), id: \.offset) { index, line in
                     DialogueBubble(isPilot: line.from == "PILOT", message: line.msg,
-                                   hidden: rehearsing && line.from == library.learningRole.speaker && !revealed.contains(index)) {
-                        revealed.insert(index)
+                                   hidden: rehearsing && line.from == library.learningRole.speaker && !revealed.contains(index),
+                                   canToggle: rehearsing && line.from == library.learningRole.speaker) {
+                        if revealed.contains(index) { revealed.remove(index) }
+                        else { revealed.insert(index) }
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(ArchiveTheme.background)
@@ -332,6 +334,7 @@ struct DialogueBubble: View {
     let isPilot: Bool
     let message: String
     let hidden: Bool
+    var canToggle: Bool = false
     let reveal: () -> Void
     private var roleColor: Color { isPilot ? ArchiveTheme.accent : Color(red: 0.10, green: 0.34, blue: 0.27) }
     var body: some View {
@@ -345,6 +348,10 @@ struct DialogueBubble: View {
                     Button(isPilot ? "Reveal pilot response" : "Reveal controller response", action: reveal)
                         .font(.body.weight(.semibold)).frame(minHeight: 44)
                 } else {
+                    if canToggle {
+                        Button(isPilot ? "Hide pilot response" : "Hide controller response", action: reveal)
+                            .font(.body.weight(.semibold)).frame(minHeight: 44)
+                    }
                     Text(message).font(.body).foregroundStyle(ArchiveTheme.ink)
                         .lineSpacing(6).fixedSize(horizontal: false, vertical: true)
                         .textSelection(.enabled)

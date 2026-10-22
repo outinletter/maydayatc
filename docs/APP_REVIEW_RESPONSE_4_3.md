@@ -4,7 +4,7 @@ Prepared response for the existing review conversation. Not sent. The developer 
 
 Dear App Review team,
 
-Thank you for the opportunity to clarify the purpose and origin of Mayday ATC. I am the developer and a pilot. I conceived this product for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I have implemented the changes described below in version 1.0 build 12. The rejected build has not been resubmitted.
+Thank you for the opportunity to clarify the purpose and origin of Mayday ATC. I am the developer and a pilot. I conceived this product for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I have implemented the changes described below in version 1.0 build 13. The rejected build has not been resubmitted.
 
 1. What the app does and the problem it solves
 
@@ -44,11 +44,11 @@ I have not used a commercial app template, another third-party app codebase or a
 
 No client, partner or commissioning third party supplied the concept or branding. I am the pilot who conceived and developed this app and I am submitting through my own developer account. External videos are credited references. I am responsible for the app and its independent fictional exercises; I am not a template vendor submitting on behalf of a customer.
 
-The main functional changes in build 12 are role selection, a direct lesson practice library, two-choice response exercises, source-linked answer feedback, persistent role-specific question records and mistake review. These changes make the learning flow accessible independently of the external video archive. Please let me know which specific app or component raised concerns about duplication or a commercial app generation service so I can address that concern directly.
+The main functional changes are role selection, a direct lesson practice library, two-choice response exercises, source-linked answer feedback, persistent role-specific question records and mistake review. Build 13 also allows learners to reveal and hide each response repeatedly during rehearsal. A separate physical-device UI test exercised two reveal/hide cycles for each role. These changes make the learning flow accessible independently of the external video archive. Please let me know which specific app or component raised concerns about duplication or a commercial app generation service so I can address that concern directly.
 
 ## Available evidence
 
-- Version 1.0 build 12; physical iPhone test result: Passed, one targeted test, zero failures and zero skipped tests.
+- Version 1.0 build 13. Physical iPhone tests: the role-practice test passed on build 12 and the additional reveal/hide test passed on build 13. Each targeted test had zero failures and zero skipped tests.
 - Six original iPhone screenshots in outputs/app-store-screenshots/iphone-release12, including role selection, both roles, feedback and the enabled mistake filter.
 - Review steps: Home, Role practice, select lesson, read dialogue, answer a question, inspect feedback, start a new round or filter mistakes. Change role through Settings.
 - Source diff showing role selection, question construction, local records and the editorial publication gate.

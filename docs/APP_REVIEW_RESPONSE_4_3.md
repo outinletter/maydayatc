@@ -1,10 +1,10 @@
 # Response to App Review 4.3 and 4.2.6
 
-Prepared response for the existing review conversation. Not sent. The developer requested preparation only, stopping before submission. Ownership and cross-app statements were confirmed by the developer on October 22, 2026. Build 14 passed physical iPhone UI verification and seven current screenshots were captured. Do not claim external beta testing, accreditation or market exclusivity.
+Prepared response for the existing review conversation. Not sent. The developer requested preparation only, stopping before submission. Ownership and cross-app statements were confirmed by the developer on October 22, 2026. The current candidate is build 16. Historical role/persistence verification was completed on build 14; build 16 passed the multilingual physical-iPhone UI test. Do not claim external beta testing, accreditation or market exclusivity.
 
 Dear App Review team,
 
-Thank you for the opportunity to clarify the purpose and origin of Mayday ATC. I am the developer and a pilot. I conceived this product for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I have implemented the changes described below in version 1.0 build 15. The rejected build has not been resubmitted.
+Thank you for the opportunity to clarify the purpose and origin of Mayday ATC. I am the developer and a pilot. I conceived this product for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I have implemented the changes described below in version 1.0 build 16. The rejected build has not been resubmitted.
 
 1. What the app does and the problem it solves
 
@@ -48,12 +48,12 @@ The main functional changes are role selection, a direct lesson practice library
 
 Build 14 additionally lets learners switch freely between both examples after answering and read a separate explanation for each choice. Only the first answer in a round is recorded, so exploring another explanation does not inflate attempts or overwrite the original result. The physical-device role-practice test was rerun on build 14 and passed, including switching from an incorrect example to the correct example and verifying after relaunch that the initial mistake remained recorded. Seven current iPhone screenshots were captured, including both explanations. Automated checks also passed for the distinct explanations of all 73 questions.
 
-Build 15 retains that workflow and adds localized interface text, lesson categories, lesson summaries, language-reflection explanations and choice-specific feedback in Korean, Japanese, Simplified Chinese, Spanish, French, German, Italian, Brazilian Portuguese, Russian and Dutch. Aviation dialogue and response examples remain in English. All 157 localized resource keys passed ten-language completeness and format checks, including verification inside the signed Release archive. Build 15 was uploaded to App Store Connect and installed on the connected iPhone. Multilingual physical-device screenshot validation is pending an unlocked device; it is not claimed as passed.
+Build 16 retains that workflow and adds localized interface text, lesson categories, lesson summaries, language-reflection explanations and choice-specific feedback in Korean, Japanese, Simplified Chinese, Spanish, French, German, Italian, Brazilian Portuguese, Russian and Dutch. Aviation dialogue and response examples remain in English. All 157 localized resource keys passed ten-language completeness and format checks, including verification inside the signed Release archive. Build 16 was uploaded to App Store Connect and installed on the connected iPhone. A physical-iPhone UI test passed in English and all ten additional languages, checking localized settings, Pilot selection, dialogue, the practice prompt, and switching between incorrect and correct feedback. Four original iPhone screenshots have been uploaded for each additional locale. The English set includes four new images and retains four existing learning-function screenshots and the preview video. These are developer tests, not external beta testing.
 
 ## Available evidence
 
-- Version 1.0 build 14. The expanded role-practice test passed on build 14 with zero failures and zero skipped tests. The repeated reveal/hide test passed on build 13; this feature remains in build 14.
-- Seven current original iPhone screenshots in outputs/app-store-screenshots/iphone-release14, including both choices and explanations, role selection and mistake review.
+- Version 1.0 build 16 is uploaded and selected in the submission draft. The final physical-iPhone test passed in English and all ten additional languages. The expanded role-practice and persistence test previously passed on build 14; the repeated reveal/hide test passed on build 13. These features are retained in build 16.
+- Localized screenshot selection: outputs/build16/store-screenshots. Four new originals per locale, English plus ten additional languages. The English store also retains the controller, correct/incorrect explanation and mistake-review originals from outputs/app-store-screenshots/iphone-release14. The preview video is preserved.
 - Review steps: Home, Role practice, select lesson, read dialogue, answer a question, inspect feedback, start a new round or filter mistakes. Change role through Settings.
 - Source diff showing role selection, question construction, local records and the editorial publication gate.
 - Do not call development observations external beta feedback or claim aviation authority approval.

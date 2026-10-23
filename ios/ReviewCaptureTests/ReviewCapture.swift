@@ -198,6 +198,7 @@ final class ReviewCapture: XCTestCase {
             image.name = name
             image.lifetime = .keepAlways
             add(image)
+            app.activate()
         }
         func reveal(_ element: XCUIElement) {
             for _ in 0..<35 {
@@ -208,6 +209,7 @@ final class ReviewCapture: XCTestCase {
         }
         for row in translations {
             app.terminate()
+            XCUIDevice.shared.press(.home)
             app.launchArguments = ["-AppleLanguages", "(" + row[0] + ")", "-AppleLocale", row[0]]
             app.launch()
             XCTAssertTrue(app.buttons[row[1]].waitForExistence(timeout: 20), row[0])
@@ -219,7 +221,7 @@ final class ReviewCapture: XCTestCase {
             app.buttons[row[2]].tap()
             app.buttons["role-practice"].tap()
             app.buttons["lesson-engine"].tap()
-            let dialogue = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "MAYDAY, MAYDAY, MAYDAY. United 81")).firstMatch
+            let dialogue = app.staticTexts.matching(NSPredicate(format: "label == %@", "MAYDAY, MAYDAY, MAYDAY, United 81, left engine failure, 8,000 feet, requesting immediate return to Washington, 182 souls on board.")).firstMatch
             reveal(dialogue)
             capture(row[0] + "-03-dialogue")
             let answer = app.buttons["answer-1-0"]
@@ -228,6 +230,7 @@ final class ReviewCapture: XCTestCase {
             capture(row[0] + "-04-question")
             answer.tap()
             reveal(app.staticTexts[row[5]])
+            app.swipeUp()
             capture(row[0] + "-05-incorrect")
             let other = app.buttons["answer-1-1"]
             for _ in 0..<15 {
@@ -237,6 +240,7 @@ final class ReviewCapture: XCTestCase {
             XCTAssertTrue(other.isHittable, row[0])
             other.tap()
             reveal(app.staticTexts[row[6]])
+            app.swipeUp()
             capture(row[0] + "-06-correct")
         }
         app.terminate()

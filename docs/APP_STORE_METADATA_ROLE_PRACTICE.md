@@ -1,6 +1,6 @@
-# Proposed metadata for version 1.0 build 15
+# Proposed metadata for version 1.0 build 16
 
-The English build 14 metadata was previously saved. Build 15 adds ten complete language resource sets. Localized product copy is prepared in APP_STORE_LOCALIZATIONS.json; Korean product copy is saved. Other language saves and new screenshots remain in progress.
+Build 16 is selected in the version 1.0 draft. English copy and the ten complete localized product descriptions, keywords, names and subtitles are saved in App Store Connect. Four original iPhone screenshots are uploaded for each of the ten additional locales. English has four new original screenshots plus four retained learning-function images and the existing preview. APP_STORE_LOCALIZATIONS.json contains the non-English metadata.
 
 ## Promotional text
 
@@ -22,6 +22,8 @@ Update content downloads the latest published learning material. New collected m
 
 Independent language learning only. Not flight instructions, emergency guidance or an accredited ICAO course. Never use during flight operations. No affiliation with aviation authorities, airlines or video publishers.
 
+The interface and study explanations are available in English plus Korean, Japanese, Simplified Chinese, Spanish, French, German, Italian, Brazilian Portuguese, Russian and Dutch. Aviation dialogue and response examples remain in English.
+
 ## Review notes
 
 Developer is a pilot and the original concept owner. No client commission, commercial app template or app generation service. No proprietary code, images or learning materials shared with other apps on this account. No external TestFlight beta was conducted.
@@ -41,6 +43,4 @@ Review path for the new functionality:
 There is no login, microphone capture, payment, subscription or third-party SDK. Videos open externally. GitHub updates download validated JSON only. These are fictional language comprehension exercises, not a rating of operational correctness or real-world flight readiness.
 
 
-## Build 15 language notes
-
-The interface and study explanations are available in English plus Korean, Japanese, Simplified Chinese, Spanish, French, German, Italian, Brazilian Portuguese, Russian and Dutch. Aviation dialogue and response examples remain in English. The iPhone preferred app language selects the interface language.
+Version 1.0 build 16 adds the ten localized interface and study-explanation languages listed on the product page. The iOS preferred app language selects the interface. English dialogue and response examples are preserved. All 157 resource keys passed ten-language completeness and format checks, including the compiled Release app bundle. Content updates download a video list and lesson JSON, not videos.

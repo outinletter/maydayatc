@@ -32,3 +32,6 @@ DEVELOPER_DIR=/Applications/Xcode-Internal.app/Contents/Developer xcodebuild -ex
 Exit 0. `Upload succeeded`, `EXPORT SUCCEEDED`. Log: `outputs/build15/upload.log`. This confirms upload; App Store processing and draft build selection are separate.
 
 The existing iPhone app was updated with the same bundle ID. Installation exit 0. Log: `outputs/build15/install.log`. No TestFlight beta distribution was requested or performed.
+
+
+빌드 16이 최종 후보로 대체했습니다. 빌드 15의 최초 실기기 촬영 시도는 잠금 상태로 테스트 러너를 시작하지 못했습니다. 빌드 15에 대한 다국어 UI 검증 통과를 주장하지 않습니다.

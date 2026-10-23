@@ -4,6 +4,7 @@ final class ReviewCapture: XCTestCase {
     @MainActor func testRevealAndHideResponses() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         for role in ["Pilot", "Controller"] {
             app.launch()
             XCTAssertTrue(app.buttons["Settings"].waitForExistence(timeout: 15))
@@ -44,6 +45,7 @@ final class ReviewCapture: XCTestCase {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
         XCTAssertTrue(app.buttons["Settings"].waitForExistence(timeout: 15))
         func capture(_ name: String) {
@@ -139,6 +141,7 @@ final class ReviewCapture: XCTestCase {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
         XCTAssertTrue(app.buttons["Filter"].waitForExistence(timeout: 15))
         func capture(_ name: String) {
@@ -171,5 +174,71 @@ final class ReviewCapture: XCTestCase {
         app.buttons["Settings"].tap()
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Update content now")).firstMatch.waitForExistence(timeout: 5))
         capture("05-content-updates")
+    }
+
+    @MainActor func testLocalizedScreenshots() throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+        let translations = [
+            ["en", "Settings", "Done", "Pilot", "Which example comes next in this dialogue?", "Incorrect — belongs to another turn", "Correct — follows this dialogue"],
+            ["ko", "설정", "완료", "조종사", "이 대화의 다음 예문은 무엇인가요?", "오답: 다른 대화 차례의 응답입니다", "정답: 이 대화의 다음 응답입니다"],
+            ["ja", "設定", "完了", "パイロット", "この会話の次の応答はどれですか？", "不正解：別の場面の応答です", "正解：会話の続きです"],
+            ["zh-Hans", "设置", "完成", "飞行员", "哪一个示例是对话的下一句？", "错误：属于另一轮对话", "正确：与对话内容衔接"],
+            ["es", "Ajustes", "Listo", "Piloto", "¿Qué ejemplo sigue en este diálogo?", "Incorrecto: corresponde a otro turno", "Correcto: continúa este diálogo"],
+            ["fr", "Réglages", "Terminé", "Pilote", "Quel exemple vient ensuite dans ce dialogue ?", "Incorrect : correspond à un autre échange", "Correct : suite de ce dialogue"],
+            ["de", "Einstellungen", "Fertig", "Pilot", "Welches Beispiel folgt in diesem Dialog?", "Falsch: gehört zu einem anderen Gesprächszug", "Richtig: setzt diesen Dialog fort"],
+            ["it", "Impostazioni", "Fine", "Pilota", "Quale esempio viene dopo in questo dialogo?", "Errato: appartiene a un altro turno", "Corretto: prosegue questo dialogo"],
+            ["pt-BR", "Ajustes", "Concluir", "Piloto", "Qual exemplo vem a seguir neste diálogo?", "Incorreto: pertence a outra fala", "Correto: continua este diálogo"],
+            ["ru", "Настройки", "Готово", "Пилот", "Какой пример продолжает этот диалог?", "Неверно: это другая реплика", "Верно: продолжает этот диалог"],
+            ["nl", "Instellingen", "Gereed", "Piloot", "Welk voorbeeld volgt in deze dialoog?", "Onjuist: hoort bij een andere beurt", "Goed: sluit aan op deze dialoog"]
+        ]
+        let app = XCUIApplication()
+        func capture(_ name: String) {
+            let image = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            image.name = name
+            image.lifetime = .keepAlways
+            add(image)
+        }
+        func reveal(_ element: XCUIElement) {
+            for _ in 0..<35 {
+                if element.exists && element.isHittable { return }
+                app.swipeUp()
+            }
+            XCTFail("Could not reveal localized element: " + element.description)
+        }
+        for row in translations {
+            app.terminate()
+            app.launchArguments = ["-AppleLanguages", "(" + row[0] + ")", "-AppleLocale", row[0]]
+            app.launch()
+            XCTAssertTrue(app.buttons[row[1]].waitForExistence(timeout: 20), row[0])
+            capture(row[0] + "-01-home")
+            app.buttons[row[1]].tap()
+            app.buttons["learning-role"].tap()
+            app.buttons[row[3]].tap()
+            capture(row[0] + "-02-settings")
+            app.buttons[row[2]].tap()
+            app.buttons["role-practice"].tap()
+            app.buttons["lesson-engine"].tap()
+            let dialogue = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "MAYDAY, MAYDAY, MAYDAY. United 81")).firstMatch
+            reveal(dialogue)
+            capture(row[0] + "-03-dialogue")
+            let answer = app.buttons["answer-1-0"]
+            reveal(answer)
+            XCTAssertTrue(app.staticTexts[row[4]].exists, row[0])
+            capture(row[0] + "-04-question")
+            answer.tap()
+            reveal(app.staticTexts[row[5]])
+            capture(row[0] + "-05-incorrect")
+            let other = app.buttons["answer-1-1"]
+            for _ in 0..<15 {
+                if other.exists && other.isHittable { break }
+                app.swipeDown()
+            }
+            XCTAssertTrue(other.isHittable, row[0])
+            other.tap()
+            reveal(app.staticTexts[row[6]])
+            capture(row[0] + "-06-correct")
+        }
+        app.terminate()
     }
 }

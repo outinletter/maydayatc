@@ -1,0 +1,82 @@
+{
+  "ko": {
+    "name": "Mayday ATC",
+    "subtitle": "조종사와 관제사의 항공 영어",
+    "promotionalText": "대화 읽기 · 응답 선택 · 오답 복습",
+    "description": "Mayday ATC. 조종사가 조종사와 관제사의 비업무 시간 항공 영어 연습을 위해 개발했습니다.\n\n역할을 선택하세요. 모든 대화의 양쪽 응답을 읽을 수 있습니다.\n\n대화를 읽고 다음 응답을 선택하세요. 두 예문과 각각의 설명을 비교할 수 있습니다. 첫 응답만 기록됩니다. 두 설명을 모두 비교할 수 있습니다. 다시 답하려면 새 회차를 시작하세요.\n\n자신의 말로 응답한 뒤 예문을 확인하세요. 음성은 녹음하지 않습니다.\n\n가상의 언어 학습 예시입니다. 영상 자막, 사고 분석 또는 실제 운항 지침이 아닙니다.\n\n게시된 영상 목록과 수업을 받습니다. 수집과 생성은 중앙에서 진행됩니다.\n\n영어 무전 대화와 응답 예문은 영어로 제공됩니다. 화면 안내, 학습 해설 및 카테고리는 기기 언어에 맞게 표시됩니다.\n\n가상의 항공 영어 연습 전용입니다. 실제 관제 녹취, 운항 지침, 비상 대응 안내 또는 공인 ICAO 과정이 아닙니다. 운항 중 사용하지 마세요. 승인된 교육, 항공기 절차 및 공식 관제 지시를 따르세요.\n\n독립적인 학습 보조 도구입니다. ICAO, FAA, Apple, 항공사 또는 관제기관과 제휴하거나 이들의 인증을 받지 않았습니다.",
+    "keywords": "항공영어,조종사,관제사,무전,항공,영어,대화,독해,연습,비행",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "ja": {
+    "name": "Mayday ATC",
+    "subtitle": "パイロットと管制官の航空英語",
+    "promotionalText": "会話を読む・応答を選ぶ・間違いを復習",
+    "description": "Mayday ATC. パイロットが、パイロットと管制官の業務外の航空英語練習のために開発しました。\n\n役割を選んでください。どちらの役割の発言も読めます。\n\n会話を読んで次の応答を選び、両方の例と解説を比較してください。 記録されるのは最初の回答のみです。両方の解説を比較できます。再回答には新しいラウンドを始めてください。\n\n自分の言葉で応答してから例を表示してください。音声は録音されません。\n\n架空の語学学習例です。動画の書き起こし、事故分析、運航指示ではありません。\n\n公開された動画一覧とレッスンを取得します。収集と生成は運営側で行います。\n\n英語の無線交信と応答例は英語で表示されます。画面の案内、学習解説、カテゴリーは端末の言語に合わせて表示されます。\n\n架空の航空英語練習専用です。実際の管制交信の書き起こし、運航指示、緊急時の指針、公認ICAOコースではありません。運航中は使用しないでください。承認された訓練、航空機の手順、公式の管制指示に従ってください。\n\n独立した学習補助ツールです。ICAO、FAA、Apple、航空会社、管制機関との提携や承認はありません。",
+    "keywords": "航空英語,パイロット,管制官,無線,会話,学習,飛行",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "zh-Hans": {
+    "name": "Mayday ATC",
+    "subtitle": "飞行员与管制员的航空英语",
+    "promotionalText": "阅读对话 · 选择应答 · 复习错题",
+    "description": "Mayday ATC. 由飞行员开发，供飞行员和空中交通管制员在非工作时间练习航空英语。\n\n选择你的角色。仍可阅读双方的全部对话。\n\n阅读对话并选择下一句应答。比较两个示例及其解释。 仅记录首次作答。可以比较两种解释。重新作答请开始新一轮。\n\n先用自己的话应答，再显示示例。不会录音。\n\n仅为虚构语言示例，并非视频转录、事件分析或运行指导。\n\n下载已发布的视频列表和课程。采集和生成由后台集中运行。\n\n英语无线电对话和应答示例保留英文。界面、学习解释及类别会按照设备语言显示。\n\n仅供虚构航空英语练习。并非真实空管通话转录、运行指令、应急指导或获认证的ICAO课程。切勿在飞行运行中使用。请遵循经批准的培训、航空器程序和正式空管指令。\n\n独立学习辅助工具。与ICAO、FAA、Apple、航空公司或空管机构无隶属关系，也未获其认可。",
+    "keywords": "航空英语,飞行员,管制员,无线电,对话,学习,飞行",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "es": {
+    "name": "Mayday ATC",
+    "subtitle": "Inglés aeronáutico",
+    "promotionalText": "Lee un diálogo · elige una respuesta · repasa errores",
+    "description": "Mayday ATC. Creada por un piloto para que pilotos y controladores practiquen inglés aeronáutico fuera de sus funciones operativas.\n\nElige tu rol. Puedes seguir leyendo ambas partes de cada diálogo.\n\nLee el diálogo y elige la siguiente respuesta. Compara ambos ejemplos y sus explicaciones. Solo cuenta tu primera respuesta. Puedes comparar ambas explicaciones. Inicia una nueva ronda para volver a responder.\n\nResponde con tus propias palabras y después muestra el ejemplo. No se graba audio.\n\nSolo ejemplos de lenguaje ficticios. No son transcripciones, análisis de incidentes ni instrucciones operativas.\n\nDescarga listas de vídeos y lecciones publicadas. La recopilación y generación se realizan de forma centralizada.\n\nLos diálogos de radio y las respuestas de ejemplo permanecen en inglés. La interfaz, explicaciones y categorías siguen el idioma del dispositivo.\n\nSolo para practicar inglés aeronáutico con situaciones ficticias. No son transcripciones ATC reales, instrucciones operativas, orientación de emergencia ni un curso acreditado de la OACI. No se debe usar durante operaciones de vuelo. Sigue la formación aprobada, los procedimientos de la aeronave y las instrucciones ATC oficiales.\n\nHerramienta de aprendizaje independiente. Sin afiliación ni aprobación de la OACI, FAA, Apple, aerolíneas o autoridades ATC.",
+    "keywords": "aviación,inglés,ATC,piloto,radio,comunicación,diálogo,estudio,vuelo",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "fr": {
+    "name": "Mayday ATC",
+    "subtitle": "Anglais aéronautique",
+    "promotionalText": "Lire un dialogue · choisir une réponse · revoir les erreurs",
+    "description": "Mayday ATC. Créée par un pilote pour permettre aux pilotes et contrôleurs de pratiquer l’anglais aéronautique hors service.\n\nChoisissez votre rôle. Les deux côtés de chaque dialogue restent accessibles.\n\nLisez le dialogue et choisissez la réponse suivante. Comparez les deux exemples et leurs explications. Seule la première réponse compte. Vous pouvez comparer les deux explications. Commencez une nouvelle série pour répondre à nouveau.\n\nRépondez avec vos propres mots, puis affichez l’exemple. Aucun son n’est enregistré.\n\nExemples linguistiques fictifs uniquement. Ni transcriptions, ni analyses d’incidents, ni consignes opérationnelles.\n\nTéléchargez les listes de vidéos et leçons publiées. La collecte et la génération sont centralisées.\n\nLes dialogues radio et exemples de réponse restent en anglais. L’interface, les explications et catégories suivent la langue de l’appareil.\n\nExercices fictifs d’anglais aéronautique uniquement. Il ne s’agit ni de transcriptions ATC réelles, ni de consignes opérationnelles, ni de conseils d’urgence, ni d’un cours agréé OACI. Ne jamais utiliser en vol. Suivez la formation approuvée, les procédures de l’aéronef et les instructions ATC officielles.\n\nOutil pédagogique indépendant. Aucune affiliation ni approbation de l’OACI, de la FAA, d’Apple, des compagnies ou des autorités ATC.",
+    "keywords": "aviation,anglais,ATC,pilote,radio,communication,dialogue,étude,vol",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "de": {
+    "name": "Mayday ATC",
+    "subtitle": "Luftfahrtenglisch üben",
+    "promotionalText": "Dialog lesen · Antwort wählen · Fehler wiederholen",
+    "description": "Mayday ATC. Von einem Piloten entwickelt, damit Piloten und Fluglotsen außerhalb des Dienstes Luftfahrtenglisch üben können.\n\nWähle deine Rolle. Beide Seiten jedes Dialogs bleiben lesbar.\n\nLies den Dialog und wähle die nächste Antwort. Vergleiche beide Beispiele und ihre Erklärungen. Nur die erste Antwort zählt. Du kannst beide Erklärungen vergleichen. Starte zum erneuten Antworten eine neue Runde.\n\nAntworte mit eigenen Worten und zeige dann das Beispiel. Es wird kein Ton aufgenommen.\n\nNur fiktive Sprachbeispiele. Keine Videotranskripte, Vorfallanalysen oder Betriebsanweisungen.\n\nLade veröffentlichte Videolisten und Lektionen. Sammlung und Erstellung erfolgen zentral.\n\nFunkdialoge und Beispielantworten bleiben auf Englisch. Oberfläche, Lernerklärungen und Kategorien folgen der Gerätesprache.\n\nNur fiktive Übungen für Luftfahrtenglisch. Keine echten ATC-Transkripte, Betriebsanweisungen, Notfallanleitungen oder akkreditierten ICAO-Kurse. Niemals im Flugbetrieb verwenden. Befolge genehmigte Schulungen, Flugzeugverfahren und offizielle ATC-Anweisungen.\n\nUnabhängige Lernhilfe. Keine Verbindung zu oder Anerkennung durch ICAO, FAA, Apple, Fluggesellschaften oder ATC-Behörden.",
+    "keywords": "Luftfahrt,Englisch,ATC,Pilot,Funk,Kommunikation,Dialog,Lernen,Flug",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "it": {
+    "name": "Mayday ATC",
+    "subtitle": "Inglese aeronautico",
+    "promotionalText": "Leggi il dialogo · scegli una risposta · ripassa gli errori",
+    "description": "Mayday ATC. Creata da un pilota per permettere a piloti e controllori di praticare l’inglese aeronautico fuori dal servizio.\n\nScegli il tuo ruolo. Puoi comunque leggere entrambi i lati di ogni dialogo.\n\nLeggi il dialogo e scegli la risposta successiva. Confronta entrambi gli esempi e le spiegazioni. Conta solo la prima risposta. Puoi confrontare entrambe le spiegazioni. Inizia un nuovo turno per rispondere di nuovo.\n\nRispondi con parole tue, poi mostra l’esempio. Nessun audio viene registrato.\n\nSolo esempi linguistici fittizi. Non sono trascrizioni, analisi di incidenti o istruzioni operative.\n\nScarica elenchi video e lezioni pubblicati. Raccolta e generazione sono centralizzate.\n\nI dialoghi radio e gli esempi di risposta restano in inglese. Interfaccia, spiegazioni e categorie seguono la lingua del dispositivo.\n\nSolo esercizi fittizi di inglese aeronautico. Non sono trascrizioni ATC reali, istruzioni operative, indicazioni di emergenza o un corso ICAO accreditato. Non usare durante le operazioni di volo. Segui la formazione approvata, le procedure dell’aeromobile e le istruzioni ATC ufficiali.\n\nAusilio didattico indipendente. Nessuna affiliazione o approvazione da ICAO, FAA, Apple, compagnie aeree o autorità ATC.",
+    "keywords": "aviazione,inglese,ATC,pilota,radio,comunicazione,dialogo,studio,volo",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "pt-BR": {
+    "name": "Mayday ATC",
+    "subtitle": "Inglês aeronáutico",
+    "promotionalText": "Leia o diálogo · escolha uma resposta · revise os erros",
+    "description": "Mayday ATC. Criado por um piloto para pilotos e controladores praticarem inglês aeronáutico fora do serviço.\n\nEscolha sua função. Você ainda pode ler os dois lados de cada diálogo.\n\nLeia o diálogo e escolha a próxima resposta. Compare os dois exemplos e suas explicações. Apenas a primeira resposta conta. Você pode comparar as duas explicações. Inicie outra rodada para responder novamente.\n\nResponda com suas palavras e depois mostre o exemplo. Nenhum áudio é gravado.\n\nApenas exemplos linguísticos fictícios. Não são transcrições, análises de incidentes ou orientações operacionais.\n\nBaixe listas de vídeos e lições publicadas. A coleta e a geração são centralizadas.\n\nOs diálogos de rádio e exemplos de resposta permanecem em inglês. A interface, explicações e categorias seguem o idioma do dispositivo.\n\nApenas prática fictícia de inglês aeronáutico. Não são transcrições ATC reais, instruções operacionais, orientações de emergência ou curso credenciado pela ICAO. Nunca use durante operações de voo. Siga o treinamento aprovado, os procedimentos da aeronave e as instruções ATC oficiais.\n\nFerramenta de estudo independente. Sem vínculo ou endosso da ICAO, FAA, Apple, companhias aéreas ou autoridades ATC.",
+    "keywords": "aviação,inglês,ATC,piloto,rádio,comunicação,diálogo,estudo,voo",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "ru": {
+    "name": "Mayday ATC",
+    "subtitle": "Авиационный английский",
+    "promotionalText": "Читайте диалог · выбирайте ответ · повторяйте ошибки",
+    "description": "Mayday ATC. Разработано пилотом для практики авиационного английского пилотами и диспетчерами вне служебных обязанностей.\n\nВыберите роль. Реплики обеих сторон остаются доступными.\n\nПрочитайте диалог и выберите следующую реплику. Сравните оба примера и объяснения. Учитывается только первый ответ. Можно сравнить оба объяснения. Для повторного ответа начните новый раунд.\n\nОтветьте своими словами, затем откройте пример. Звук не записывается.\n\nТолько вымышленные языковые примеры. Это не расшифровки видео, разборы происшествий или эксплуатационные указания.\n\nЗагрузите опубликованные списки видео и уроки. Сбор и создание выполняются централизованно.\n\nРадиодиалоги и примеры ответов остаются на английском. Интерфейс, пояснения и категории отображаются на языке устройства.\n\nТолько вымышленные упражнения по авиационному английскому. Это не реальные расшифровки УВД, эксплуатационные инструкции, рекомендации в чрезвычайных ситуациях или аккредитованный курс ICAO. Не используйте во время полётов. Следуйте утверждённому обучению, процедурам воздушного судна и официальным указаниям УВД.\n\nНезависимое учебное пособие. Нет связи с ICAO, FAA, Apple, авиакомпаниями и органами УВД или их одобрения.",
+    "keywords": "авиация,английский,УВД,пилот,радио,связь,диалог,учёба,полёт",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  },
+  "nl": {
+    "name": "Mayday ATC",
+    "subtitle": "Luchtvaartengels oefenen",
+    "promotionalText": "Lees een dialoog · kies een reactie · herhaal fouten",
+    "description": "Mayday ATC. Gemaakt door een piloot voor piloten en verkeersleiders om buiten dienst luchtvaartengels te oefenen.\n\nKies je rol. Je kunt beide kanten van elke dialoog blijven lezen.\n\nLees de dialoog en kies de volgende reactie. Vergelijk beide voorbeelden en hun uitleg. Alleen je eerste antwoord telt. Je kunt beide uitlegteksten vergelijken. Start een nieuwe ronde om opnieuw te antwoorden.\n\nAntwoord in je eigen woorden en toon daarna het voorbeeld. Er wordt geen audio opgenomen.\n\nAlleen fictieve taalvoorbeelden. Geen videotranscripten, incidentanalyses of operationele instructies.\n\nDownload gepubliceerde videolijsten en lessen. Verzamelen en genereren gebeurt centraal.\n\nRadiodialogen en voorbeeldreacties blijven in het Engels. Interface, uitleg en categorieën volgen de taal van het apparaat.\n\nAlleen fictieve oefeningen voor luchtvaartengels. Geen echte ATC-transcripten, operationele instructies, noodrichtlijnen of erkende ICAO-cursus. Nooit gebruiken tijdens vluchtoperaties. Volg goedgekeurde training, vliegtuigprocedures en officiële ATC-instructies.\n\nOnafhankelijk leerhulpmiddel. Niet verbonden aan of goedgekeurd door ICAO, FAA, Apple, luchtvaartmaatschappijen of ATC-instanties.",
+    "keywords": "luchtvaart,Engels,ATC,piloot,radio,communicatie,dialoog,leren,vlucht",
+    "supportUrl": "https://github.com/outinletter/maydayatc/blob/main/docs/SUPPORT.md"
+  }
+}

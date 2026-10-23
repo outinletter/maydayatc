@@ -1,10 +1,10 @@
 # Response to App Review 4.3 and 4.2.6
 
-Prepared response for the existing review conversation. Not sent. The developer requested preparation only, stopping before submission. Ownership and cross-app statements were confirmed by the developer on October 22, 2026. Physical iPhone UI verification passed and six matching screenshots were captured. Do not claim external beta testing, accreditation or market exclusivity.
+Prepared response for the existing review conversation. Not sent. The developer requested preparation only, stopping before submission. Ownership and cross-app statements were confirmed by the developer on October 22, 2026. Build 14 passed physical iPhone UI verification and seven current screenshots were captured. Do not claim external beta testing, accreditation or market exclusivity.
 
 Dear App Review team,
 
-Thank you for the opportunity to clarify the purpose and origin of Mayday ATC. I am the developer and a pilot. I conceived this product for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I have implemented the changes described below in version 1.0 build 14. The rejected build has not been resubmitted.
+Thank you for the opportunity to clarify the purpose and origin of Mayday ATC. I am the developer and a pilot. I conceived this product for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I have implemented the changes described below in version 1.0 build 15. The rejected build has not been resubmitted.
 
 1. What the app does and the problem it solves
 
@@ -47,6 +47,8 @@ No client, partner or commissioning third party supplied the concept or branding
 The main functional changes are role selection, a direct lesson practice library, two-choice response exercises, source-linked answer feedback, persistent role-specific question records and mistake review. Build 13 also allows learners to reveal and hide each response repeatedly during rehearsal. A separate physical-device UI test exercised two reveal/hide cycles for each role. These changes make the learning flow accessible independently of the external video archive. Please let me know which specific app or component raised concerns about duplication or a commercial app generation service so I can address that concern directly.
 
 Build 14 additionally lets learners switch freely between both examples after answering and read a separate explanation for each choice. Only the first answer in a round is recorded, so exploring another explanation does not inflate attempts or overwrite the original result. The physical-device role-practice test was rerun on build 14 and passed, including switching from an incorrect example to the correct example and verifying after relaunch that the initial mistake remained recorded. Seven current iPhone screenshots were captured, including both explanations. Automated checks also passed for the distinct explanations of all 73 questions.
+
+Build 15 retains that workflow and adds localized interface text, lesson categories, lesson summaries, language-reflection explanations and choice-specific feedback in Korean, Japanese, Simplified Chinese, Spanish, French, German, Italian, Brazilian Portuguese, Russian and Dutch. Aviation dialogue and response examples remain in English. All 157 localized resource keys passed ten-language completeness and format checks, including verification inside the signed Release archive. Build 15 was uploaded to App Store Connect and installed on the connected iPhone. Multilingual physical-device screenshot validation is pending an unlocked device; it is not claimed as passed.
 
 ## Available evidence
 

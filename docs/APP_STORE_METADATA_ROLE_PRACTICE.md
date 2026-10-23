@@ -1,6 +1,6 @@
-# Proposed metadata for version 1.0 build 14
+# Proposed metadata for version 1.0 build 15
 
-Prepared text only. Update the submission after device validation and attach screenshots of the new learning flow.
+The English build 14 metadata was previously saved. Build 15 adds ten complete language resource sets. Localized product copy is prepared in APP_STORE_LOCALIZATIONS.json; Korean product copy is saved. Other language saves and new screenshots remain in progress.
 
 ## Promotional text
 
@@ -39,3 +39,8 @@ Review path for the new functionality:
 9. After answering a question, select the other example. Its own correct or incorrect explanation replaces the previous one. Switching examples does not record another attempt or overwrite the first answer. Use Start a new round to submit a fresh answer.
 
 There is no login, microphone capture, payment, subscription or third-party SDK. Videos open externally. GitHub updates download validated JSON only. These are fictional language comprehension exercises, not a rating of operational correctness or real-world flight readiness.
+
+
+## Build 15 language notes
+
+The interface and study explanations are available in English plus Korean, Japanese, Simplified Chinese, Spanish, French, German, Italian, Brazilian Portuguese, Russian and Dutch. Aviation dialogue and response examples remain in English. The iPhone preferred app language selects the interface language.

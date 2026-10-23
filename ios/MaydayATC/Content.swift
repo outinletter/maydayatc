@@ -1,5 +1,14 @@
 import Foundation
 
+enum L {
+    static func text(_ key: String) -> String {
+        Bundle.main.localizedString(forKey: key, value: key, table: nil)
+    }
+    static func format(_ key: String, _ arguments: CVarArg...) -> String {
+        String(format: text(key), locale: Locale.current, arguments: arguments)
+    }
+}
+
 struct PracticeBlock: Identifiable, Equatable {
     enum Kind: Equatable {
         case step, pilot, controller, original, corrected, explanation, alternative, paragraph
@@ -7,6 +16,7 @@ struct PracticeBlock: Identifiable, Equatable {
     let id: Int
     let kind: Kind
     var text: String
+    var displayText: String { L.text(text) }
 
     static func parse(_ text: String) -> [PracticeBlock] {
         var blocks: [PracticeBlock] = []
@@ -51,12 +61,38 @@ struct Scenario: Codable, Identifiable, Hashable {
     let atcRoles: [String]
     let dialogue: [Exchange]
     let practice: String
+    var displayTitle: String {
+        let parts = title.components(separatedBy: " · ")
+        if parts.count == 2, parts[1].hasPrefix("Training ") {
+            return L.text(parts[0]) + " · " + L.format("Training %@", String(parts[1].dropFirst(9)))
+        }
+        return L.text(title)
+    }
+    var displaySummary: String { L.text(summary) }
+    var shareText: String {
+        let body = PracticeBlock.parse(practice).map { block -> String in
+            let label: String
+            switch block.kind {
+            case .pilot: label = L.text("Pilot")
+            case .controller: label = L.text("Controller")
+            case .original: label = L.text("Original phrase")
+            case .corrected: label = L.text("Revised phrase")
+            case .explanation: label = L.text("Why this wording")
+            case .alternative: label = L.text("Alternative expression")
+            default: return block.displayText
+            }
+            return label + ": " + block.displayText
+        }.joined(separator: "\n\n")
+        return "Mayday ATC — " + L.text("Fictional English practice") + "\n" + displayTitle
+            + "\n\n" + body + "\n\n" + AppInformation.disclaimer
+    }
 }
 
 enum LearningRole: String, CaseIterable, Identifiable {
     case pilot, controller
     var id: String { rawValue }
-    var title: String { self == .pilot ? "Pilot" : "Controller" }
+    var title: String { NSLocalizedString(self == .pilot ? "Pilot" : "Controller", comment: "Learning role") }
+    var responseTitle: String { L.text(rawValue) }
     var speaker: String { self == .pilot ? "PILOT" : "ATC" }
 }
 
@@ -70,11 +106,17 @@ struct DialogueQuestion: Identifiable {
     let explanation: String
 
     func feedback(for selected: Int) -> String {
-        guard options.indices.contains(selected) else { return "Choose an example to read its explanation." }
+        guard options.indices.contains(selected) else { return L.text("Choose an example to read its explanation.") }
         if selected == correctIndex {
-            return "This example is the next response in the supplied dialogue.\n\nPreceding message: \(cue.msg)\n\nNext response: \(options[selected])\n\nIt follows this message in the lesson. This is a reading exercise, not a judgement of operational suitability."
+            return L.text("This example is the next response in the supplied dialogue.")
+                + "\n\n" + L.text("Preceding message") + ": " + cue.msg
+                + "\n\n" + L.text("Next response") + ": " + options[selected]
+                + "\n\n" + L.text("This checks reading comprehension, not operational suitability.")
         }
-        return "This example belongs to a different turn of the supplied dialogue. It is not the next response to the message shown here.\n\nSelected example: \(options[selected])\n\nAfter the preceding message, the lesson instead continues with: \(options[correctIndex])\n\nCompare the information and the request in the preceding message, then choose the other example to see its explanation."
+        return L.text("This example belongs to a different turn of the dialogue.")
+            + "\n\n" + L.text("Selected example") + ": " + options[selected]
+            + "\n\n" + L.text("The dialogue instead continues with") + ": " + options[correctIndex]
+            + "\n\n" + L.text("Compare the preceding message, then select the other example to read its explanation.")
     }
 
     static func make(scenario: Scenario, role: LearningRole) -> [DialogueQuestion] {
@@ -154,14 +196,14 @@ enum ContentError: LocalizedError {
     case invalid, response, rollback
     var errorDescription: String? {
         switch self {
-        case .invalid: "The content file is invalid. Your existing lessons are unchanged."
-        case .response: "GitHub is unavailable. Your downloaded lessons remain available offline."
-        case .rollback: "An older content revision was ignored. Your lessons are unchanged."
+        case .invalid: L.text("The content file is invalid. Your existing lessons are unchanged.")
+        case .response: L.text("GitHub is unavailable. Your downloaded lessons remain available offline.")
+        case .rollback: L.text("An older content revision was ignored. Your lessons are unchanged.")
         }
     }
 }
 
 enum AppInformation {
-    static let disclaimer = "Fictional aviation English practice only. Not real ATC transcripts, operational instructions, emergency guidance, or an accredited ICAO course. Never use during flight operations. Follow approved training, aircraft procedures, and official ATC instructions."
-    static let privacy = "Lessons, saved items, practice progress, and preferences stay on this device. No account, advertising, analytics, microphone, or location access is used. Manual content updates send a normal HTTPS request to GitHub, which receives network information such as your IP address and may retain logs under its privacy policy. No bookmarks or practice history are sent. Content is requested only when you tap Update content or pull to refresh. Opening video links uses YouTube and its privacy practices; no video is downloaded or embedded by this app. Opening support or GitHub privacy links uses your browser and those services’ policies. Reset local data in Settings to delete saved items, progress, and downloaded lessons. Device backups may retain app data until you delete those backups. Support is available through the repository’s GitHub Issues page; posting there requires a GitHub account and is public."
+    static let disclaimer = L.text("Fictional aviation English practice only. Not real ATC transcripts, operational instructions, emergency guidance, or an accredited ICAO course. Never use during flight operations. Follow approved training, aircraft procedures, and official ATC instructions.")
+    static let privacy = L.text("Lessons, saved items, practice progress, and preferences stay on this device. No account, advertising, analytics, microphone, or location access is used. Manual content updates send a normal HTTPS request to GitHub, which receives network information such as your IP address and may retain logs under its privacy policy. No bookmarks or practice history are sent. Content is requested only when you tap Update content or pull to refresh. Opening video links uses YouTube and its privacy practices; no video is downloaded or embedded by this app. Opening support or GitHub privacy links uses your browser and those services’ policies. Reset local data in Settings to delete saved items, progress, and downloaded lessons. Device backups may retain app data until you delete those backups. Support is available through the repository’s GitHub Issues page; posting there requires a GitHub account and is public.")
 }

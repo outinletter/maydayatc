@@ -6,6 +6,8 @@ Dear App Review team,
 
 Thank you for the opportunity to clarify the purpose and origin of Mayday ATC. I am the developer and a pilot. I conceived this product for aviation English learning needed in my professional field. It was not commissioned by a client and was not made using a commercial app template or app generation service. I have implemented the changes described below in version 1.0 build 16. The rejected build has not been resubmitted.
 
+Mayday ATC uses one explicit Bundle ID, `com.addvalue.maydayatc`; I have not created regional, client-specific, or duplicate Bundle IDs. It is a standalone product with one focused workflow: role-based aviation dialogue comprehension, two-choice response practice, source-based explanations, and local mistake review. The product is not a general video catalog, a social feed, or a copy of a popular video app.
+
 1. What the app does and the problem it solves
 
 Mayday ATC provides fictional aviation English dialogues for deliberate study between pilots and air traffic controllers. Its purpose is practicing how one message connects to the next response, beyond watching a video or reading vocabulary. In the revised implementation, learners choose Pilot or Controller in Settings, study both sides of a dialogue, and select one of two examples for the next message by their role. The app explains the answer using the source dialogue and retains mistakes for focused review. Learners can start another round or change roles. Preferences and role-specific question records stay on the device. A direct practice library works independently of the video archive. Source videos are optional external references. Fictional lessons are not video transcripts or operational instructions.
@@ -17,6 +19,8 @@ The intended users are pilots and air traffic controllers seeking supplementary 
 3. Need addressed
 
 The specific need is a repeatable role-specific aviation dialogue exercise connecting reading, response selection, source-based feedback and later review. A video reference alone does not provide that loop. The app combines the two speaker perspectives and retains individual mistakes locally. I do not claim that no competing product has similar capabilities or that the app is the first of its kind. Its intended contribution is this focused workflow designed by a pilot for pilots and controllers.
+
+This distinction addresses the two spam concerns directly: there is no second app or location variant, and the app's primary utility is the integrated pilot/controller exercise and feedback loop rather than a generic media or language-content listing.
 
 4. Testing before submission
 
@@ -49,6 +53,8 @@ The main functional changes are role selection, a direct lesson practice library
 Build 14 additionally lets learners switch freely between both examples after answering and read a separate explanation for each choice. Only the first answer in a round is recorded, so exploring another explanation does not inflate attempts or overwrite the original result. The physical-device role-practice test was rerun on build 14 and passed, including switching from an incorrect example to the correct example and verifying after relaunch that the initial mistake remained recorded. Seven current iPhone screenshots were captured, including both explanations. Automated checks also passed for the distinct explanations of all 73 questions.
 
 Build 16 retains that workflow and adds localized interface text, lesson categories, lesson summaries, language-reflection explanations and choice-specific feedback in Korean, Japanese, Simplified Chinese, Spanish, French, German, Italian, Brazilian Portuguese, Russian and Dutch. Aviation dialogue and response examples remain in English. All 157 localized resource keys passed ten-language completeness and format checks, including verification inside the signed Release archive. Build 16 was uploaded to App Store Connect and installed on the connected iPhone. A physical-iPhone UI test passed in English and all ten additional languages, checking localized settings, Pilot selection, dialogue, the practice prompt, and switching between incorrect and correct feedback. Four original iPhone screenshots have been uploaded for each additional locale. The English set includes four new images and retains four existing learning-function screenshots and the preview video. These are developer tests, not external beta testing.
+
+I respectfully ask that the team evaluate this submission as the single, independently developed Mayday ATC product described above. I have answered each question from the 4.3 and 4.2.6 notice directly and can provide additional ownership or implementation details if needed.
 
 ## Available evidence
 

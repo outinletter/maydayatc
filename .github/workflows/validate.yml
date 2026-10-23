@@ -8,6 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 scripts/validate-content.py
+      - run: python3 scripts/validate-localization.py
       - run: python3 -m unittest discover -s tests -p 'test_*.py'
   ios:
     runs-on: macos-15

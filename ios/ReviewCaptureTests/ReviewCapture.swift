@@ -224,7 +224,7 @@ final class ReviewCapture: XCTestCase {
             capture(row[0] + "-03-dialogue")
             let answer = app.buttons["answer-1-0"]
             reveal(answer)
-            XCTAssertTrue(app.staticTexts[row[4]].exists, row[0])
+            XCTAssertTrue(app.staticTexts.matching(identifier: row[4]).firstMatch.exists, row[0])
             capture(row[0] + "-04-question")
             answer.tap()
             reveal(app.staticTexts[row[5]])

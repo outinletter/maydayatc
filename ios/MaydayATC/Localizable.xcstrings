@@ -2334,7 +2334,7 @@
         }
       }
     },
-    "Download published videos and lessons. Collection and generation run centrally.": {
+    "Download published video lists and lessons. Collection and generation run centrally.": {
       "extractionState": "manual",
       "localizations": {
         "de": {

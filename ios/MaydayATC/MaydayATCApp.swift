@@ -568,7 +568,7 @@ struct SettingsView: View {
                         .font(.subheadline).foregroundStyle(ArchiveTheme.secondaryInk)
                 }
                 Section("Content updates") {
-                    Text("Download published videos and lessons. Collection and generation run centrally.").font(.subheadline)
+                    Text("Download published video lists and lessons. Collection and generation run centrally.").font(.subheadline)
                     Button { Task { await library.sync() } } label: {
                         Label(L.text(library.syncing ? "Updating content…" : "Update content now"),
                               systemImage: library.syncing ? "arrow.triangle.2.circlepath" : "arrow.down.circle.fill")
